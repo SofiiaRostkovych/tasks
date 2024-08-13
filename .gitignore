@@ -1,0 +1,47 @@
+# Node modules directory
+node_modules/
+
+# Build output directory
+dist/
+out/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+
+# OS and IDE-specific files
+.DS_Store
+*.swp
+*.swo
+*.swn
+
+# NPM package lock files
+package-lock.json
+yarn.lock
+
+# Coverage directory
+coverage/
+
+# VS Code settings
+.vscode/
+
+# IntelliJ IDEA settings
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*~ 
