@@ -30,7 +30,7 @@ test("Check that page Add User has title", async ({ page }) => {
 });
 
 test("Verify Create button design on the Add User page", async ({ page }) => {
-  const createBtn = page.locator("xpath=//div[4]/button");;
+  const createBtn = page.locator("xpath=//div[4]/button");
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
   await createBtn.hover();
@@ -59,7 +59,7 @@ test("Verify User Name field design and error messages on the Add User page", as
   let testStr = generateRandomString(2);
   await userNameField.fill(testStr);
   await expect(userNameField).toHaveValue(testStr);
-  const errorMsg = page.locator('xpath=//*[@id="inputUserName-error"]'); 
+  const errorMsg = page.locator('xpath=//*[@id="inputUserName-error"]');
   await expect(errorMsg).toBeVisible;
 
   //checking maximum symbols limit - 14 characters
@@ -97,8 +97,7 @@ test("Check Gender field design and content on the Add User page", async ({
 }) => {
   const genderField = page.locator('xpath=//*[@id="selectGender"]');
   await expect(genderField).toBeVisible;
-   
-  
+
   //checking option 1 - Male
   await genderField.selectOption({ label: "Male" });
   await expect(genderField).toHaveValue("1");
@@ -112,8 +111,9 @@ test("Check Gender field design and content on the Add User page", async ({
   await expect(genderField).toHaveValue("0");
 });
 
-
-test("Header UI", async ({ page }) => {
+test("Verify Header design and content on the Add User page", async ({
+  page,
+}) => {
   await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
 
   //getting first listitem
