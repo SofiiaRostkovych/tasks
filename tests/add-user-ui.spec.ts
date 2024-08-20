@@ -1,74 +1,97 @@
 import { test, expect } from "@playwright/test";
 
-test("has title", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
+enum Colors {
+  lightBlue = "rgb(13, 110, 253)",
+  darkBlue = "rgb(11, 94, 215)",
+  lightGrey = "rgb(108, 117, 125)",
+  darkGrey = "rgb(92, 99, 106)",
+}
 
-  // Expect a title "to contain" a substring.
+const generateRandomString = (n: number = 15): string => {
+  let result = "";
+
+  for (let i = 0; i < n; i++) {
+    const randomNumber =
+      Math.random() > 0.5
+        ? Math.floor(65 + Math.random() * 25)
+        : Math.floor(97 + Math.random() * 25);
+
+    const randomChar = String.fromCharCode(randomNumber);
+
+    result += randomChar;
+  }
+  return result;
+};
+test.beforeEach(async ({ page }) => {
+  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
+});
+test("Check that page Add User has title", async ({ page }) => {
   await expect(page).toHaveTitle("TS Trainee course");
 });
 
-test("Create button UI", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.getByRole("button", { name: "Create" });
-  await expect(el).toBeVisible;
-  await expect(el).toHaveClass("btn btn-primary");
-  await expect(el).toHaveCSS("background-color", "rgb(13, 110, 253)");
-  // checking btn reaction to hover
-  await el.hover();
-  await expect(el).toHaveCSS("background-color", "rgb(11, 94, 215)");
+test("Verify Create button design on the Add User page", async ({ page }) => {
+  const createBtn = page.getByRole("button", { name: "Create" });
+  await expect(createBtn).toBeVisible;
+  await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
+  await createBtn.hover();
+  await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
 
-test("Cancel button UI", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.getByRole("link", { name: "Cancel" });
+test("Verify Cancel button design on the Add User page", async ({ page }) => {
+  const cancelBtn = page.getByRole("link", { name: "Cancel" });
 
-  await expect(el).toHaveClass("btn btn-secondary");
-  await expect(el).toHaveCSS("background-color", "rgb(108, 117, 125)");
-  // checking btn reaction to hover
-  await el.hover();
-  await expect(el).toHaveCSS("background-color", "rgb(92, 99, 106)");
+  await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
+  await cancelBtn.hover();
+  await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
 
-test("User name UI", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.getByLabel("User Name");
-  const placeholder = await el.getAttribute("placeholder");
+test("Verify User Name field design and error messages on the Add User page", async ({
+  page,
+}) => {
+  const userNameField = page.getByLabel("User Name"); //need to change to XPath
+  const placeholder = await userNameField.getAttribute("placeholder");
 
-  await expect(el).toBeVisible;
+  await expect(userNameField).toBeVisible;
   await expect(placeholder).toEqual("User Name");
-  await expect(el).toHaveValue("");
+  await expect(userNameField).toHaveValue("");
 
   //checking error msg for too short value
-  await el.fill("ab");
-  await expect(el).toHaveValue("ab");
-  const err = page.getByText("Name is too short");
+  let testStr = generateRandomString(2);
+  await userNameField.fill(testStr);
+  await expect(userNameField).toHaveValue(testStr);
+  const err = page.getByText("Name is too short"); //need to change to XPath
   await expect(err).toBeVisible;
 
   //checking maximum symbols limit - 14 characters
-  await el.fill("12345678901234567890");
-  await expect(el).toHaveValue("12345678901234");
+  testStr = generateRandomString(20);
+  await userNameField.fill(testStr);
+  await expect(userNameField).toHaveValue(testStr.substring(0, 14));
 });
 
-test("Year of Birth", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.getByPlaceholder("Year of Birth");
-  await expect(el).toBeVisible;
-  await expect(el).toHaveValue("");
+test("Verify Year of Birth field design and error messages on the Add User page", async ({
+  page,
+}) => {
+  const yearOfBirthField = page.getByPlaceholder("Year of Birth");
+  await expect(yearOfBirthField).toBeVisible;
+  await expect(yearOfBirthField).toHaveValue("");
 });
 
-test("Gender UI", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.getByLabel("Gender");
-  await expect(el).toBeVisible;
-
-  //checking default value
-  await expect(el).toHaveValue("0");
+test("Check Gender field design and content on the Add User page", async ({
+  page,
+}) => {
+  //XPAth would be better than label
+  const genderField = page.getByLabel("Gender");
+  await expect(genderField).toBeVisible;
 
   //checking option 1 - Male
-  await el.selectOption({ label: "Male" });
-  await expect(el).toHaveValue("1");
+  await genderField.selectOption({ label: "Male" });
+  await expect(genderField).toHaveValue("1");
 
   //checking option 2 - Female
-  await el.selectOption({ label: "Female" });
-  await expect(el).toHaveValue("2");
+  await genderField.selectOption({ label: "Female" });
+  await expect(genderField).toHaveValue("2");
+
+  //checking option 0 - Undefined
+  await genderField.selectOption({ label: "Undefined" });
+  await expect(genderField).toHaveValue("0");
 });
