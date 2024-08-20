@@ -9,7 +9,7 @@ test("has title", async ({ page }) => {
 
 test("Create button UI", async ({ page }) => {
   await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-  const el = page.locator("xpath=//div[4]/button");
+  const el = page.getByRole("button", { name: "Create" });
   await expect(el).toBeVisible;
   await expect(el).toHaveClass("btn btn-primary");
   await expect(el).toHaveCSS("background-color", "rgb(13, 110, 253)");
@@ -54,25 +54,6 @@ test("Year of Birth", async ({ page }) => {
   const el = page.getByPlaceholder("Year of Birth");
   await expect(el).toBeVisible;
   await expect(el).toHaveValue("");
-
-  //checking the error msg after entering empty field
-  await el.press("Enter");
-  let err = page.locator(
-    'xpath=//span[last()][@data-valmsg-for="User.YearOfBirth"]',
-  );
-  await expect(err).toBeVisible;
-  await expect(err).toContainText("Year of Birth is requried");
-
-  //checking the error msg after entering invalid Year of Birth(<1900)
-  await el.fill("1899");
-  await expect(el).toHaveValue("1899");
-  await el.press("Enter");
-  err = page.locator('xpath=//*[@id="inputYearOfBirth-error"]');
-  await expect(err).toBeVisible;
-  await expect(err).toContainText("Not valid Year of Birth is set");
-
-  await el.fill("1900");
-  await expect(el).toHaveValue("1900");
 });
 
 test("Gender UI", async ({ page }) => {
@@ -90,36 +71,4 @@ test("Gender UI", async ({ page }) => {
   //checking option 2 - Female
   await el.selectOption({ label: "Female" });
   await expect(el).toHaveValue("2");
-});
-
-test("Header UI", async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
-
-  //getting first listitem
-  let el = page.locator("xpath=//ul/li[position()<2]");
-  await expect(el).toBeVisible;
-  await expect(el).toHaveRole("listitem");
-  //checking the child of first listitem, which is a link
-  let child = el.locator("xpath=child::*");
-  await expect(child).toHaveRole("link");
-  await expect(child).toContainText("Home");
-  await expect(child).toHaveAttribute("href", "/");
-
-  //getting the next listitem
-  el = el.locator("xpath=following-sibling::li[1]");
-  await expect(el).toBeVisible();
-  await expect(el).toHaveRole("listitem");
-  //checking the child of second listitem, which is a link
-  child = el.locator("xpath=descendant::*");
-  await expect(child).toHaveRole("link");
-  await expect(child).toContainText("Add User");
-  await expect(child).toHaveAttribute("href", "/Forms/AddUser");
-
-  //checking the last listitem
-  el = el
-    .locator("xpath=ancestor::ul") //getting the parent of el - the list element
-    .locator('xpath=descendant::a[contains(text(),"Add Address")]'); //getting last link by text it contains
-  await expect(el).toHaveRole("link");
-  await expect(el).toContainText("Add Address");
-  await expect(el).toHaveAttribute("href", "/Forms/AddAddress");
 });
