@@ -13,43 +13,36 @@ test.beforeEach(async ({ page }) => {
   await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
 });
 
-validUserData.forEach(
-  ({
-    userNameValue: username,
-    yearOfBirthValue: yearOfBirth,
-    genderValue: gender,
-  }) => {
-    test.describe(`Verify user "${username}" creation with valid data`, () => {
-      test(`Check successful creation of new user`, async ({ page }) => {
-        const genderField = page.locator('xpath=//*[@id="selectGender"]');
-        const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-        const yearOfBirthField = page.locator(
-          'xpath=//*[@id="inputYearOfBirth"]',
-        );
-        const createBtn = page.locator("xpath=//div[4]/button");
+validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue}) => {
+  test.describe(`Verify user "${userNameValue}" creation with valid data`, () => {
+    test(`Check successful creation of new user`, async ({ page }) => {
+      const genderField = page.locator('xpath=//*[@id="selectGender"]');
+      const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
+      const yearOfBirthField = page.locator(
+        'xpath=//*[@id="inputYearOfBirth"]',
+      );
+      const createBtn = page.locator("xpath=//div[4]/button");
 
-        //TODO: update locators which use Label
-        await genderField.selectOption({ label: "Male" });
-        await userNameField.fill(username);
-        await yearOfBirthField.fill(yearOfBirth);
-        createBtn.click();
+      //TODO: update locators which use Label
+      await genderField.selectOption({ label: "Male" });
+      await userNameField.fill(userNameValue);
+      await yearOfBirthField.fill(yearOfBirthValue);
+      createBtn.click();
 
-        const user = await page.locator("xpath=//table[1]/tbody/tr[last()]");
-        url = await user.getByTestId("button-Delete").getAttribute("href");
-        await expect(user.getByTestId("td-YearOfBirth")).toHaveText(
-          yearOfBirth,
-        );
-        await expect(user.getByTestId("td-UserName")).toHaveText(username);
-      });
-      test.afterEach("Check successful deletion of user", async ({ page }) => {
-        await page.goto("https://traineeautomation.azurewebsites.net" + url);
-
-        //TODO: update locators which use Name
-        await page.getByRole("button", { name: "Yes" }).click();
-      });
+      const user = await page.locator("xpath=//table[1]/tbody/tr[last()]");
+      url = await user.getByTestId("button-Delete").getAttribute("href");
+      await expect(user.getByTestId("td-YearOfBirth")).toHaveText(yearOfBirthValue);
+      await expect(user.getByTestId("td-UserName")).toHaveText(userNameValue);
     });
-  },
-);
+
+    test.afterEach("Delete created user", async ({ page }) => {
+      await page.goto("https://traineeautomation.azurewebsites.net" + url);
+
+      //TODO: update locators which use Name
+      await page.getByRole("button", { name: "Yes" }).click();
+    });
+  });
+});
 
 test.describe(`Check unsuccessful user creation`, () => {
   test(`Check creation of user with empty fields`, async ({ page }) => {
