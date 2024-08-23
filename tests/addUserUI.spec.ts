@@ -34,7 +34,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
 
-test("Verify 'User Name' field design on the 'Add User' page", async ({
+test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
   page,
 }) => {
   const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
@@ -45,7 +45,7 @@ test("Verify 'User Name' field design on the 'Add User' page", async ({
   await expect(userNameField).toHaveValue("");
 });
 
-test("Verify 'Year of Birth' field design and only number input on the 'Add User' page", async ({
+test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async ({
   page,
 }) => {
   const yearOfBirthField = page.getByPlaceholder("Year of Birth");
@@ -58,7 +58,7 @@ test("Verify 'Year of Birth' field design and only number input on the 'Add User
   await expect(yearOfBirthField).toHaveValue("");
 });
 
-test("Check 'Gender' field design and content on the 'Add User' page", async ({
+test("Check 'Gender' field content on the 'Add User' page", async ({
   page,
 }) => {
   const genderField = page.locator('xpath=//*[@id="selectGender"]');
