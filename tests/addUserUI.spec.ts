@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
+import { URLS } from "../src/config/urlProvider";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/Forms/AddUser");
@@ -19,6 +20,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
   const createBtn = page.locator("xpath=//div[4]/button");
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
+  
   await createBtn.hover();
   await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
@@ -27,8 +29,8 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
   page,
 }) => {
   const cancelBtn = page.locator("xpath=//div[4]/a");
-
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
+
   await cancelBtn.hover();
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
@@ -105,7 +107,7 @@ test("Verify Header design and content on the 'Add User' page", async ({
   child = listitem.locator("xpath=descendant::*");
   await expect(child).toHaveRole("link");
   await expect(child).toContainText("Add User");
-  await expect(child).toHaveAttribute("href", "/Forms/AddUser");
+  await expect(child).toHaveAttribute("href", URLS.ADDUSER);
 
   // checking the content of last listitem of the header
   child = listitem
@@ -113,5 +115,5 @@ test("Verify Header design and content on the 'Add User' page", async ({
     .locator('xpath=descendant::a[contains(text(),"Add Address")]');
   await expect(child).toHaveRole("link");
   await expect(child).toContainText("Add Address");
-  await expect(child).toHaveAttribute("href", "/Forms/AddAddress");
+  await expect(child).toHaveAttribute("href", URLS.ADDADDRESS);
 });
