@@ -20,7 +20,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
   const createBtn = page.locator("xpath=//div[4]/button");
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
-  
+
   await createBtn.hover();
   await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
@@ -61,7 +61,7 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
   await expect(yearOfBirthField).toHaveValue("");
 });
 
-test("Check 'Gender' field design and content on the 'Add User' page", async ({
+test("Check 'Gender' field content on the 'Add User' page", async ({
   page,
 }) => {
   const genderField = page.locator('xpath=//*[@id="selectGender"]');
@@ -86,9 +86,7 @@ test("Check 'Gender' field design and content on the 'Add User' page", async ({
   );
 });
 
-test("Verify Header and content on the 'Add User' page", async ({
-  page,
-}) => {
+test("Verify Header content on the 'Add User' page", async ({ page }) => {
   // getting first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]");
   await expect(listitem).toBeVisible;

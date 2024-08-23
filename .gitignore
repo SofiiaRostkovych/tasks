@@ -174,3 +174,4 @@ eslint.config.mjs
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.cache/
