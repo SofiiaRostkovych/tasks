@@ -5,7 +5,7 @@ import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplay
 import { URLS } from "../src/config/urlProvider";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/Forms/AddUser");
+  await page.goto(URLS.ADDUSER);
 });
 
 test("Check that 'Add User' page has title - TS Trainee course", async ({
@@ -35,7 +35,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
 
-test("Verify 'User Name' field design on the 'Add User' page", async ({
+test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
   page,
 }) => {
   const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
@@ -46,7 +46,7 @@ test("Verify 'User Name' field design on the 'Add User' page", async ({
   await expect(userNameField).toHaveValue("");
 });
 
-test("Verify 'Year of Birth' field design and only number input on the 'Add User' page", async ({
+test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async ({
   page,
 }) => {
   const yearOfBirthField = page.locator('xpath=//*[@id="inputYearOfBirth"]');
@@ -86,7 +86,7 @@ test("Check 'Gender' field design and content on the 'Add User' page", async ({
   );
 });
 
-test("Verify Header design and content on the 'Add User' page", async ({
+test("Verify Header and content on the 'Add User' page", async ({
   page,
 }) => {
   // getting first listitem of the header
