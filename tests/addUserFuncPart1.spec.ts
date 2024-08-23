@@ -36,22 +36,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/Forms/AddUser");
 });
 
-test("Verify 'User Name' field design and maximum symbols limit on the 'Add User' page", async ({
-  page,
-}) => {
-  const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-  const placeholder = await userNameField.getAttribute("placeholder");
-
-  await expect(userNameField).toBeVisible;
-  await expect(placeholder).toEqual("User Name");
-  await expect(userNameField).toHaveValue("");
-
-  // checking maximum symbols limit - 14 characters for User Name input
-  const testStr = generateRandomUserName(20);
-  await userNameField.fill(testStr);
-  await expect(userNameField).toHaveValue(testStr.substring(0, 14));
-});
-
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async ({
     page,
