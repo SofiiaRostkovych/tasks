@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { GenderOptions } from "../enums/GenderOptions";
-import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
+
 const validUserData = [
   {
     userNameValue: "nб3-w",
@@ -18,7 +17,6 @@ const validUserData = [
     yearOfBirthValue: "2004",
     genderValue: 2,
   },
-
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
@@ -37,7 +35,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/Forms/AddUser");
 });
 
-
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async ({
     page,
@@ -47,23 +44,24 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     const yearOfBirthField = page.locator('xpath=//*[@id="inputYearOfBirth"]');
     const createBtn = page.locator("xpath=//div[4]/button");
 
-    // TODO: update locators which use Label
     await genderField.selectOption(genderValue.toString());
     await userNameField.fill(userNameValue);
     await yearOfBirthField.fill(yearOfBirthValue);
     createBtn.click();
 
     createdUser = await page.locator('tr:has-text("' + userNameValue + '")');
+
     await expect(createdUser.getByTestId("td-YearOfBirth")).toHaveText(
       yearOfBirthValue,
     );
-    
+
     await expect(createdUser.getByTestId("td-UserName")).toHaveText(
       userNameValue,
     );
 
-
-    expect(await extractSelectedDisplayedValue(genderField)).toBe(GenderOptions[genderValue]);
+    await expect(createdUser.getByTestId("td-Gender")).toHaveText(
+      GenderOptions[genderValue],
+    );
   });
 });
 
@@ -71,7 +69,6 @@ test.afterEach(async ({ page }) => {
   if (createdUser) {
     await createdUser.getByTestId("button-Delete").click();
 
-    // TODO: update locators which use Name
     await page.locator("xpath=//div[2]/form/button").click();
   }
 });

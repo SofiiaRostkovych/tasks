@@ -11,4 +11,3 @@ export const generateRandomUserName = (n: number = 15): string => {
   }
   return result;
 };
-

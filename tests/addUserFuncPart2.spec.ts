@@ -74,7 +74,6 @@ test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ({
   page,
 }) => {
   const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-  const placeholder = await userNameField.getAttribute("placeholder");
 
   // checking maximum symbols limit - 14 characters for User Name input
   const testStr = generateRandomUserName(20);
