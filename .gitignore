@@ -174,5 +174,3 @@ eslint.config.mjs
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
->>>>>>> Stashed changes
