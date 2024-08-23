@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { GenderOptions } from "../enums/GenderOptions";
+import { URLS } from "../src/config/urlProvider";
 const validUserData = [
   {
     userNameValue: "nб3-w",
@@ -33,7 +33,7 @@ const validUserData = [
 let createdUser;
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/Forms/AddUser");
+  await page.goto(URLS.ADDUSER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
@@ -49,13 +49,21 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     await genderField.selectOption({ label: genderValue });
     await userNameField.fill(userNameValue);
     await yearOfBirthField.fill(yearOfBirthValue);
-    createBtn.click();
+    await createBtn.click();
 
-    createdUser = await page.locator('tr:has-text("' + userNameValue + '")');
+    const users = await page
+      .locator(`xpath=//td[@data-testid="td-UserName"]`)
+      .all();
+    for (const user of users) {
+      if ((await user.innerText()) === userNameValue) {
+        createdUser = user.locator("xpath=//parent::tr");
+      }
+    }
+
     await expect(createdUser.getByTestId("td-YearOfBirth")).toHaveText(
       yearOfBirthValue,
     );
-    
+
     await expect(createdUser.getByTestId("td-UserName")).toHaveText(
       userNameValue,
     );

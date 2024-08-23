@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
+import { URLS } from "../src/config/urlProvider";
 
 const invalidYearOfBirth = [
   "1899",
@@ -9,7 +10,7 @@ const invalidYearOfBirth = [
 ];
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/Forms/AddUser");
+  await page.goto(URLS.ADDUSER);
 });
 
 test(`Check creation of user with empty fields`, async ({ page }) => {
@@ -45,7 +46,7 @@ test(`Check creation of user with invalid 'User Name' input`, async ({
     'xpath=//*[@id="inputUserName-error"]',
   );
   await expect(nameIsTooShortErr).toHaveText("Name is too short");
-  await expect(page).toHaveURL("/Forms/AddUser");
+  await expect(page).toHaveURL(URLS.ADDUSER);
 });
 
 invalidYearOfBirth.forEach((yearOfBirthValue) => {
@@ -66,7 +67,7 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
     await expect(yearOfBirthIsInvalidErr).toHaveText(
       "Not valid Year of Birth is set",
     );
-    await expect(page).toHaveURL("/Forms/AddUser");
+    await expect(page).toHaveURL(URLS.ADDUSER);
   });
 });
 

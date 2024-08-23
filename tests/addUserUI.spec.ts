@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
+import { URLS } from "../src/config/urlProvider";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/Forms/AddUser");
+  await page.goto(URLS.ADDUSER);
 });
 
 test("Check that 'Add User' page has title - TS Trainee course", async ({
@@ -18,6 +19,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
   const createBtn = page.locator("xpath=//div[4]/button");
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
+
   await createBtn.hover();
   await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
@@ -26,8 +28,8 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
   page,
 }) => {
   const cancelBtn = page.getByRole("link", { name: "Cancel" });
-
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
+
   await cancelBtn.hover();
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
