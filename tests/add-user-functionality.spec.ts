@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
+import { PageFactory } from "../page-factory/page-factory";
+
 const validUserData = [
   {
     userNameValue: "nб3-w",
@@ -18,10 +20,17 @@ const validUserData = [
   },
 ];
 
-let userDeletionUrl;
+let addUserPage, homePage, deleteUserPage;
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("https://traineeautomation.azurewebsites.net/Forms/AddUser");
+test.beforeEach(async ({page})=> {
+  const pageFactory = new PageFactory(page);
+  
+  addUserPage = pageFactory.getAddUserPage();
+  homePage = pageFactory.getHomePage();
+  deleteUserPage = pageFactory.getDeleteUserPage();
+
+  addUserPage.navigateToAddUserPage();
+
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
@@ -33,87 +42,61 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
         'xpath=//*[@id="inputYearOfBirth"]',
       );
       const createBtn = page.locator("xpath=//div[4]/button");
+      await addUserPage.selectGenderOption(genderValue);
+      await addUserPage.fillUserNameField(userNameValue);
+      await addUserPage.fillYearOfBirthField(yearOfBirthValue);
 
-      await genderField.selectOption(genderValue);
-      await userNameField.fill(userNameValue);
-      await yearOfBirthField.fill(yearOfBirthValue);
-      createBtn.click();
-
-      const user = await page.locator('tr:has-text("' + userNameValue + '")');
-      userDeletionUrl = await user
-        .getByTestId("button-Delete")
-        .getAttribute("href");
-      await expect(user.getByTestId("td-YearOfBirth")).toHaveText(
+      await addUserPage.clickCreate();
+      await homePage.getYearOfBirthOfUser(userNameValue);
+      await expect(homePage.yearOfBirthOfUser).toHaveText(
         yearOfBirthValue,
       );
-      await expect(user.getByTestId("td-UserName")).toHaveText(userNameValue);
     });
 
     test.afterEach(async ({ page }) => {
-      await page.goto(
-        "https://traineeautomation.azurewebsites.net" + userDeletionUrl,
-      );
-
-      await page.locator("xpath=//div[2]/form/button").click();
+      await homePage.clickDeleteUserBtn(userNameValue);
+      await deleteUserPage.confirmUserDeletion();
     });
   });
 });
 
 test.describe(`Check unsuccessful user creation`, () => {
   test(`Check creation of user with empty fields`, async ({ page }) => {
-    const createBtn = page.locator("xpath=//div[4]/button");
-    await createBtn.click();
-
-    const nameIsRequiredErr = page.locator(
-      'xpath=//*[@id="inputUserName-error"]',
+    await addUserPage.clickCreate();
+    await expect(addUserPage.page).toHaveURL(
+      "https://traineeautomation.azurewebsites.net/Forms/AddUser",
     );
-    await expect(nameIsRequiredErr).toContainText("Name is requried");
 
-    const yearOfBirthIsRequiredErr = page.locator(
-      'xpath=//span[last()][@data-valmsg-for="User.YearOfBirth"]',
-    );
-    await expect(yearOfBirthIsRequiredErr).toBeVisible;
-    await expect(yearOfBirthIsRequiredErr).toContainText(
+    await expect(addUserPage.userNameFieldError).toContainText("Name is requried");
+
+    await expect(addUserPage.yearOfBirthFieldError).toContainText(
       "Year of Birth is requried",
     );
+    
   });
 
-  test(`Check creation of user with invalid username`, async ({ page }) => {
-    const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-    const yearOfBirthField = page.locator("xpath=//div[3]/input");
+  test(`Check creation of user with invalid username`, async () => {
+ 
     const testStr = generateRandomUserName(2);
 
-    await userNameField.fill(testStr);
-
-    yearOfBirthField.fill("1900");
-    await yearOfBirthField.press("Enter");
-    const nameIsTooShortErr = page.locator(
-      'xpath=//*[@id="inputUserName-error"]',
-    );
-    await expect(nameIsTooShortErr).toContainText("Name is too short");
-    await expect(page).toHaveURL(
+    await addUserPage.fillUserNameField(testStr);
+    await addUserPage.fillYearOfBirthField("1900");
+    await addUserPage.pressEnterUserNameField();
+    await expect(addUserPage.page.getByTestId('inputError-UserName')).toContainText("Name is too short");
+    await expect(addUserPage.page).toHaveURL(
       "https://traineeautomation.azurewebsites.net/Forms/AddUser",
     );
   });
 
-  test(`Check creation of user with invalid year of birth`, async ({
-    page,
-  }) => {
-    const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-    const yearOfBirthField = page.locator("xpath=//div[3]/input");
+  test(`Check creation of user with invalid year of birth`, async ({}) => {
 
     const testStr = generateRandomUserName(3);
-    await userNameField.fill(testStr);
-    yearOfBirthField.fill("1899");
 
-    await yearOfBirthField.press("Enter");
-    const yearOfBirthIsInvalidErr = page.locator(
-      'xpath=//*[@id="inputYearOfBirth-error"]',
-    );
-    await expect(yearOfBirthIsInvalidErr).toContainText(
-      "Not valid Year of Birth is set",
-    );
-    await expect(page).toHaveURL(
+    await addUserPage.fillUserNameField(testStr);
+    await addUserPage.fillYearOfBirthField("1899");
+    await addUserPage.pressEnterYearOfBirthField();
+    await expect(addUserPage.yearOfBirthFieldError).toContainText("Not valid Year of Birth is set");
+    await expect(addUserPage.page).toHaveURL(
       "https://traineeautomation.azurewebsites.net/Forms/AddUser",
     );
   });
