@@ -1,15 +1,13 @@
 export const generateRandomUserName = (n: number = 15): string => {
   let result = "";
 
-  for (let i = 0; i < n; i++) {
-    const randomNumber =
-      Math.random() > 0.5
-        ? Math.floor(65 + Math.random() * 25)
-        : Math.floor(97 + Math.random() * 25);
-
-    const randomChar = String.fromCharCode(randomNumber);
-
-    result += randomChar;
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-,. ";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < n) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
   }
 
   return result;

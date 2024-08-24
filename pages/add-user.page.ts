@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
+import { URLS } from "../src/config/urlProvider";
 
 export class AddUserPage {
 
@@ -27,7 +28,7 @@ export class AddUserPage {
 
   async navigateToAddUserPage() {
     await this.page.goto(
-      "/Forms/AddUser"
+      URLS.ADDUSER
     );
   }
 
@@ -62,5 +63,15 @@ export class AddUserPage {
 
   async getGenderSelectedOption() {
     return await extractSelectedDisplayedValue(this.genderField);
+  }
+
+  async getUserNameFieldError(){
+    let userNameFieldError = await this.page.getByTestId('inputError-UserName').innerText();
+    return  userNameFieldError;
+  }
+
+  async getYearOfBirthFieldError(){
+    let yearOfBirthFieldError =  await this.page.getByTestId('inputError-YearOfBirth').innerText();
+    return yearOfBirthFieldError;
   }
 }

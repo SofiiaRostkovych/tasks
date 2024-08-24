@@ -6,34 +6,47 @@ export class HomePage {
 
   }
   
-  public user;
+  public createdUser;
   public yearOfBirthOfUser;
 
   public addUserLink = this.page.locator(
     "xpath=/html/body/header/nav/div/div/ul/li[2]/a",
   );
-  public usersTable = this.page.locator("xpath=/html/body/div/main/table[1]");
+  public usersTable = this.page.locator("xpath=//table[1]");
  
   async navigateToHomePage() {
-    await this.page.goto("https://traineeautomation.azurewebsites.net/");
+    await this.page.goto("");
   }
 
   async goToAddUserPage() {
     await this.addUserLink.click();
   }
+
+  async getUserByUserName(userNameValue:string){
+    const users = await this.page
+      .locator(`xpath=//td[@data-testid="td-UserName"]`)
+      .all();
+    for (const user of users) {
+      if ((await user.innerText()) === userNameValue) {
+        this.createdUser = user.locator("xpath=//parent::tr");
+      }
+    }
+    let user = this.createdUser;
+    return this.createdUser;
+  }
   
-  async getYearOfBirthOfUser(username:string){    
-    this.yearOfBirthOfUser = await this.page.locator('tr:has-text("' + username + '")').getByTestId("td-YearOfBirth") ;
+  async getYearOfBirthOfUser(){    
+    return await this.createdUser.locator('xpath=/td[@data-testid="td-YearOfBirth"]').innerText() ;
   }
 
-  async getDeleteUserUrl(username:string){
-    let userDeletionUrl = await this.page.locator('tr:has-text("' + username + '")')
-        .getByTestId("button-Delete")
-        .getAttribute("href");
-    return userDeletionUrl;
+  async getSelectedGenderOfUser(){    
+
+    return await this.createdUser.locator('xpath=/td[@data-testid="td-Gender"]').innerText() ;
   }
-  async clickDeleteUserBtn(username:string){
-     await this.page.locator('tr:has-text("' + username + '")')
+
+
+  async clickDeleteUserBtn(){
+     await this.createdUser
         .getByTestId("button-Delete").click();
     ;
   }

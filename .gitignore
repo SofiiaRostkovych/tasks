@@ -1,6 +1,6 @@
 # Node modules directory
 node_modules/
-.cashe/
+.cache/
 
 # Build output directory
 dist/
