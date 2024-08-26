@@ -17,7 +17,7 @@ test("Check that 'Add User' page has title - TS Trainee course", async ({
 test("Verify 'Create' button design on the 'Add User' page", async ({
   page,
 }) => {
-  const createBtn = page.locator("xpath=//div[4]/button");
+  const createBtn = page.locator('xpath=//button[@data-testid="button-Create"]');
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
 
@@ -28,7 +28,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
 test("Verify 'Cancel' button design on the 'Add User' page", async ({
   page,
 }) => {
-  const cancelBtn = page.locator("xpath=//div[4]/a");
+  const cancelBtn = page.locator('xpath=//a[@data-testid="button-Cancel"]');
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
 
   await cancelBtn.hover();
@@ -38,7 +38,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
 test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
   page,
 }) => {
-  const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
+  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
   const placeholder = await userNameField.getAttribute("placeholder");
 
   await expect(userNameField).toBeVisible;
@@ -49,7 +49,7 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
 test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async ({
   page,
 }) => {
-  const yearOfBirthField = page.locator('xpath=//*[@id="inputYearOfBirth"]');
+  const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
   const placeholder = await yearOfBirthField.getAttribute("placeholder");
   await expect(yearOfBirthField).toBeVisible;
   await expect(yearOfBirthField).toHaveValue("");
@@ -64,54 +64,42 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
 test("Check 'Gender' field content on the 'Add User' page", async ({
   page,
 }) => {
-  const genderField = page.locator('xpath=//*[@id="selectGender"]');
+  const genderField = page.locator('xpath=//select[@id="selectGender"]');
   await expect(genderField).toBeVisible;
 
   // checking option 1 for gender input - Male
-  await genderField.selectOption("1");
+  await genderField.selectOption(GenderOptions.Male.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
-    GenderOptions[1],
+    GenderOptions[GenderOptions.Male],
   );
 
   // checking option 2 for gender input - Female
-  await genderField.selectOption("2");
+  await genderField.selectOption(GenderOptions.Female.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
-    GenderOptions[2],
+    GenderOptions[GenderOptions.Female],
   );
 
   // checking option 0 for gender input - Undefined
-  await genderField.selectOption("0");
+  await genderField.selectOption(GenderOptions.Undefined.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
-    GenderOptions[0],
+    GenderOptions[GenderOptions.Undefined],
   );
 });
 
 test("Verify Header content on the 'Add User' page", async ({ page }) => {
-  // getting first listitem of the header
-  let listitem = page.locator("xpath=//ul/li[position()<2]");
-  await expect(listitem).toBeVisible;
-  await expect(listitem).toHaveRole("listitem");
-  // checking the content of the child of first listitem of the header, which is a link
-  let child = listitem.locator("xpath=child::*");
-  await expect(child).toHaveRole("link");
-  await expect(child).toContainText("Home");
-  await expect(child).toHaveAttribute("href", "/");
+  // checking the content of the first listitem of the header
+  let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
+  await expect(listitem).toHaveText("Home");
+  await expect(listitem).toHaveAttribute("href", "/");
 
-  // getting the next listitem of the header
-  listitem = listitem.locator("xpath=following-sibling::li[1]");
-  await expect(listitem).toBeVisible();
-  await expect(listitem).toHaveRole("listitem");
-  // checking the content of the child of second listitem, which is a link
-  child = listitem.locator("xpath=descendant::*");
-  await expect(child).toHaveRole("link");
-  await expect(child).toContainText("Add User");
-  await expect(child).toHaveAttribute("href", URLS.ADDUSER);
+  // checking the content of the second listitem of the header
+  listitem = listitem.locator("xpath=/parent::li/following-sibling::li[1]/descendant::a");
+  await expect(listitem).toHaveText("Add User");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
 
   // checking the content of last listitem of the header
-  child = listitem
-    .locator("xpath=ancestor::ul")
-    .locator('xpath=descendant::a[contains(text(),"Add Address")]');
-  await expect(child).toHaveRole("link");
-  await expect(child).toContainText("Add Address");
-  await expect(child).toHaveAttribute("href", URLS.ADDADDRESS);
+  listitem = listitem
+    .locator('xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]');
+  await expect(listitem).toHaveText("Add Address");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
 });

@@ -40,10 +40,10 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async ({
     page,
   }) => {
-    const genderField = page.locator('xpath=//*[@id="selectGender"]');
-    const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-    const yearOfBirthField = page.locator('xpath=//*[@id="inputYearOfBirth"]');
-    const createBtn = page.locator("xpath=//div[4]/button");
+    const genderField = page.locator('xpath=//select[@id="selectGender"]');
+    const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
+    const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
+    const createBtn = page.locator('xpath=//button[@data-testid="button-Create"]');
 
     await genderField.selectOption(genderValue.toString());
     await userNameField.fill(userNameValue);
@@ -77,6 +77,6 @@ test.afterEach(async ({ page }) => {
   if (createdUser) {
     await createdUser.getByTestId("button-Delete").click();
 
-    await page.locator("xpath=//div[2]/form/button").click();
+    await page.locator('xpath=//button[@data-testid="button-Yes"]').click();
   }
 });
