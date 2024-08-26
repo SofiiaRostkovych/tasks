@@ -11,20 +11,23 @@ export class AddUserPage {
   readonly yearOfBirthField: Locator;
   readonly genderField: Locator;
   readonly headerListitem: Locator;
+  readonly maxUserNameLength: number;
+  readonly minUserNameLength: number;
   public yearOfBirthFieldError: Locator;
   public userNameFieldError: Locator;
 
   constructor(page: Page) {
     this.page = page;
-  this.createBtn = this.page.locator("xpath=//div[4]/button");
-  this.cancelBtn = this.page.locator("xpath=//div[4]/a");
+  this.createBtn = this.page.locator(
+    'xpath=//button[@data-testid="button-Create"]',
+  );
+  this.cancelBtn = this.page.locator('xpath=//a[@data-testid="button-Cancel"]');
   this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
   this.yearOfBirthField = this. page.locator('xpath=//*[@id="inputYearOfBirth"]');
   this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
-  this.headerListitem = this.page.locator("xpath=//ul/li[position()<2]");
-  this.userNameFieldError = this.page.getByTestId('inputError-UserName');
-  this.yearOfBirthFieldError = this.page.getByTestId('inputError-YearOfBirth');
-  }
+  this.maxUserNameLength = 14;
+  this.minUserNameLength = 3;
+ }
 
   async navigateToAddUserPage() {
     await this.page.goto(

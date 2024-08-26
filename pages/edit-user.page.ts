@@ -1,21 +1,29 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
+import { URLS } from "../src/config/urlProvider";
 
 export class EditUserPage {
-  constructor(private page: Page) {}
+  readonly updateBtn: Locator;
+  readonly cancelBtn: Locator;
+  readonly userNameField: Locator;
+  readonly yearOfBirthField: Locator;
+  readonly genderField: Locator;
 
-  public updateBtn = this.page.locator('xpath=//*[@id="editUserForm"]/div[6]/button');
-  public cancelBtn = this.page.locator('xpath=//*[@id="editUserForm"]/div[6]/a');
-  public userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
-  public yearOfBirthField = this.page.locator('xpath=//*[@id="inputYearOfBirth"]');
-  public genderField = this.page.locator('xpath=//*[@id="selectGender"]');
+  constructor(private page: Page) {
+    this.updateBtn = this.page.locator('xpath=//button[@data-testid="button-Update"]');
+    this.cancelBtn = this.page.locator('xpath=//a[@data-testid="button-Cancel"]');
+    this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
+    this.yearOfBirthField = this.page.locator('xpath=//*[@id="inputYearOfBirth"]');
+    this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
+  }
+
 
   async navigateToEditUserPage(userEditUrl: string) {
     await this.page.goto(
-      'https://traineeautomation.azurewebsites.net/Forms/EditUser/'+userEditUrl,
+      URLS.EDITUSER + userEditUrl,
     );
   }
 
-  async cancelEditUserOperation() {
+  async clickCancel() {
     await this.cancelBtn.click();
   }
 

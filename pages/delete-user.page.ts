@@ -1,14 +1,18 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
+import { URLS } from "../src/config/urlProvider";
 
 export class DeleteUserPage {
-  constructor(private page: Page) {}
+  readonly yesBtn: Locator;
+  readonly cancelBtn: Locator;
+  constructor(private page: Page) {
+    this.yesBtn = this.page.locator('xpath=//button[@data-testid="button-Yes"]');
+    this.cancelBtn = this.page.locator('xpath=//a[@data-testid="button-Cancel"]');
+  }
 
-  public yesBtn = this.page.locator('xpath=//div[2]/form/button');
-  public cancelBtn = this.page.locator('xpath=//div[2]/form/a');
 
   async navigateToDeleteUserPage(userDeletionUrl: string) {
     await this.page.goto(
-      'https://traineeautomation.azurewebsites.net/Forms/EditUser/'+userDeletionUrl,
+      URLS.DELETEUSER + userDeletionUrl,
     );
   }
 
@@ -17,7 +21,7 @@ export class DeleteUserPage {
   }
 
   async confirmUserDeletion() {
-    await this.page.locator('xpath=//div[2]/form/button').click();
+    await this.yesBtn.click();
   }
 
 }

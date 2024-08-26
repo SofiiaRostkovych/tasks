@@ -44,9 +44,7 @@ test.beforeEach(async ({page})=> {
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
-  test(`Check successful creation of new user "${userNameValue}"`, async ({
-    page,
-  }) => {
+  test(`Check successful creation of new user "${userNameValue}"`, async () => {
 
     await addUserPage.selectGenderOption(genderValue);
     await addUserPage.fillUserNameField(userNameValue);
@@ -54,21 +52,17 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
 
     await addUserPage.clickCreate();
 
-    let user = await homePage.getUserByUserName(userNameValue);
+    await homePage.getUserByUserName(userNameValue);
 
     await expect(await homePage.getYearOfBirthOfUser()).toBe(
       yearOfBirthValue,
     );
-   
-    await homePage.clickDeleteUserBtn(userNameValue);
-    await deleteUserPage.confirmUserDeletion();
-/*
-    await expect(createdUser.getByTestId("td-UserName")).toHaveText(
-      userNameValue,
+    await expect(await homePage.getSelectedGenderOfUser()).toBe(
+     GenderOptions[genderValue]
     );
 
-   
-    */
+    await homePage.clickDeleteUserBtn(userNameValue);
+    await deleteUserPage.confirmUserDeletion();
   });
 });
 

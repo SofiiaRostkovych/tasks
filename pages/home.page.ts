@@ -1,24 +1,25 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
+import { URLS } from "../src/config/urlProvider";
 
 export class HomePage {
-
-  constructor(private page: Page) {
-
-  }
+  readonly addUserLink: Locator;
+  public createdUser: Locator;
+  readonly usersTable: Locator;
   
-  public createdUser;
-  public yearOfBirthOfUser;
-
-  public addUserLink = this.page.locator(
-    "xpath=/html/body/header/nav/div/div/ul/li[2]/a",
-  );
-  public usersTable = this.page.locator("xpath=//table[1]");
+  constructor(private page: Page) {
+    this.page = page;
+     this.addUserLink = this.page.locator(
+      `xpath=//a[@href="${URLS.ADDUSER}"]`,
+    );
+    this.usersTable = this.page.locator('xpath=//table[@data-testid="table-Users"]');
  
+  
+  }
   async navigateToHomePage() {
     await this.page.goto("");
   }
 
-  async goToAddUserPage() {
+  async clickAddUserLink() {
     await this.addUserLink.click();
   }
 
@@ -31,7 +32,6 @@ export class HomePage {
         this.createdUser = user.locator("xpath=//parent::tr");
       }
     }
-    let user = this.createdUser;
     return this.createdUser;
   }
   
@@ -40,14 +40,11 @@ export class HomePage {
   }
 
   async getSelectedGenderOfUser(){    
-
     return await this.createdUser.locator('xpath=/td[@data-testid="td-Gender"]').innerText() ;
   }
 
-
   async clickDeleteUserBtn(){
-     await this.createdUser
-        .getByTestId("button-Delete").click();
+     await this.createdUser.getByTestId("button-Delete").click();
     ;
   }
 
