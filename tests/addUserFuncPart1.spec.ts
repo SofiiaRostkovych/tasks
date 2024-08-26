@@ -42,8 +42,12 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   }) => {
     const genderField = page.locator('xpath=//select[@id="selectGender"]');
     const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-    const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
-    const createBtn = page.locator('xpath=//button[@data-testid="button-Create"]');
+    const yearOfBirthField = page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
+    const createBtn = page.locator(
+      'xpath=//button[@data-testid="button-Create"]',
+    );
 
     await genderField.selectOption(genderValue.toString());
     await userNameField.fill(userNameValue);

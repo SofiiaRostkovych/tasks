@@ -14,7 +14,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test(`Check creation of user with empty fields`, async ({ page }) => {
-  const createBtn = page.locator('xpath=//button[@data-testid="button-Create"]');
+  const createBtn = page.locator(
+    'xpath=//button[@data-testid="button-Create"]',
+  );
   await createBtn.click();
 
   const nameIsRequiredErr = page.locator(
@@ -35,7 +37,9 @@ test(`Check creation of user with invalid 'User Name' input`, async ({
   page,
 }) => {
   const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-  const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
+  const yearOfBirthField = page.locator(
+    'xpath=//input[@id="inputYearOfBirth"]',
+  );
   const testStr = generateRandomUserName(2);
 
   await userNameField.fill(testStr);
@@ -54,7 +58,9 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
     page,
   }) => {
     const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-    const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
+    const yearOfBirthField = page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
 
     const testStr = generateRandomUserName(3);
     await userNameField.fill(testStr);

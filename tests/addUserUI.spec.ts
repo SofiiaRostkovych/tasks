@@ -17,7 +17,9 @@ test("Check that 'Add User' page has title - TS Trainee course", async ({
 test("Verify 'Create' button design on the 'Add User' page", async ({
   page,
 }) => {
-  const createBtn = page.locator('xpath=//button[@data-testid="button-Create"]');
+  const createBtn = page.locator(
+    'xpath=//button[@data-testid="button-Create"]',
+  );
   await expect(createBtn).toBeVisible;
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
 
@@ -49,7 +51,9 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
 test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async ({
   page,
 }) => {
-  const yearOfBirthField = page.locator('xpath=//input[@id="inputYearOfBirth"]');
+  const yearOfBirthField = page.locator(
+    'xpath=//input[@id="inputYearOfBirth"]',
+  );
   const placeholder = await yearOfBirthField.getAttribute("placeholder");
   await expect(yearOfBirthField).toBeVisible;
   await expect(yearOfBirthField).toHaveValue("");
@@ -93,13 +97,16 @@ test("Verify Header content on the 'Add User' page", async ({ page }) => {
   await expect(listitem).toHaveAttribute("href", "/");
 
   // checking the content of the second listitem of the header
-  listitem = listitem.locator("xpath=/parent::li/following-sibling::li[1]/descendant::a");
+  listitem = listitem.locator(
+    "xpath=/parent::li/following-sibling::li[1]/descendant::a",
+  );
   await expect(listitem).toHaveText("Add User");
   await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
 
   // checking the content of last listitem of the header
-  listitem = listitem
-    .locator('xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]');
+  listitem = listitem.locator(
+    'xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]',
+  );
   await expect(listitem).toHaveText("Add Address");
   await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
 });
