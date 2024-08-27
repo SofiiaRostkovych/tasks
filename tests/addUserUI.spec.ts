@@ -71,19 +71,16 @@ test("Check 'Gender' field content on the 'Add User' page", async ({
   const genderField = page.locator('xpath=//select[@id="selectGender"]');
   await expect(genderField).toBeVisible();
 
-  // checking option 1 for gender input - Male
   await genderField.selectOption(GenderOptions.Male.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
     GenderOptions[GenderOptions.Male],
   );
 
-  // checking option 2 for gender input - Female
   await genderField.selectOption(GenderOptions.Female.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
     GenderOptions[GenderOptions.Female],
   );
 
-  // checking option 0 for gender input - Undefined
   await genderField.selectOption(GenderOptions.Undefined.toString());
   expect(await extractSelectedDisplayedValue(genderField)).toBe(
     GenderOptions[GenderOptions.Undefined],
