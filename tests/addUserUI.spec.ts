@@ -14,19 +14,31 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Verify 'Create' button design on the 'Add User' page", async () => {
-  const createBtn = addUserPage.createBtn;
+  let createBtn;
+  await test.step("Check the 'Create' button background color in neutural state", async()=>{
+    createBtn = await addUserPage.createBtn;
 
-  await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
-  await createBtn.hover();
-  await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
+    await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
+  });
+  await test.step("Check the 'Create' button background color after hovering", async()=>{
+    await createBtn.hover();
+
+    await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
+  });
 });
 
 test("Verify 'Cancel' button design on the 'Add User' page", async () => {
-  const cancelBtn = await addUserPage.cancelBtn;
+  let cancelBtn;
+  await test.step("Check the 'Cancel' button background color in neutural state", async()=>{
+  cancelBtn = await addUserPage.cancelBtn;
 
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
-  await cancelBtn.hover();
-  await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
+  });
+  await test.step("Check the 'Cancel' button background color after hovering", async()=>{
+    await cancelBtn.hover();
+    await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
+  });
+ 
 });
 
 test("Verify 'User Name' field placeholder on the 'Add User' page", async () => {
