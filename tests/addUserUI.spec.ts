@@ -90,6 +90,7 @@ test("Check 'Gender' field content on the 'Add User' page", async ({
   );
 });
 
+// using Header to practice writing tests using XPath functions and axis
 test("Verify Header content on the 'Add User' page", async ({ page }) => {
   // checking the content of the first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");

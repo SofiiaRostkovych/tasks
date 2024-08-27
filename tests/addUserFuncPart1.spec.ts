@@ -6,17 +6,17 @@ const validUserData = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
-    genderValue: 0,
+    genderValue: GenderOptions.Undefined,
   },
   {
     userNameValue: "йцу",
     yearOfBirthValue: "2005",
-    genderValue: 1,
+    genderValue: GenderOptions.Male,
   },
   {
     userNameValue: "new user",
     yearOfBirthValue: "2004",
-    genderValue: 2,
+    genderValue: GenderOptions.Female,
   },
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
