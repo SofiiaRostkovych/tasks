@@ -60,8 +60,8 @@ export class AddUserPage {
     await this.yearOfBirthField.press("Enter");
   }
 
-  async selectGenderOption(option: string) {
-    await this.genderField.selectOption(option);
+  async selectGenderOption(option: number) {
+    await this.genderField.selectOption(option.toString());
   }
 
   async getGenderSelectedOption() {

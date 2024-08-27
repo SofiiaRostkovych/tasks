@@ -3,8 +3,8 @@ import { URLS } from "../src/config/urlProvider";
 
 export class HomePage {
   readonly addUserLink: Locator;
-  public createdUser: Locator;
   readonly usersTable: Locator;
+  public createdUser: Locator;
 
   constructor(private page: Page) {
     this.page = page;

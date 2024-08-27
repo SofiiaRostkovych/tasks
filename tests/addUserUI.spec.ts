@@ -55,14 +55,36 @@ test("Check 'Gender' field content on the 'Add User' page", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
   // checking option 1 for gender input - Male
-  await addUserPage.selectGenderOption("1");
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[1]);
+  await addUserPage.selectGenderOption(GenderOptions.Male);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Male]);
 
   // checking option 2 for gender input - Female
-  await addUserPage.selectGenderOption("2");
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[2]);
+  await addUserPage.selectGenderOption(GenderOptions.Female);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Female]);
 
   // checking option 0 for gender input - Undefined
-  await addUserPage.selectGenderOption("0");
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[0]);
+  await addUserPage.selectGenderOption(GenderOptions.Undefined);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Undefined]);
 });
+
+// this test was used to practice writing tests with XPath functions and axis
+/*test("Verify Header content on the 'Add User' page", async ({ page }) => {
+  // checking the content of the first listitem of the header
+  let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
+  await expect(listitem).toHaveText("Home");
+  await expect(listitem).toHaveAttribute("href", "/");
+
+  // checking the content of the second listitem of the header
+  listitem = listitem.locator(
+    "xpath=/parent::li/following-sibling::li[1]/descendant::a",
+  );
+  await expect(listitem).toHaveText("Add User");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
+
+  // checking the content of last listitem of the header
+  listitem = listitem.locator(
+    'xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]',
+  );
+  await expect(listitem).toHaveText("Add Address");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
+});*/
