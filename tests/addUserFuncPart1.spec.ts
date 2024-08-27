@@ -1,22 +1,25 @@
 import { test, expect } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../page-factory/page-factory";
+import { AddUserPage } from "../pages/add-user.page";
+import { HomePage } from "../pages/home.page";
+import { DeleteUserPage } from "../pages/delete-user.page";
 
 const validUserData = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
-    genderValue:  GenderOptions.Undefined,
+    genderValue: GenderOptions.Undefined,
   },
   {
     userNameValue: "йцу",
     yearOfBirthValue: "2005",
-    genderValue:  GenderOptions.Male,
+    genderValue: GenderOptions.Male,
   },
   {
     userNameValue: "new user",
     yearOfBirthValue: "2004",
-    genderValue:  GenderOptions.Female,
+    genderValue: GenderOptions.Female,
   },
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
@@ -30,7 +33,9 @@ const validUserData = [
   */
 ];
 
-let addUserPage, homePage, deleteUserPage;
+let addUserPage: AddUserPage,
+  homePage: HomePage,
+  deleteUserPage: DeleteUserPage;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory = new PageFactory(page);
@@ -52,8 +57,8 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
 
     await homePage.getUserByUserName(userNameValue);
 
-    await expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
-    await expect(await homePage.getSelectedGenderOfUser()).toBe(
+    expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
+    expect(await homePage.getSelectedGenderOfUser()).toBe(
       GenderOptions[genderValue],
     );
 

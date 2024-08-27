@@ -2,8 +2,9 @@ import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../page-factory/page-factory";
+import { AddUserPage } from "../pages/add-user.page";
 
-let addUserPage;
+let addUserPage: AddUserPage;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory = new PageFactory(page);
@@ -55,13 +56,19 @@ test("Check 'Gender' field content on the 'Add User' page", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
   await addUserPage.selectGenderOption(GenderOptions.Male);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Male]);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(
+    GenderOptions[GenderOptions.Male],
+  );
 
   await addUserPage.selectGenderOption(GenderOptions.Female);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Female]);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(
+    GenderOptions[GenderOptions.Female],
+  );
 
   await addUserPage.selectGenderOption(GenderOptions.Undefined);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Undefined]);
+  expect(await addUserPage.getGenderSelectedOption()).toBe(
+    GenderOptions[GenderOptions.Undefined],
+  );
 });
 
 // this test was used to practice writing tests with XPath functions and axis

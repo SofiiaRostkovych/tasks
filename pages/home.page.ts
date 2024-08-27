@@ -45,7 +45,7 @@ export class HomePage {
       .innerText();
   }
 
-  async clickDeleteUserBtn() {
+  async clickDeleteUserBtn(userNameValue: string) {
     await this.createdUser.getByTestId("button-Delete").click();
   }
 }
