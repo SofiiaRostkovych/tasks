@@ -9,18 +9,21 @@ export class EditUserPage {
   readonly genderField: Locator;
 
   constructor(private page: Page) {
-    this.updateBtn = this.page.locator('xpath=//button[@data-testid="button-Update"]');
-    this.cancelBtn = this.page.locator('xpath=//a[@data-testid="button-Cancel"]');
+    this.updateBtn = this.page.locator(
+      'xpath=//button[@data-testid="button-Update"]',
+    );
+    this.cancelBtn = this.page.locator(
+      'xpath=//a[@data-testid="button-Cancel"]',
+    );
     this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
-    this.yearOfBirthField = this.page.locator('xpath=//*[@id="inputYearOfBirth"]');
+    this.yearOfBirthField = this.page.locator(
+      'xpath=//*[@id="inputYearOfBirth"]',
+    );
     this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
   }
 
-
   async navigateToEditUserPage(userEditUrl: string) {
-    await this.page.goto(
-      URLS.EDITUSER + userEditUrl,
-    );
+    await this.page.goto(URLS.EDITUSER + userEditUrl);
   }
 
   async clickCancel() {

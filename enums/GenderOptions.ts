@@ -1,6 +1,5 @@
 export enum GenderOptions {
-    Undefined,
-    Male,
-    Female,
-  }
-  
+  Undefined,
+  Male,
+  Female,
+}

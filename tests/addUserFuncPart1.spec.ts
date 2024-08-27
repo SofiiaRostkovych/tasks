@@ -32,20 +32,18 @@ const validUserData = [
 
 let addUserPage, homePage, deleteUserPage;
 
-test.beforeEach(async ({page})=> {
+test.beforeEach(async ({ page }) => {
   const pageFactory = new PageFactory(page);
-  
+
   addUserPage = pageFactory.getAddUserPage();
   homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
 
   addUserPage.navigateToAddUserPage();
-
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async () => {
-
     await addUserPage.selectGenderOption(genderValue);
     await addUserPage.fillUserNameField(userNameValue);
     await addUserPage.fillYearOfBirthField(yearOfBirthValue);
@@ -54,15 +52,12 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
 
     await homePage.getUserByUserName(userNameValue);
 
-    await expect(await homePage.getYearOfBirthOfUser()).toBe(
-      yearOfBirthValue,
-    );
+    await expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
     await expect(await homePage.getSelectedGenderOfUser()).toBe(
-     GenderOptions[genderValue]
+      GenderOptions[genderValue],
     );
 
     await homePage.clickDeleteUserBtn(userNameValue);
     await deleteUserPage.confirmUserDeletion();
   });
 });
-

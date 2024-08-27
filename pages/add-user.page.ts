@@ -3,7 +3,6 @@ import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplay
 import { URLS } from "../src/config/urlProvider";
 
 export class AddUserPage {
-
   readonly page: Page;
   readonly createBtn: Locator;
   readonly cancelBtn: Locator;
@@ -18,21 +17,23 @@ export class AddUserPage {
 
   constructor(page: Page) {
     this.page = page;
-  this.createBtn = this.page.locator(
-    'xpath=//button[@data-testid="button-Create"]',
-  );
-  this.cancelBtn = this.page.locator('xpath=//a[@data-testid="button-Cancel"]');
-  this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
-  this.yearOfBirthField = this. page.locator('xpath=//*[@id="inputYearOfBirth"]');
-  this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
-  this.maxUserNameLength = 14;
-  this.minUserNameLength = 3;
- }
+    this.createBtn = this.page.locator(
+      'xpath=//button[@data-testid="button-Create"]',
+    );
+    this.cancelBtn = this.page.locator(
+      'xpath=//a[@data-testid="button-Cancel"]',
+    );
+    this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
+    this.yearOfBirthField = this.page.locator(
+      'xpath=//*[@id="inputYearOfBirth"]',
+    );
+    this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
+    this.maxUserNameLength = 14;
+    this.minUserNameLength = 3;
+  }
 
   async navigateToAddUserPage() {
-    await this.page.goto(
-      URLS.ADDUSER
-    );
+    await this.page.goto(URLS.ADDUSER);
   }
 
   async cancelAddUserOperation() {
@@ -59,7 +60,6 @@ export class AddUserPage {
     await this.yearOfBirthField.press("Enter");
   }
 
-
   async selectGenderOption(option: string) {
     await this.genderField.selectOption(option);
   }
@@ -68,13 +68,17 @@ export class AddUserPage {
     return await extractSelectedDisplayedValue(this.genderField);
   }
 
-  async getUserNameFieldError(){
-    let userNameFieldError = await this.page.getByTestId('inputError-UserName').innerText();
-    return  userNameFieldError;
+  async getUserNameFieldError() {
+    let userNameFieldError = await this.page
+      .getByTestId("inputError-UserName")
+      .innerText();
+    return userNameFieldError;
   }
 
-  async getYearOfBirthFieldError(){
-    let yearOfBirthFieldError =  await this.page.getByTestId('inputError-YearOfBirth').innerText();
+  async getYearOfBirthFieldError() {
+    let yearOfBirthFieldError = await this.page
+      .getByTestId("inputError-YearOfBirth")
+      .innerText();
     return yearOfBirthFieldError;
   }
 }
