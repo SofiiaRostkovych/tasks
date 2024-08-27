@@ -39,25 +39,30 @@ test.beforeEach(async ({ page }) => {
   homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
 
-  addUserPage.navigateToAddUserPage();
+  await addUserPage.navigateToAddUserPage();
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async () => {
+    await test.step("Create new user", async ()=>{
     await addUserPage.selectGenderOption(genderValue);
     await addUserPage.fillUserNameField(userNameValue);
     await addUserPage.fillYearOfBirthField(yearOfBirthValue);
-
     await addUserPage.clickCreate();
+  });
 
+  await test.step("Check the data of created user", async ()=>{
     await homePage.getUserByUserName(userNameValue);
 
     await expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
     await expect(await homePage.getSelectedGenderOfUser()).toBe(
       GenderOptions[genderValue],
     );
+  });
 
+    await test.step("Delete created user", async ()=>{
     await homePage.clickDeleteUserBtn(userNameValue);
     await deleteUserPage.confirmUserDeletion();
+    });
   });
 });

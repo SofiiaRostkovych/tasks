@@ -30,7 +30,7 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: BASE,
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* Collect trace. See https://playwright.dev/docs/trace-viewer */
     trace: "on",
     screenshot: 'only-on-failure',
     headless: false,
@@ -44,7 +44,7 @@ export default defineConfig({
       
     },
 
-    /*{
+    {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
@@ -52,7 +52,7 @@ export default defineConfig({
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
-    },*/
+    },
 
     /* Test against mobile viewports. */
     // {
