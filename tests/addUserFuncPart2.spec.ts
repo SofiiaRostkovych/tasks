@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../page-factory/page-factory";
 
 const invalidYearOfBirth = [

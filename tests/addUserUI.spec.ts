@@ -34,7 +34,7 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async () => 
     await addUserPage.userNameField.getAttribute("placeholder");
 
   await expect(addUserPage.userNameField).toBeVisible();
-  await expect(placeholder).toEqual("User Name");
+  expect(placeholder).toEqual("User Name");
   await expect(addUserPage.userNameField).toHaveValue("");
 });
 
@@ -43,7 +43,7 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
   await expect(addUserPage.yearOfBirthField).toHaveValue("");
   const placeholder =
     await addUserPage.yearOfBirthField.getAttribute("placeholder");
-  await expect(placeholder).toEqual("Year of Birth");
+  expect(placeholder).toEqual("Year of Birth");
 
   // check that non-number input is ignored by the Year of Birth field
   await addUserPage.yearOfBirthField.click();
@@ -54,15 +54,12 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
 test("Check 'Gender' field content on the 'Add User' page", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
-  // checking option 1 for gender input - Male
   await addUserPage.selectGenderOption(GenderOptions.Male);
   expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Male]);
 
-  // checking option 2 for gender input - Female
   await addUserPage.selectGenderOption(GenderOptions.Female);
   expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Female]);
 
-  // checking option 0 for gender input - Undefined
   await addUserPage.selectGenderOption(GenderOptions.Undefined);
   expect(await addUserPage.getGenderSelectedOption()).toBe(GenderOptions[GenderOptions.Undefined]);
 });

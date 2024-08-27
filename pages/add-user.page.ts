@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 export class AddUserPage {
   readonly page: Page;

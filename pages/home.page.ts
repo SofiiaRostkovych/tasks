@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 export class HomePage {
   readonly addUserLink: Locator;
