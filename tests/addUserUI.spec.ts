@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.ADDUSER);
@@ -20,7 +20,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
   const createBtn = page.locator(
     'xpath=//button[@data-testid="button-Create"]',
   );
-  await expect(createBtn).toBeVisible;
+  await expect(createBtn).toBeVisible();
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
 
   await createBtn.hover();
@@ -43,8 +43,8 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
   const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
   const placeholder = await userNameField.getAttribute("placeholder");
 
-  await expect(userNameField).toBeVisible;
-  await expect(placeholder).toEqual("User Name");
+  await expect(userNameField).toBeVisible();
+  expect(placeholder).toEqual("User Name");
   await expect(userNameField).toHaveValue("");
 });
 
@@ -55,9 +55,9 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
     'xpath=//input[@id="inputYearOfBirth"]',
   );
   const placeholder = await yearOfBirthField.getAttribute("placeholder");
-  await expect(yearOfBirthField).toBeVisible;
+  await expect(yearOfBirthField).toBeVisible();
   await expect(yearOfBirthField).toHaveValue("");
-  await expect(placeholder).toEqual("Year of Birth");
+  expect(placeholder).toEqual("Year of Birth");
 
   // check that non-number input is ignored be the Year of Birth field
   await yearOfBirthField.click();
@@ -69,7 +69,7 @@ test("Check 'Gender' field content on the 'Add User' page", async ({
   page,
 }) => {
   const genderField = page.locator('xpath=//select[@id="selectGender"]');
-  await expect(genderField).toBeVisible;
+  await expect(genderField).toBeVisible();
 
   // checking option 1 for gender input - Male
   await genderField.selectOption(GenderOptions.Male.toString());

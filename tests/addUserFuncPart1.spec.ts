@@ -1,6 +1,6 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 const validUserData = [
   {
@@ -30,7 +30,7 @@ const validUserData = [
   */
 ];
 
-let createdUser;
+let createdUser: Locator;
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.ADDUSER);

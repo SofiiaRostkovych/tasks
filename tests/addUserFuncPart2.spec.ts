@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 const invalidYearOfBirth = [
   "1899",
@@ -27,7 +27,7 @@ test(`Check creation of user with empty fields`, async ({ page }) => {
   const yearOfBirthIsRequiredErr = page.locator(
     'xpath=//span[@id="inputYearOfBirth-error"]',
   );
-  await expect(yearOfBirthIsRequiredErr).toBeVisible;
+  await expect(yearOfBirthIsRequiredErr).toBeVisible();
   await expect(yearOfBirthIsRequiredErr).toHaveText(
     "Year of Birth is requried",
   );
