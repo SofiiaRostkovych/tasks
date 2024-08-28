@@ -1,14 +1,15 @@
 import { Locator, Page } from "@playwright/test";
-import { URLS } from "../config/urlProvider";
+import { BasePage } from "./basePage";
 
-export class EditUserPage {
+export class EditUserPage extends BasePage {
   readonly updateBtn: Locator;
   readonly cancelBtn: Locator;
   readonly userNameField: Locator;
   readonly yearOfBirthField: Locator;
   readonly genderField: Locator;
 
-  constructor(private page: Page) {
+  constructor(page: Page) {
+    super(page);
     this.updateBtn = this.page.locator(
       'xpath=//button[@data-testid="button-Update"]',
     );
@@ -22,18 +23,6 @@ export class EditUserPage {
       'xpath=//input[@id="inputYearOfBirth"]',
     );
     this.genderField = this.page.locator('xpath=//select[@id="selectGender"]');
-  }
-
-  async navigateToEditUserPage(userEditUrl: string) {
-    await this.page.goto(URLS.EDITUSER + userEditUrl);
-  }
-
-  async clickCancel() {
-    await this.cancelBtn.click();
-  }
-
-  async clickUpdate() {
-    await this.updateBtn.click();
   }
 
   async fillUserNameField(text: string) {

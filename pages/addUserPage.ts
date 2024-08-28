@@ -1,8 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
 import { URLS } from "../config/urlProvider";
+import { BasePage } from "./basePage";
 
-export class AddUserPage {
+export class AddUserPage extends BasePage {
   readonly page: Page;
   readonly createBtn: Locator;
   readonly cancelBtn: Locator;
@@ -10,18 +11,17 @@ export class AddUserPage {
   readonly yearOfBirthField: Locator;
   readonly genderField: Locator;
   readonly headerListitem: Locator;
-  readonly maxUserNameLength: number;
-  readonly minUserNameLength: number;
   public yearOfBirthFieldError: Locator;
   public userNameFieldError: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.createBtn = this.page.locator(
       'xpath=//button[@data-testid="button-Create"]',
     );
     this.cancelBtn = this.page.locator(
-      'xpath=//a[@data-testid="button-Cancel"]',
+      'xpath=//a[@data-testid="button-Cancel"]'
     );
     this.userNameField = this.page.locator(
       'xpath=//input[@id="inputUserName"]',
@@ -30,20 +30,6 @@ export class AddUserPage {
       'xpath=//input[@id="inputYearOfBirth"]',
     );
     this.genderField = this.page.locator('xpath=//select[@id="selectGender"]');
-    this.maxUserNameLength = 14;
-    this.minUserNameLength = 3;
-  }
-
-  async navigateToAddUserPage() {
-    await this.page.goto(URLS.ADDUSER);
-  }
-
-  async cancelAddUserOperation() {
-    await this.cancelBtn.click();
-  }
-
-  async clickCreate() {
-    await this.createBtn.click();
   }
 
   async fillUserNameField(text: string) {

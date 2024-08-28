@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../page-factory/page-factory";
-import { AddUserPage } from "../pages/add-user.page";
-import { HomePage } from "../pages/home.page";
-import { DeleteUserPage } from "../pages/delete-user.page";
+import { PageFactory } from "../pageFactory/pageFactory";
+import { AddUserPage } from "../pages/addUserPage";
+import { HomePage } from "../pages/homePage";
+import { DeleteUserPage } from "../pages/deleteUserPage";
+import { URLS } from "../config/urlProvider";
 
 const validUserData = [
   {
@@ -44,7 +45,7 @@ test.beforeEach(async ({ page }) => {
   homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
 
-  addUserPage.navigateToAddUserPage();
+  addUserPage.goToPage(URLS.ADDUSER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
@@ -53,7 +54,7 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     await addUserPage.fillUserNameField(userNameValue);
     await addUserPage.fillYearOfBirthField(yearOfBirthValue);
 
-    await addUserPage.clickCreate();
+    await addUserPage.createBtn.click();
 
     await homePage.getUserByUserName(userNameValue);
 
@@ -62,7 +63,7 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
       GenderOptions[genderValue],
     );
 
-    await homePage.clickDeleteUserBtn(userNameValue);
+    await homePage.clickDeleteUserBtn();
     await deleteUserPage.confirmUserDeletion();
   });
 });
