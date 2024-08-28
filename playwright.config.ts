@@ -19,9 +19,9 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  
-  retries: 2,
-
+  /* Give failing tests 1 retry attempts */
+  retries: 1,
+  /* Limit the number of workers on CI, use default locally */
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? 'dot' : 'list',
@@ -29,10 +29,11 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: BASE,
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    /* Collect trace for all tests. See https://playwright.dev/docs/trace-viewer */
     trace: "on",
+    /* Capture screenshot after each test failure. */
     screenshot: 'only-on-failure',
+    /* Do not run browser in headless mode. */
     headless: false,
   },
 
