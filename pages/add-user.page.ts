@@ -23,11 +23,13 @@ export class AddUserPage {
     this.cancelBtn = this.page.locator(
       'xpath=//a[@data-testid="button-Cancel"]',
     );
-    this.userNameField = this.page.locator('xpath=//*[@id="inputUserName"]');
-    this.yearOfBirthField = this.page.locator(
-      'xpath=//*[@id="inputYearOfBirth"]',
+    this.userNameField = this.page.locator(
+      'xpath=//input[@id="inputUserName"]',
     );
-    this.genderField = this.page.locator('xpath=//*[@id="selectGender"]');
+    this.yearOfBirthField = this.page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
+    this.genderField = this.page.locator('xpath=//select[@id="selectGender"]');
     this.maxUserNameLength = 14;
     this.minUserNameLength = 3;
   }
