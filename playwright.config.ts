@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { BASE } from "./src/config/urlProvider";
+import { BASE } from "./config/urlProvider";
 
 /**
  * Read environment variables from file.
@@ -43,7 +43,6 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
       
     },
-
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },

@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../page-factory/page-factory";
+import { PageFactory } from "../pageFactory/pageFactory";
+import { AddUserPage } from "../pages/addUserPage";
+import { HomePage } from "../pages/homePage";
+import { DeleteUserPage } from "../pages/deleteUserPage";
+import { URLS } from "../config/urlProvider";
 
 const validUserData = [
   {
@@ -30,7 +34,9 @@ const validUserData = [
   */
 ];
 
-let addUserPage, homePage, deleteUserPage;
+let addUserPage: AddUserPage,
+  homePage: HomePage,
+  deleteUserPage: DeleteUserPage;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory = new PageFactory(page);
@@ -39,7 +45,7 @@ test.beforeEach(async ({ page }) => {
   homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
 
-  addUserPage.navigateToAddUserPage();
+  addUserPage.goToPage(URLS.ADDUSER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
@@ -49,20 +55,20 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
       await addUserPage.fillUserNameField(userNameValue);
       await addUserPage.fillYearOfBirthField(yearOfBirthValue);
   
-      await addUserPage.clickCreate();
+      await addUserPage.createBtn.click();
     });
 
     await test.step("Verify the created user's data", async()=>{
       await homePage.getUserByUserName(userNameValue);
 
-    await expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
-    await expect(await homePage.getSelectedGenderOfUser()).toBe(
+    expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
+    expect(await homePage.getSelectedGenderOfUser()).toBe(
       GenderOptions[genderValue],
     );
     });
     
     await test.step("Delete created user", async()=>{
-      await homePage.clickDeleteUserBtn(userNameValue);
+      await homePage.clickDeleteUserBtn();
       await deleteUserPage.confirmUserDeletion();
     });
 
