@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../page-factory/page-factory";
-import { DeleteUserPage } from "../pages/delete-user.page";
 import { AddUserPage } from "../pages/add-user.page";
-import { HomePage } from "../pages/home.page";
 
 const invalidYearOfBirth = [
   "1899",
