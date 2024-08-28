@@ -39,38 +39,41 @@ let addUserPage: AddUserPage,
   deleteUserPage: DeleteUserPage;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory = new PageFactory(page);
+  await test.step("Intitialize the Page Objects using Page Factory", async () => {
+    const pageFactory = new PageFactory(page);
 
-  addUserPage = pageFactory.getAddUserPage();
-  homePage = pageFactory.getHomePage();
-  deleteUserPage = pageFactory.getDeleteUserPage();
+    addUserPage = pageFactory.getAddUserPage();
+    homePage = pageFactory.getHomePage();
+    deleteUserPage = pageFactory.getDeleteUserPage();
+  });
 
-  addUserPage.goToPage(URLS.ADDUSER);
+  await test.step("Navigate to the 'Add User' page", async () => {
+    addUserPage.goToPage(URLS.ADDUSER);
+  });
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async () => {
-    await test.step('Create new user with valid data', async()=>{
+    await test.step("Create new user with valid data", async () => {
       await addUserPage.selectGenderOption(genderValue);
       await addUserPage.fillUserNameField(userNameValue);
       await addUserPage.fillYearOfBirthField(yearOfBirthValue);
-  
+
       await addUserPage.createBtn.click();
     });
 
-    await test.step("Verify the created user's data", async()=>{
+    await test.step("Verify the created user's data", async () => {
       await homePage.getUserByUserName(userNameValue);
 
-    expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
-    expect(await homePage.getSelectedGenderOfUser()).toBe(
-      GenderOptions[genderValue],
-    );
-    });
-    
-    await test.step("Delete created user", async()=>{
-      await homePage.clickDeleteUserBtn();
-      await deleteUserPage.confirmUserDeletion();
+      expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
+      expect(await homePage.getSelectedGenderOfUser()).toBe(
+        GenderOptions[genderValue],
+      );
     });
 
+    await test.step("Delete created user", async () => {
+      await homePage.clickDeleteUserBtn();
+      await deleteUserPage.yesBtn.click();
+    });
   });
 });

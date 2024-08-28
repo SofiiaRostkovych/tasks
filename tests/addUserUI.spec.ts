@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../pageFactory/pageFactory";
@@ -8,21 +8,26 @@ import { URLS } from "../config/urlProvider";
 let addUserPage: AddUserPage;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory = new PageFactory(page);
+  await test.step("Intitialize the Page Object using Page Factory", async () => {
+    const pageFactory = new PageFactory(page);
 
-  addUserPage = pageFactory.getAddUserPage();
+    addUserPage = pageFactory.getAddUserPage();
+  });
 
-  await addUserPage.goToPage(URLS.ADDUSER);
+  await test.step("Navigate to the 'Add User' page", async () => {
+    await addUserPage.goToPage(URLS.ADDUSER);
+  });
 });
 
 test("Verify 'Create' button design on the 'Add User' page", async () => {
-  let createBtn;
-  await test.step("Check the 'Create' button background color in neutural state", async()=>{
-    createBtn = await addUserPage.createBtn;
+  let createBtn: Locator;
+  await test.step("Check the 'Create' button background color in neutural state", async () => {
+    createBtn = addUserPage.createBtn;
 
     await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
   });
-  await test.step("Check the 'Create' button background color after hovering", async()=>{
+
+  await test.step("Check the 'Create' button background color after hovering", async () => {
     await createBtn.hover();
 
     await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
@@ -30,58 +35,70 @@ test("Verify 'Create' button design on the 'Add User' page", async () => {
 });
 
 test("Verify 'Cancel' button design on the 'Add User' page", async () => {
-  let cancelBtn;
-  await test.step("Check the 'Cancel' button background color in neutural state", async()=>{
-  cancelBtn = await addUserPage.cancelBtn;
+  let cancelBtn: Locator;
+  await test.step("Check the 'Cancel' button background color in neutural state", async () => {
+    cancelBtn = addUserPage.cancelBtn;
 
-  await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
+    await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
   });
-  await test.step("Check the 'Cancel' button background color after hovering", async()=>{
+
+  await test.step("Check the 'Cancel' button background color after hovering", async () => {
     await cancelBtn.hover();
     await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
   });
- 
 });
 
 test("Verify 'User Name' field placeholder on the 'Add User' page", async () => {
-  const placeholder =
-    await addUserPage.userNameField.getAttribute("placeholder");
+  await test.step("Check the placeholder for the 'User Name' field", async () => {
+    const placeholder =
+      await addUserPage.userNameField.getAttribute("placeholder");
+    expect(placeholder).toEqual("User Name");
+  });
 
-  await expect(addUserPage.userNameField).toBeVisible();
-  expect(placeholder).toEqual("User Name");
-  await expect(addUserPage.userNameField).toHaveValue("");
+  await test.step("Verify the 'User Name' field default value", async () => {
+    await expect(addUserPage.userNameField).toHaveValue("");
+  });
 });
 
 test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async () => {
-  await expect(addUserPage.yearOfBirthField).toBeVisible();
-  await expect(addUserPage.yearOfBirthField).toHaveValue("");
-  const placeholder =
-    await addUserPage.yearOfBirthField.getAttribute("placeholder");
-  expect(placeholder).toEqual("Year of Birth");
+  await test.step("Check the 'Year of Birth' field default value", async () => {
+    await expect(addUserPage.yearOfBirthField).toHaveValue("");
+  });
 
-  // check that non-number input is ignored by the Year of Birth field
-  await addUserPage.yearOfBirthField.click();
-  await addUserPage.page.keyboard.insertText("!a@");
-  await expect(addUserPage.yearOfBirthField).toHaveValue("");
+  await test.step("Check the placeholder for the 'Year of Birth' field", async () => {
+    const placeholder =
+      await addUserPage.yearOfBirthField.getAttribute("placeholder");
+    expect(placeholder).toEqual("Year of Birth");
+  });
+
+  await test.step("Verify that non-number input is ignored by the 'Year of Birth' field", async () => {
+    await addUserPage.yearOfBirthField.click();
+    await addUserPage.page.keyboard.insertText("!a@");
+    await expect(addUserPage.yearOfBirthField).toHaveValue("");
+  });
 });
 
 test("Check 'Gender' field content on the 'Add User' page", async () => {
-  await expect(addUserPage.genderField).toBeVisible();
+  await test.step("Check the 'Male' option for the 'Gender' select", async () => {
+    await addUserPage.selectGenderOption(GenderOptions.Male);
+    expect(await addUserPage.getGenderSelectedOption()).toBe(
+      GenderOptions[GenderOptions.Male],
+    );
+  });
 
-  await addUserPage.selectGenderOption(GenderOptions.Male);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
-    GenderOptions[GenderOptions.Male],
-  );
+  await test.step("Check the 'Female' option for the 'Gender' select", async () => {
+    await addUserPage.selectGenderOption(GenderOptions.Female);
+    expect(await addUserPage.getGenderSelectedOption()).toBe(
+      GenderOptions[GenderOptions.Female],
+    );
+  });
 
-  await addUserPage.selectGenderOption(GenderOptions.Female);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
-    GenderOptions[GenderOptions.Female],
-  );
-
-  await addUserPage.selectGenderOption(GenderOptions.Undefined);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
-    GenderOptions[GenderOptions.Undefined],
-  );
+  await test.step("Check the 'Undefined' option for the 'Gender' select", async () => {
+    await addUserPage.selectGenderOption(GenderOptions.Undefined);
+    expect(await addUserPage.getGenderSelectedOption()).toBe(
+      GenderOptions[GenderOptions.Undefined],
+    );
+  });
 });
 
 // this test was used to practice writing tests with XPath functions and axis

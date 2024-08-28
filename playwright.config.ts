@@ -13,18 +13,18 @@ import { BASE } from "./config/urlProvider";
  */
 export default defineConfig({
   timeout: 5 * 60 * 1000,
-  
+
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  
+
   retries: 2,
 
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'dot' : 'list',
+  reporter: process.env.CI ? "dot" : "list",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -32,7 +32,7 @@ export default defineConfig({
 
     /* Collect trace. See https://playwright.dev/docs/trace-viewer */
     trace: "on",
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
     headless: false,
   },
 
@@ -41,7 +41,6 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      
     },
     {
       name: "firefox",
