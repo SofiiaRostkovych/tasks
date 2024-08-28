@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../page-factory/page-factory";
+import { AddUserPage } from "../pages/add-user.page";
 
 const invalidYearOfBirth = [
   "1899",
@@ -10,14 +11,12 @@ const invalidYearOfBirth = [
   (new Date().getFullYear() - 16).toString(),
 ];
 
-let addUserPage, homePage, deleteUserPage;
+let addUserPage: AddUserPage;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
-  homePage = pageFactory.getHomePage();
-  deleteUserPage = pageFactory.getDeleteUserPage();
 
   await addUserPage.navigateToAddUserPage();
 });
@@ -26,10 +25,8 @@ test(`Check creation of user with empty fields`, async () => {
   await addUserPage.clickCreate();
 
   await expect(await addUserPage.page).toHaveURL(URLS.ADDUSER);
-  await expect(await addUserPage.getUserNameFieldError()).toBe(
-    "Name is requried",
-  );
-  await expect(await addUserPage.getYearOfBirthFieldError()).toBe(
+  expect(await addUserPage.getUserNameFieldError()).toBe("Name is requried");
+  expect(await addUserPage.getYearOfBirthFieldError()).toBe(
     "Year of Birth is requried",
   );
 });
@@ -42,9 +39,7 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
 
   await addUserPage.pressEnterUserNameField();
 
-  await expect(await addUserPage.getUserNameFieldError()).toBe(
-    "Name is too short",
-  );
+  expect(await addUserPage.getUserNameFieldError()).toBe("Name is too short");
   await expect(await addUserPage.page).toHaveURL(URLS.ADDUSER);
 });
 
@@ -57,7 +52,7 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
 
     await addUserPage.pressEnterYearOfBirthField();
 
-    await expect(await addUserPage.getYearOfBirthFieldError()).toBe(
+    expect(await addUserPage.getYearOfBirthFieldError()).toBe(
       "Not valid Year of Birth is set",
     );
     await expect(await addUserPage.page).toHaveURL(URLS.ADDUSER);

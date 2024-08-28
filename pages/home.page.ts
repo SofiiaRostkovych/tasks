@@ -1,10 +1,10 @@
 import { Locator, Page } from "@playwright/test";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 export class HomePage {
   readonly addUserLink: Locator;
-  public createdUser: Locator;
   readonly usersTable: Locator;
+  public createdUser: Locator;
 
   constructor(private page: Page) {
     this.page = page;
@@ -45,7 +45,7 @@ export class HomePage {
       .innerText();
   }
 
-  async clickDeleteUserBtn() {
+  async clickDeleteUserBtn(userNameValue: string) {
     await this.createdUser.getByTestId("button-Delete").click();
   }
 }
