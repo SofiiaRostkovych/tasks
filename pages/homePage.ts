@@ -12,14 +12,12 @@ export class HomePage extends BasePage {
     super(page);
     this.page = page;
     this.addUserLink = this.page.locator(`xpath=//a[@href="${URLS.ADDUSER}"]`);
-    this.usersTable = this.page.locator(
-      'xpath=//table[@data-testid="table-Users"]',
-    );
+    this.usersTable = this.page.getByTestId("table-Users");
   }
 
   async getUserByUserName(userNameValue: string) {
     const users = await this.page
-      .locator(`xpath=//td[@data-testid="td-UserName"]`)
+      .getByTestId("td-UserName")
       .all();
     for (const user of users) {
       if ((await user.innerText()) === userNameValue) {
@@ -31,13 +29,13 @@ export class HomePage extends BasePage {
 
   async getYearOfBirthOfUser() {
     return await this.createdUser
-      .locator('xpath=/td[@data-testid="td-YearOfBirth"]')
+      .getByTestId("td-YearOfBirth")
       .innerText();
   }
 
   async getSelectedGenderOfUser() {
     return await this.createdUser
-      .locator('xpath=/td[@data-testid="td-Gender"]')
+      .getByTestId("td-Gender")
       .innerText();
   }
 

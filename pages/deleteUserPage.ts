@@ -7,12 +7,8 @@ export class DeleteUserPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.yesBtn = this.page.locator(
-      'xpath=//button[@data-testid="button-Yes"]',
-    );
-    this.cancelBtn = this.page.locator(
-      'xpath=//a[@data-testid="button-Cancel"]',
-    );
+    this.yesBtn = this.page.getByTestId("button-Yes");
+    this.cancelBtn = this.page.getByTestId("button-Cancel");
   }
 
   async cancelDeleteUserOperation() {

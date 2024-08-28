@@ -17,19 +17,11 @@ export class AddUserPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.createBtn = this.page.locator(
-      'xpath=//button[@data-testid="button-Create"]',
-    );
-    this.cancelBtn = this.page.locator(
-      'xpath=//a[@data-testid="button-Cancel"]'
-    );
-    this.userNameField = this.page.locator(
-      'xpath=//input[@id="inputUserName"]',
-    );
-    this.yearOfBirthField = this.page.locator(
-      'xpath=//input[@id="inputYearOfBirth"]',
-    );
-    this.genderField = this.page.locator('xpath=//select[@id="selectGender"]');
+    this.createBtn = this.page.getByTestId("button-Create");
+    this.cancelBtn = this.page.getByTestId("button-Cancel");
+    this.userNameField = this.page.getByTestId("input-UserName");
+    this.yearOfBirthField = this.page.getByTestId("input-YearOfBirth");
+    this.genderField = this.page.getByTestId("select-Gender");
   }
 
   async fillUserNameField(text: string) {
