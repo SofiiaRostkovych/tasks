@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { BASE } from "./src/config/urlProvider";
+import { BASE } from "./config/urlProvider";
 
 /**
  * Read environment variables from file.
@@ -40,8 +40,7 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-
-    /* {
+    {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
@@ -49,7 +48,8 @@ export default defineConfig({
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
-    },*/
+    },
+    
 
     /* Test against mobile viewports. */
     // {

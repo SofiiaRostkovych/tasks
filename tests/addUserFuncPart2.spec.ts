@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
 
 const invalidYearOfBirth = [
   "1899",
@@ -14,18 +14,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 test(`Check creation of user with empty fields`, async ({ page }) => {
-  const createBtn = page.locator("xpath=//div[4]/button");
+  const createBtn = page.locator(
+    'xpath=//button[@data-testid="button-Create"]',
+  );
   await createBtn.click();
 
   const nameIsRequiredErr = page.locator(
-    'xpath=//*[@id="inputUserName-error"]',
+    'xpath=//span[@id="inputUserName-error"]',
   );
   await expect(nameIsRequiredErr).toHaveText("Name is requried");
 
   const yearOfBirthIsRequiredErr = page.locator(
-    'xpath=//span[last()][@data-valmsg-for="User.YearOfBirth"]',
+    'xpath=//span[@id="inputYearOfBirth-error"]',
   );
-  await expect(yearOfBirthIsRequiredErr).toBeVisible;
+  await expect(yearOfBirthIsRequiredErr).toBeVisible();
   await expect(yearOfBirthIsRequiredErr).toHaveText(
     "Year of Birth is requried",
   );
@@ -34,8 +36,10 @@ test(`Check creation of user with empty fields`, async ({ page }) => {
 test(`Check creation of user with invalid 'User Name' input`, async ({
   page,
 }) => {
-  const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-  const yearOfBirthField = page.locator("xpath=//div[3]/input");
+  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
+  const yearOfBirthField = page.locator(
+    'xpath=//input[@id="inputYearOfBirth"]',
+  );
   const testStr = generateRandomUserName(2);
 
   await userNameField.fill(testStr);
@@ -43,7 +47,7 @@ test(`Check creation of user with invalid 'User Name' input`, async ({
   yearOfBirthField.fill("1900");
   await yearOfBirthField.press("Enter");
   const nameIsTooShortErr = page.locator(
-    'xpath=//*[@id="inputUserName-error"]',
+    'xpath=//span[@id="inputUserName-error"]',
   );
   await expect(nameIsTooShortErr).toHaveText("Name is too short");
   await expect(page).toHaveURL(URLS.ADDUSER);
@@ -53,8 +57,10 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
   test(`Check creation of user with invalid 'Year of Birth' ${yearOfBirthValue}`, async ({
     page,
   }) => {
-    const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-    const yearOfBirthField = page.locator("xpath=//div[3]/input");
+    const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
+    const yearOfBirthField = page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
 
     const testStr = generateRandomUserName(3);
     await userNameField.fill(testStr);
@@ -62,7 +68,7 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
 
     await yearOfBirthField.press("Enter");
     const yearOfBirthIsInvalidErr = page.locator(
-      'xpath=//*[@id="inputYearOfBirth-error"]',
+      'xpath=//span[@id="inputYearOfBirth-error"]',
     );
     await expect(yearOfBirthIsInvalidErr).toHaveText(
       "Not valid Year of Birth is set",
@@ -74,8 +80,7 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
 test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ({
   page,
 }) => {
-  const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-  const placeholder = await userNameField.getAttribute("placeholder");
+  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
 
   // checking maximum symbols limit - 14 characters for User Name input
   const testStr = generateRandomUserName(20);

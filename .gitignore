@@ -113,7 +113,7 @@ eslint.config.mjs
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-=======
+.cache/
 
 # Runtime data
 pids
@@ -174,3 +174,4 @@ eslint.config.mjs
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.cache/

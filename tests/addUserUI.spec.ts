@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
-import { URLS } from "../src/config/urlProvider";
+import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
+import { URLS } from "../config/urlProvider";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.ADDUSER);
@@ -16,8 +17,10 @@ test("Check that 'Add User' page has title - TS Trainee course", async ({
 test("Verify 'Create' button design on the 'Add User' page", async ({
   page,
 }) => {
-  const createBtn = page.locator("xpath=//div[4]/button");
-  await expect(createBtn).toBeVisible;
+  const createBtn = page.locator(
+    'xpath=//button[@data-testid="button-Create"]',
+  );
+  await expect(createBtn).toBeVisible();
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
 
   await createBtn.hover();
@@ -27,7 +30,7 @@ test("Verify 'Create' button design on the 'Add User' page", async ({
 test("Verify 'Cancel' button design on the 'Add User' page", async ({
   page,
 }) => {
-  const cancelBtn = page.getByRole("link", { name: "Cancel" });
+  const cancelBtn = page.locator('xpath=//a[@data-testid="button-Cancel"]');
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
 
   await cancelBtn.hover();
@@ -37,20 +40,24 @@ test("Verify 'Cancel' button design on the 'Add User' page", async ({
 test("Verify 'User Name' field placeholder on the 'Add User' page", async ({
   page,
 }) => {
-  const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
+  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
   const placeholder = await userNameField.getAttribute("placeholder");
 
-  await expect(userNameField).toBeVisible;
-  await expect(placeholder).toEqual("User Name");
+  await expect(userNameField).toBeVisible();
+  expect(placeholder).toEqual("User Name");
   await expect(userNameField).toHaveValue("");
 });
 
 test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async ({
   page,
 }) => {
-  const yearOfBirthField = page.getByPlaceholder("Year of Birth");
-  await expect(yearOfBirthField).toBeVisible;
+  const yearOfBirthField = page.locator(
+    'xpath=//input[@id="inputYearOfBirth"]',
+  );
+  const placeholder = await yearOfBirthField.getAttribute("placeholder");
+  await expect(yearOfBirthField).toBeVisible();
   await expect(yearOfBirthField).toHaveValue("");
+  expect(placeholder).toEqual("Year of Birth");
 
   // check that non-number input is ignored be the Year of Birth field
   await yearOfBirthField.click();
@@ -61,18 +68,43 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
 test("Check 'Gender' field content on the 'Add User' page", async ({
   page,
 }) => {
-  const genderField = page.locator('xpath=//*[@id="selectGender"]');
-  await expect(genderField).toBeVisible;
-  // TODO: update locators which use Label
-  // checking option 1 for gender input - Male
-  await genderField.selectOption({ label: GenderOptions[1] });
-  await expect(genderField).toHaveValue(GenderOptions.Male.toString());
+  const genderField = page.locator('xpath=//select[@id="selectGender"]');
+  await expect(genderField).toBeVisible();
 
-  // checking option 2 for gender input - Female
-  await genderField.selectOption({ label: GenderOptions[2] });
-  await expect(genderField).toHaveValue(GenderOptions.Female.toString());
+  await genderField.selectOption(GenderOptions.Male.toString());
+  expect(await extractSelectedDisplayedValue(genderField)).toBe(
+    GenderOptions[GenderOptions.Male],
+  );
 
-  // checking option 0 for gender input - Undefined
-  await genderField.selectOption({ label: GenderOptions[0] });
-  await expect(genderField).toHaveValue(GenderOptions.Undefined.toString());
+  await genderField.selectOption(GenderOptions.Female.toString());
+  expect(await extractSelectedDisplayedValue(genderField)).toBe(
+    GenderOptions[GenderOptions.Female],
+  );
+
+  await genderField.selectOption(GenderOptions.Undefined.toString());
+  expect(await extractSelectedDisplayedValue(genderField)).toBe(
+    GenderOptions[GenderOptions.Undefined],
+  );
+});
+
+// using Header to practice writing tests using XPath functions and axis
+test("Verify Header content on the 'Add User' page", async ({ page }) => {
+  // checking the content of the first listitem of the header
+  let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
+  await expect(listitem).toHaveText("Home");
+  await expect(listitem).toHaveAttribute("href", "/");
+
+  // checking the content of the second listitem of the header
+  listitem = listitem.locator(
+    "xpath=/parent::li/following-sibling::li[1]/descendant::a",
+  );
+  await expect(listitem).toHaveText("Add User");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
+
+  // checking the content of last listitem of the header
+  listitem = listitem.locator(
+    'xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]',
+  );
+  await expect(listitem).toHaveText("Add Address");
+  await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
 });

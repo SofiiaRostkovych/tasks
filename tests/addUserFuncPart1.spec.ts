@@ -1,23 +1,23 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { URLS } from "../src/config/urlProvider";
+import { URLS } from "../config/urlProvider";
+
 const validUserData = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
-    genderValue: GenderOptions[0],
+    genderValue: GenderOptions.Undefined,
   },
   {
     userNameValue: "йцу",
     yearOfBirthValue: "2005",
-    genderValue: GenderOptions[1],
+    genderValue: GenderOptions.Male,
   },
   {
     userNameValue: "new user",
     yearOfBirthValue: "2004",
-    genderValue: GenderOptions[2],
+    genderValue: GenderOptions.Female,
   },
-
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
@@ -30,7 +30,7 @@ const validUserData = [
   */
 ];
 
-let createdUser;
+let createdUser: Locator;
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.ADDUSER);
@@ -40,13 +40,16 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async ({
     page,
   }) => {
-    const genderField = page.locator('xpath=//*[@id="selectGender"]');
-    const userNameField = page.locator('xpath=//*[@id="inputUserName"]');
-    const yearOfBirthField = page.locator('xpath=//*[@id="inputYearOfBirth"]');
-    const createBtn = page.locator("xpath=//div[4]/button");
+    const genderField = page.locator('xpath=//select[@id="selectGender"]');
+    const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
+    const yearOfBirthField = page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
+    const createBtn = page.locator(
+      'xpath=//button[@data-testid="button-Create"]',
+    );
 
-    // TODO: update locators which use Label
-    await genderField.selectOption({ label: genderValue });
+    await genderField.selectOption(genderValue.toString());
     await userNameField.fill(userNameValue);
     await yearOfBirthField.fill(yearOfBirthValue);
     await createBtn.click();
@@ -67,6 +70,10 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     await expect(createdUser.getByTestId("td-UserName")).toHaveText(
       userNameValue,
     );
+
+    await expect(createdUser.getByTestId("td-Gender")).toHaveText(
+      GenderOptions[genderValue],
+    );
   });
 });
 
@@ -74,7 +81,6 @@ test.afterEach(async ({ page }) => {
   if (createdUser) {
     await createdUser.getByTestId("button-Delete").click();
 
-    // TODO: update locators which use Name
-    await page.getByRole("button", { name: "Yes" }).click();
+    await page.locator('xpath=//button[@data-testid="button-Yes"]').click();
   }
 });
