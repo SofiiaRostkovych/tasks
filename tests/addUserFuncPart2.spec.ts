@@ -4,16 +4,16 @@ import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
 import { AddUserSteps } from "../steps/addUserSteps";
-import { UserDTO } from "../dto/userDTO";
+import { UserDto } from "../dto/userDto";
 
-const usersWithInvalidYearOfBirth: UserDTO[] = [
-  new UserDTO(generateRandomUserName(4), "1899"),
-  new UserDTO(generateRandomUserName(3), "1898"),
-  new UserDTO(
+const usersWithInvalidYearOfBirth: UserDto[] = [
+  new UserDto(generateRandomUserName(4), "1899"),
+  new UserDto(generateRandomUserName(3), "1898"),
+  new UserDto(
     generateRandomUserName(14),
     (new Date().getFullYear() - 17).toString(),
   ),
-  new UserDTO(
+  new UserDto(
     generateRandomUserName(13),
     (new Date().getFullYear() - 16).toString(),
   ),
@@ -56,13 +56,13 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
 });
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
-  test(`Check creation of user with invalid 'Year of Birth' ${userDTO.yearOfBirthValue}`, async () => {
+  test(`Check creation of user with invalid 'Year of Birth' ${userDTO.yearOfBirth}`, async () => {
     await addUserSteps.fillField(
-      userDTO.userNameValue,
+      userDTO.name,
       addUserPage.userNameField,
     );
     await addUserSteps.fillField(
-      userDTO.yearOfBirthValue,
+      userDTO.yearOfBirth,
       addUserPage.yearOfBirthField,
     );
 

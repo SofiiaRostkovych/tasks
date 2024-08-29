@@ -1,13 +1,13 @@
 import { GenderOptions } from "../enums/GenderOptions";
 
-export class UserDTO {
+export class UserDto {
   constructor(
-    public userNameValue: string,
-    public yearOfBirthValue: string,
-    public genderValue: number = GenderOptions.Male,
+    public name: string,
+    public yearOfBirth: string,
+    public gender: number = GenderOptions.Male,
   ) {
-    this.userNameValue = userNameValue;
-    this.yearOfBirthValue = yearOfBirthValue;
-    this.genderValue = genderValue;
+    this.name = name;
+    this.yearOfBirth = yearOfBirth;
+    this.gender = gender;
   }
 }

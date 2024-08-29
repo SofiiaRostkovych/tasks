@@ -7,12 +7,13 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
-import { UserDTO } from "../dto/userDTO";
+import { UserDto } from "../dto/userDto";
 
-const validUserData: UserDTO[] = [
-  new UserDTO("nб3-w", "1900", GenderOptions.Undefined),
-  new UserDTO("йцу", "2005", GenderOptions.Male),
-  new UserDTO("new user", "2004", GenderOptions.Female),
+
+const validUserData: UserDto[] = [
+  new UserDto("nб3-w", "1900", GenderOptions.Undefined),
+  new UserDto("йцу", "2005", GenderOptions.Male),
+  new UserDto("new user", "2004", GenderOptions.Female),
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
@@ -36,27 +37,27 @@ test.beforeEach(async ({ page }) => {
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.userNameValue}"`, async () => {
-    await addUserSteps.selectGenderOption(userDTO.genderValue);
+  test(`Check successful creation of new user "${userDTO.name}"`, async () => {
+    await addUserSteps.selectGenderOption(userDTO.gender);
     await addUserSteps.fillField(
-      userDTO.userNameValue,
+      userDTO.name,
       addUserPage.userNameField,
     );
     await addUserSteps.fillField(
-      userDTO.yearOfBirthValue,
+      userDTO.yearOfBirth,
       addUserPage.yearOfBirthField,
     );
 
     await addUserPage.createBtn.click();
 
-    expect(await homeSteps.getYearOfBirthOfUser(userDTO.userNameValue)).toBe(
-      userDTO.yearOfBirthValue,
+    expect(await homeSteps.getYearOfBirthOfUser(userDTO.name)).toBe(
+      userDTO.yearOfBirth,
     );
-    expect(await homeSteps.getSelectedGenderOfUser(userDTO.userNameValue)).toBe(
-      GenderOptions[userDTO.genderValue],
+    expect(await homeSteps.getSelectedGenderOfUser(userDTO.name)).toBe(
+      GenderOptions[userDTO.gender],
     );
 
-    await homeSteps.clickDeleteUserBtn(userDTO.userNameValue);
+    await homeSteps.clickDeleteUserBtn(userDTO.name);
     await deleteUserPage.yesBtn.click();
   });
 });
