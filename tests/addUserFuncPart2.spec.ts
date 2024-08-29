@@ -1,89 +1,75 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { URLS } from "../config/urlProvider";
+import { PageFactory } from "../pageFactory/pageFactory";
+import { AddUserPage } from "../pages/addUserPage";
 
-const invalidYearOfBirth = [
+const invalidYearOfBirth: string[] = [
   "1899",
   "1898",
   (new Date().getFullYear() - 17).toString(),
   (new Date().getFullYear() - 16).toString(),
 ];
 
+let addUserPage: AddUserPage;
+
 test.beforeEach(async ({ page }) => {
-  await page.goto(URLS.ADD_USER);
+  const pageFactory: PageFactory = new PageFactory(page);
+
+  addUserPage = pageFactory.getAddUserPage();
+
+  await addUserPage.goToPage(URLS.ADD_USER);
 });
 
-test(`Check creation of user with empty fields`, async ({ page }) => {
-  const createBtn = page.locator(
-    'xpath=//button[@data-testid="button-Create"]',
-  );
-  await createBtn.click();
+test(`Check creation of user with empty fields`, async () => {
+  await addUserPage.createBtn.click();
 
-  const nameIsRequiredErr = page.locator(
-    'xpath=//span[@id="inputUserName-error"]',
-  );
-  await expect(nameIsRequiredErr).toHaveText("Name is requried");
-
-  const yearOfBirthIsRequiredErr = page.locator(
-    'xpath=//span[@id="inputYearOfBirth-error"]',
-  );
-  await expect(yearOfBirthIsRequiredErr).toBeVisible();
-  await expect(yearOfBirthIsRequiredErr).toHaveText(
+  await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
+  expect(await addUserPage.getUserNameFieldError()).toBe("Name is requried");
+  expect(await addUserPage.getYearOfBirthFieldError()).toBe(
     "Year of Birth is requried",
   );
 });
 
-test(`Check creation of user with invalid 'User Name' input`, async ({
-  page,
-}) => {
-  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-  const yearOfBirthField = page.locator(
-    'xpath=//input[@id="inputYearOfBirth"]',
+test(`Check creation of user with invalid 'User Name' input`, async () => {
+  const testStr: string = generateRandomUserName(
+    addUserPage.minUserNameLength - 1,
   );
-  const testStr = generateRandomUserName(2);
 
-  await userNameField.fill(testStr);
+  await addUserPage.fillUserNameField(testStr);
+  await addUserPage.fillYearOfBirthField("1900");
 
-  yearOfBirthField.fill("1900");
-  await yearOfBirthField.press("Enter");
-  const nameIsTooShortErr = page.locator(
-    'xpath=//span[@id="inputUserName-error"]',
-  );
-  await expect(nameIsTooShortErr).toHaveText("Name is too short");
-  await expect(page).toHaveURL(URLS.ADD_USER);
+  await addUserPage.pressEnterUserNameField();
+
+  expect(await addUserPage.getUserNameFieldError()).toBe("Name is too short");
+  await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
 });
 
 invalidYearOfBirth.forEach((yearOfBirthValue) => {
-  test(`Check creation of user with invalid 'Year of Birth' ${yearOfBirthValue}`, async ({
-    page,
-  }) => {
-    const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-    const yearOfBirthField = page.locator(
-      'xpath=//input[@id="inputYearOfBirth"]',
+  test(`Check creation of user with invalid 'Year of Birth' ${yearOfBirthValue}`, async () => {
+    const testStr: string = generateRandomUserName(
+      addUserPage.minUserNameLength,
     );
 
-    const testStr = generateRandomUserName(3);
-    await userNameField.fill(testStr);
-    yearOfBirthField.fill(yearOfBirthValue);
+    await addUserPage.fillUserNameField(testStr);
+    await addUserPage.fillYearOfBirthField(yearOfBirthValue);
 
-    await yearOfBirthField.press("Enter");
-    const yearOfBirthIsInvalidErr = page.locator(
-      'xpath=//span[@id="inputYearOfBirth-error"]',
-    );
-    await expect(yearOfBirthIsInvalidErr).toHaveText(
+    await addUserPage.pressEnterYearOfBirthField();
+
+    expect(await addUserPage.getYearOfBirthFieldError()).toBe(
       "Not valid Year of Birth is set",
     );
-    await expect(page).toHaveURL(URLS.ADD_USER);
+    await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
   });
 });
 
-test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ({
-  page,
-}) => {
-  const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
-
+test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async () => {
   // checking maximum symbols limit - 14 characters for User Name input
-  const testStr = generateRandomUserName(20);
-  await userNameField.fill(testStr);
-  await expect(userNameField).toHaveValue(testStr.substring(0, 14));
+  const testStr: string = generateRandomUserName(
+    addUserPage.maxUserNameLength + 5,
+  );
+  await addUserPage.fillUserNameField(testStr);
+  await expect(addUserPage.userNameField).toHaveValue(
+    testStr.substring(0, addUserPage.maxUserNameLength),
+  );
 });
