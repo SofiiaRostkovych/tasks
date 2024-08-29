@@ -6,21 +6,33 @@ export class AddUserPage extends BasePage {
   readonly createBtn: Locator = this.page.locator(
     'xpath=//button[@data-testid="button-Create"]',
   );
+
   readonly cancelBtn: Locator = this.page.locator(
     'xpath=//a[@data-testid="button-Cancel"]',
   );
+
   readonly userNameField: Locator = this.page.locator(
     'xpath=//input[@id="inputUserName"]',
   );
+
   readonly yearOfBirthField: Locator = this.page.locator(
     'xpath=//input[@id="inputYearOfBirth"]',
   );
+
   readonly genderField: Locator = this.page.locator(
     'xpath=//select[@id="selectGender"]',
   );
-  readonly userNameFieldError: Locator = this.page.getByTestId("inputError-UserName");
-  readonly yearOfBirthFieldError: Locator = this.page.getByTestId("inputError-YearOfBirth");
+
+  readonly userNameFieldError: Locator = this.page.getByTestId(
+    "inputError-UserName",
+  );
+
+  readonly yearOfBirthFieldError: Locator = this.page.getByTestId(
+    "inputError-YearOfBirth",
+  );
+
   readonly maxUserNameLength: number = 14;
+
   readonly minUserNameLength: number = 3;
 
   async fillUserNameField(text: string): Promise<void> {
@@ -48,7 +60,7 @@ export class AddUserPage extends BasePage {
   }
 
   async getUserNameFieldError(): Promise<string> {
-    return await this.userNameFieldError.innerText();;
+    return await this.userNameFieldError.innerText();
   }
 
   async getYearOfBirthFieldError(): Promise<string> {
