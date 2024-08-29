@@ -3,25 +3,16 @@ import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplay
 import { BasePage } from "./basePage";
 
 export class AddUserPage extends BasePage {
-  readonly createBtn: Locator = this.page.locator(
-    'xpath=//button[@data-testid="button-Create"]',
-  );
+  readonly createBtn: Locator = this.page.getByTestId("button-Create");
 
-  readonly cancelBtn: Locator = this.page.locator(
-    'xpath=//a[@data-testid="button-Cancel"]',
-  );
+  readonly cancelBtn: Locator = this.page.getByTestId("button-Cancel");
 
-  readonly userNameField: Locator = this.page.locator(
-    'xpath=//input[@id="inputUserName"]',
-  );
+  readonly userNameField: Locator = this.page.getByTestId("input-UserName");
 
-  readonly yearOfBirthField: Locator = this.page.locator(
-    'xpath=//input[@id="inputYearOfBirth"]',
-  );
+  readonly yearOfBirthField: Locator =
+    this.page.getByTestId("input-YearOfBirth");
 
-  readonly genderField: Locator = this.page.locator(
-    'xpath=//select[@id="selectGender"]',
-  );
+  readonly genderField: Locator = this.page.getByTestId("select-Gender");
 
   readonly userNameFieldError: Locator = this.page.getByTestId(
     "inputError-UserName",

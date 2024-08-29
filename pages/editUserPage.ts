@@ -2,25 +2,12 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./basePage";
 
 export class EditUserPage extends BasePage {
-  readonly updateBtn: Locator = this.page.locator(
-    'xpath=//button[@data-testid="button-Update"]',
-  );
-
-  readonly cancelBtn: Locator = this.page.locator(
-    'xpath=//a[@data-testid="button-Cancel"]',
-  );
-
-  readonly userNameField: Locator = this.page.locator(
-    'xpath=//input[@id="inputUserName"]',
-  );
-
-  readonly yearOfBirthField: Locator = this.page.locator(
-    'xpath=//input[@id="inputYearOfBirth"]',
-  );
-
-  readonly genderField: Locator = this.page.locator(
-    'xpath=//select[@id="selectGender"]',
-  );
+  readonly updateBtn: Locator = this.page.getByTestId("button-Update");
+  readonly cancelBtn: Locator = this.page.getByTestId("button-Cancel");
+  readonly userNameField: Locator = this.page.getByTestId("input-UserName");
+  readonly yearOfBirthField: Locator =
+    this.page.getByTestId("input-YearOfBirth");
+  readonly genderField: Locator = this.page.getByTestId("select-Gender");
 
   async fillUserNameField(text: string): Promise<void> {
     await this.userNameField.fill(text);

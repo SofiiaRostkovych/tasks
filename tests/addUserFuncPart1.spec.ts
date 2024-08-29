@@ -60,7 +60,9 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
 
     await addUserPage.createBtn.click();
 
-    expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(yearOfBirthValue);
+    expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(
+      yearOfBirthValue,
+    );
     expect(await homePage.getSelectedGenderOfUser(userNameValue)).toBe(
       GenderOptions[genderValue],
     );
