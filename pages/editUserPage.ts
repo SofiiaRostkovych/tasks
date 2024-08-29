@@ -2,38 +2,35 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./basePage";
 
 export class EditUserPage extends BasePage {
-  readonly updateBtn: Locator;
-  readonly cancelBtn: Locator;
-  readonly userNameField: Locator;
-  readonly yearOfBirthField: Locator;
-  readonly genderField: Locator;
+  readonly updateBtn = this.page.locator(
+    'xpath=//button[@data-testid="button-Update"]',
+  );
 
-  constructor(page: Page) {
-    super(page);
-    this.updateBtn = this.page.locator(
-      'xpath=//button[@data-testid="button-Update"]',
-    );
-    this.cancelBtn = this.page.locator(
-      'xpath=//a[@data-testid="button-Cancel"]',
-    );
-    this.userNameField = this.page.locator(
-      'xpath=//input[@id="inputUserName"]',
-    );
-    this.yearOfBirthField = this.page.locator(
-      'xpath=//input[@id="inputYearOfBirth"]',
-    );
-    this.genderField = this.page.locator('xpath=//select[@id="selectGender"]');
-  }
+  readonly cancelBtn = this.page.locator(
+    'xpath=//a[@data-testid="button-Cancel"]',
+  );
 
-  async fillUserNameField(text: string) {
+  readonly userNameField = this.page.locator(
+    'xpath=//input[@id="inputUserName"]',
+  );
+
+  readonly yearOfBirthField = this.page.locator(
+    'xpath=//input[@id="inputYearOfBirth"]',
+  );
+
+  readonly genderField = this.page.locator(
+    'xpath=//select[@id="selectGender"]',
+  );
+
+  async fillUserNameField(text: string): Promise<void> {
     await this.userNameField.fill(text);
   }
 
-  async fillYearOfBirthField(text: string) {
+  async fillYearOfBirthField(text: string): Promise<void> {
     await this.yearOfBirthField.fill(text);
   }
 
-  async selectGenderOption(option: string) {
+  async selectGenderOption(option: string): Promise<void> {
     await this.genderField.selectOption(option);
   }
 }
