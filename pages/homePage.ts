@@ -1,29 +1,23 @@
 import { Locator, Page } from "@playwright/test";
 import { URLS } from "../config/urlProvider";
+import { BasePage } from "./basePage";
 
-export class HomePage {
+export class HomePage extends BasePage {
+  readonly page: Page;
   readonly addUserLink: Locator;
   readonly usersTable: Locator;
   public createdUser: Locator;
 
-  constructor(private page: Page) {
+  constructor(page: Page) {
+    super(page);
     this.page = page;
     this.addUserLink = this.page.locator(`xpath=//a[@href="${URLS.ADDUSER}"]`);
-    this.usersTable = this.page.locator(
-      'xpath=//table[@data-testid="table-Users"]',
-    );
-  }
-  async navigateToHomePage() {
-    await this.page.goto("");
-  }
-
-  async clickAddUserLink() {
-    await this.addUserLink.click();
+    this.usersTable = this.page.getByTestId("table-Users");
   }
 
   async getUserByUserName(userNameValue: string) {
     const users = await this.page
-      .locator(`xpath=//td[@data-testid="td-UserName"]`)
+      .getByTestId("td-UserName")
       .all();
     for (const user of users) {
       if ((await user.innerText()) === userNameValue) {
@@ -35,17 +29,17 @@ export class HomePage {
 
   async getYearOfBirthOfUser() {
     return await this.createdUser
-      .locator('xpath=/td[@data-testid="td-YearOfBirth"]')
+      .getByTestId("td-YearOfBirth")
       .innerText();
   }
 
   async getSelectedGenderOfUser() {
     return await this.createdUser
-      .locator('xpath=/td[@data-testid="td-Gender"]')
+      .getByTestId("td-Gender")
       .innerText();
   }
 
-  async clickDeleteUserBtn(userNameValue: string) {
+  async clickDeleteUserBtn() {
     await this.createdUser.getByTestId("button-Delete").click();
   }
 }

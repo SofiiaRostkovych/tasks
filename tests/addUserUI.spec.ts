@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { Colors } from "../enums/Colors";
 import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../page-factory/page-factory";
-import { AddUserPage } from "../pages/add-user.page";
+import { PageFactory } from "../pageFactory/pageFactory";
+import { AddUserPage } from "../pages/addUserPage";
+import { URLS } from "../config/urlProvider";
 
 let addUserPage: AddUserPage;
 
@@ -11,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 
   addUserPage = pageFactory.getAddUserPage();
 
-  await addUserPage.navigateToAddUserPage();
+  await addUserPage.goToPage(URLS.ADDUSER);
 });
 
 test("Verify 'Create' button design on the 'Add User' page", async () => {
@@ -23,7 +24,7 @@ test("Verify 'Create' button design on the 'Add User' page", async () => {
 });
 
 test("Verify 'Cancel' button design on the 'Add User' page", async () => {
-  const cancelBtn = await addUserPage.cancelBtn;
+  const cancelBtn = addUserPage.cancelBtn;
 
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
   await cancelBtn.hover();

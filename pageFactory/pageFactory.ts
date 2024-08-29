@@ -1,8 +1,8 @@
 import { Page } from "@playwright/test";
-import { AddUserPage } from "../pages/add-user.page";
-import { EditUserPage } from "../pages/edit-user.page";
-import { DeleteUserPage } from "../pages/delete-user.page";
-import { HomePage } from "../pages/home.page";
+import { AddUserPage } from "../pages/addUserPage";
+import { EditUserPage } from "../pages/editUserPage";
+import { DeleteUserPage } from "../pages/deleteUserPage";
+import { HomePage } from "../pages/homePage";
 
 export class PageFactory {
   public page: Page;

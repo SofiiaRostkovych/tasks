@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { URLS } from "../config/urlProvider";
-import { PageFactory } from "../page-factory/page-factory";
-import { AddUserPage } from "../pages/add-user.page";
+import { PageFactory } from "../pageFactory/pageFactory";
+import { AddUserPage } from "../pages/addUserPage";
 
 const invalidYearOfBirth = [
   "1899",
@@ -18,11 +18,11 @@ test.beforeEach(async ({ page }) => {
 
   addUserPage = pageFactory.getAddUserPage();
 
-  await addUserPage.navigateToAddUserPage();
+  await addUserPage.goToPage(URLS.ADDUSER);
 });
 
 test(`Check creation of user with empty fields`, async () => {
-  await addUserPage.clickCreate();
+  await addUserPage.createBtn.click();
 
   await expect(await addUserPage.page).toHaveURL(URLS.ADDUSER);
   expect(await addUserPage.getUserNameFieldError()).toBe("Name is requried");
