@@ -1,5 +1,6 @@
 # Node modules directory
 node_modules/
+.cache/
 
 # Build output directory
 dist/

@@ -1,10 +1,10 @@
-export const generateRandomUserName = (n: number = 15): string => {
-  let result = "";
+export const generateRandomUserName = (n: number = 5): string => {
+  let result: string = "";
 
-  const characters =
+  const characters: string =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-,. ";
-  const charactersLength = characters.length;
-  let counter = 0;
+  const charactersLength: number = characters.length;
+  let counter: number = 0;
   while (counter < n) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
     counter += 1;

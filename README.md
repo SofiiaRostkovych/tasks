@@ -1,9 +1,11 @@
 # tasks
+
 Get Started
+
 - Have installed VS Code and Node.js
 - Clone this repository:
-git clone https://github.com/sofiia-r/tasks.git
+  git clone https://github.com/sofiia-r/tasks.git
 - Install the dependencies:
-npm install
+  npm install
 - Install the Playwright browsers:
-npx playwright install
+  npx playwright install
