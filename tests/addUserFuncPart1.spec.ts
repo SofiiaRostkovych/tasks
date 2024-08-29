@@ -6,7 +6,11 @@ import { HomePage } from "../pages/homePage";
 import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 
-const validUserData = [
+const validUserData: {
+  userNameValue: string;
+  yearOfBirthValue: string;
+  genderValue: GenderOptions;
+}[] = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
@@ -39,13 +43,13 @@ let addUserPage: AddUserPage,
   deleteUserPage: DeleteUserPage;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory = new PageFactory(page);
+  const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
   homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
 
-  addUserPage.goToPage(URLS.ADDUSER);
+  addUserPage.goToPage(URLS.ADD_USER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
@@ -64,6 +68,6 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     );
 
     await homePage.clickDeleteUserBtn();
-    await deleteUserPage.confirmUserDeletion();
+    await deleteUserPage.yesBtn.click();
   });
 });
