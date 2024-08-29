@@ -1,6 +1,5 @@
 import { Locator, Page } from "@playwright/test";
 import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
-import { URLS } from "../config/urlProvider";
 import { BasePage } from "./basePage";
 
 export class AddUserPage extends BasePage {
@@ -21,7 +20,7 @@ export class AddUserPage extends BasePage {
       'xpath=//button[@data-testid="button-Create"]',
     );
     this.cancelBtn = this.page.locator(
-      'xpath=//a[@data-testid="button-Cancel"]'
+      'xpath=//a[@data-testid="button-Cancel"]',
     );
     this.userNameField = this.page.locator(
       'xpath=//input[@id="inputUserName"]',

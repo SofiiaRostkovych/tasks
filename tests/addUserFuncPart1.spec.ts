@@ -64,6 +64,6 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     );
 
     await homePage.clickDeleteUserBtn();
-    await deleteUserPage.confirmUserDeletion();
+    await deleteUserPage.yesBtn.click();
   });
 });

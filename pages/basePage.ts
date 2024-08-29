@@ -8,7 +8,7 @@ export class BasePage {
   constructor(page: Page) {
     this.page = page;
   }
-  
+
   async goToPage(source: string) {
     await this.page.goto(source);
   }

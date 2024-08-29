@@ -14,12 +14,4 @@ export class DeleteUserPage extends BasePage {
       'xpath=//a[@data-testid="button-Cancel"]',
     );
   }
-
-  async cancelDeleteUserOperation() {
-    await this.cancelBtn.click();
-  }
-
-  async confirmUserDeletion() {
-    await this.yesBtn.click();
-  }
 }
