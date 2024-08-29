@@ -59,15 +59,13 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     await addUserPage.fillYearOfBirthField(yearOfBirthValue);
 
     await addUserPage.createBtn.click();
-
-    await homePage.getUserByUserName(userNameValue);
-
-    expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
-    expect(await homePage.getSelectedGenderOfUser()).toBe(
+    
+    expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(yearOfBirthValue);
+    expect(await homePage.getSelectedGenderOfUser(userNameValue)).toBe(
       GenderOptions[genderValue],
     );
 
-    await homePage.clickDeleteUserBtn();
+    await homePage.clickDeleteUserBtn(userNameValue);
     await deleteUserPage.yesBtn.click();
   });
 });

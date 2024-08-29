@@ -3,12 +3,9 @@ import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplay
 import { BasePage } from "./basePage";
 
 export class AddUserPage extends BasePage {
-  readonly createBtn = this.page.locator(
-    'xpath=//button[@data-testid="button-Create"]',
-  );
-  readonly cancelBtn = this.page.locator(
-    'xpath=//a[@data-testid="button-Cancel"]',
-  );
+  readonly createBtn = this.page.getByTestId("button-Create");
+  readonly cancelBtn = this.page.getByTestId("button-Cancel");
+
   readonly userNameField = this.page.locator(
     'xpath=//input[@id="inputUserName"]',
   );
