@@ -5,6 +5,8 @@ import { AddUserPage } from "../pages/addUserPage";
 import { HomePage } from "../pages/homePage";
 import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
+import { AddUserSteps } from "../steps/addUserSteps";
+import { HomeSteps } from "../steps/homeSteps";
 
 const validUserData: {
   userNameValue: string;
@@ -38,36 +40,38 @@ const validUserData: {
   */
 ];
 
-let addUserPage: AddUserPage,
-  homePage: HomePage,
-  deleteUserPage: DeleteUserPage;
+let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
+let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
-  homePage = pageFactory.getHomePage();
   deleteUserPage = pageFactory.getDeleteUserPage();
+  addUserSteps = new AddUserSteps(page);
+  homeSteps = new HomeSteps(page);
 
-  addUserPage.goToPage(URLS.ADD_USER);
+  addUserSteps.goToPage(URLS.ADD_USER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async () => {
-    await addUserPage.selectGenderOption(genderValue);
-    await addUserPage.fillUserNameField(userNameValue);
-    await addUserPage.fillYearOfBirthField(yearOfBirthValue);
+    await addUserSteps.selectGenderOption(genderValue);
+    await addUserSteps.fillField(addUserPage.userNameField, userNameValue);
+    await addUserSteps.fillField(
+      addUserPage.yearOfBirthField, yearOfBirthValue
+    );
 
     await addUserPage.createBtn.click();
 
-    expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(
+    expect(await homeSteps.getYearOfBirthOfUser(userNameValue)).toBe(
       yearOfBirthValue,
     );
-    expect(await homePage.getSelectedGenderOfUser(userNameValue)).toBe(
+    expect(await homeSteps.getSelectedGenderOfUser(userNameValue)).toBe(
       GenderOptions[genderValue],
     );
 
-    await homePage.clickDeleteUserBtn(userNameValue);
+    await homeSteps.clickDeleteUserBtn(userNameValue);
     await deleteUserPage.yesBtn.click();
   });
 });
