@@ -5,5 +5,9 @@ export class UserDTO {
     public userNameValue: string,
     public yearOfBirthValue: string,
     public genderValue: number = GenderOptions.Male,
-  ) {}
+  ) {
+    this.userNameValue = userNameValue;
+    this.yearOfBirthValue = yearOfBirthValue;
+    this.genderValue = genderValue;
+  }
 }

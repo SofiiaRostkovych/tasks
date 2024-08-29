@@ -10,18 +10,14 @@ import { HomeSteps } from "../steps/homeSteps";
 import { UserDTO } from "../dto/userDTO";
 
 const validUserData: UserDTO[] = [
-  new UserDTO( "nб3-w","1900", GenderOptions.Undefined),
-  new UserDTO( "йцу", "2005", GenderOptions.Male),
-  new UserDTO( "new user", "2004", GenderOptions.Female),
+  new UserDTO("nб3-w", "1900", GenderOptions.Undefined),
+  new UserDTO("йцу", "2005", GenderOptions.Male),
+  new UserDTO("new user", "2004", GenderOptions.Female),
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
   /* 
-  {
-    userNameValue: "adult test",
-    yearOfBirthValue: (new Date().getFullYear()-18).toString(),
-    genderValue: GenderOptions[0],
-  },
+   new UserDTO("adult test", (new Date().getFullYear()-18).toString(), GenderOptions[0]),
   */
 ];
 
@@ -42,7 +38,10 @@ test.beforeEach(async ({ page }) => {
 validUserData.forEach((userDTO) => {
   test(`Check successful creation of new user "${userDTO.userNameValue}"`, async () => {
     await addUserSteps.selectGenderOption(userDTO.genderValue);
-    await addUserSteps.fillField(userDTO.userNameValue, addUserPage.userNameField);
+    await addUserSteps.fillField(
+      userDTO.userNameValue,
+      addUserPage.userNameField,
+    );
     await addUserSteps.fillField(
       userDTO.yearOfBirthValue,
       addUserPage.yearOfBirthField,
