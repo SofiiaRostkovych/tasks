@@ -12,9 +12,7 @@ export class HomePage extends BasePage {
   async getUserByUserName(userNameValue: string): Promise<Locator> {
     let createdUser: Locator = this.page.getByTestId("td-UserName")[1];
 
-    const users: Locator[] = await this.page
-    .getByTestId("td-UserName")
-      .all();
+    const users: Locator[] = await this.page.getByTestId("td-UserName").all();
 
     for (const user of users) {
       if ((await user.innerText()) === userNameValue) {
@@ -25,19 +23,21 @@ export class HomePage extends BasePage {
     return createdUser;
   }
 
-  async getYearOfBirthOfUser(userNameValue:string): Promise<string> {
+  async getYearOfBirthOfUser(userNameValue: string): Promise<string> {
     return await (await this.getUserByUserName(userNameValue))
-    .getByTestId("td-YearOfBirth")
+      .getByTestId("td-YearOfBirth")
       .innerText();
   }
 
-  async getSelectedGenderOfUser(userNameValue:string): Promise<string> {
+  async getSelectedGenderOfUser(userNameValue: string): Promise<string> {
     return await (await this.getUserByUserName(userNameValue))
-    .getByTestId("td-Gender")
+      .getByTestId("td-Gender")
       .innerText();
   }
 
-  async clickDeleteUserBtn(userNameValue:string): Promise<void> {
-    await (await this.getUserByUserName(userNameValue)).getByTestId("button-Delete").click();
+  async clickDeleteUserBtn(userNameValue: string): Promise<void> {
+    await (await this.getUserByUserName(userNameValue))
+      .getByTestId("button-Delete")
+      .click();
   }
 }

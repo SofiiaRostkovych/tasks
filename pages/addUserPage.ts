@@ -6,18 +6,13 @@ export class AddUserPage extends BasePage {
   readonly createBtn: Locator = this.page.getByTestId("button-Create");
 
   readonly cancelBtn: Locator = this.page.getByTestId("button-Cancel");
-  
-  readonly userNameField: Locator = this.page.locator(
-    'xpath=//input[@id="inputUserName"]',
-  );
 
-  readonly yearOfBirthField: Locator = this.page.locator(
-    'xpath=//input[@id="inputYearOfBirth"]',
-  );
+  readonly userNameField: Locator = this.page.getByTestId("input-UserName");
 
-  readonly genderField: Locator = this.page.locator(
-    'xpath=//select[@id="selectGender"]',
-  );
+  readonly yearOfBirthField: Locator =
+    this.page.getByTestId("input-YearOfBirth");
+
+  readonly genderField: Locator = this.page.getByTestId("select-Gender");
 
   readonly userNameFieldError: Locator = this.page.getByTestId(
     "inputError-UserName",
