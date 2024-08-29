@@ -13,7 +13,7 @@ import { BASE } from "./config/urlProvider";
  */
 export default defineConfig({
   timeout: 5 * 60 * 1000,
-  
+
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -24,7 +24,7 @@ export default defineConfig({
   /* Limit the number of workers on CI, use default locally */
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'dot' : 'list',
+  reporter: process.env.CI ? "dot" : "list",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -32,7 +32,7 @@ export default defineConfig({
     /*  Record a trace only when retrying a test for the first time. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     /* Capture screenshot after each test failure. */
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
     /* Run browser in headless mode. */
     headless: true,
   },
@@ -55,10 +55,10 @@ export default defineConfig({
     },
     */
     /* Test against mobile viewports. */
-     {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-     },
+    {
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
+    },
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },

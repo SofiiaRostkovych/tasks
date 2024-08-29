@@ -26,15 +26,11 @@ export class HomePage extends BasePage {
   }
 
   async getYearOfBirthOfUser(): Promise<string> {
-    return await this.createdUser
-      .getByTestId("td-YearOfBirth")
-      .innerText();
+    return await this.createdUser.getByTestId("td-YearOfBirth").innerText();
   }
 
   async getSelectedGenderOfUser(): Promise<string> {
-    return await this.createdUser
-      .getByTestId("td-Gender")
-      .innerText();
+    return await this.createdUser.getByTestId("td-Gender").innerText();
   }
 
   async clickDeleteUserBtn(): Promise<void> {

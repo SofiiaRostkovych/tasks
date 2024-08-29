@@ -7,7 +7,7 @@ export class EditUserPage extends BasePage {
   readonly userNameField = this.page.getByTestId("input-UserName");
   readonly yearOfBirthField = this.page.getByTestId("input-YearOfBirth");
   readonly genderField = this.page.getByTestId("select-Gender");
-  
+
   async fillUserNameField(text: string): Promise<void> {
     await this.userNameField.fill(text);
   }
