@@ -40,12 +40,10 @@ validUserData.forEach((userDTO) => {
   test(`Check successful creation of new user "${userDTO.name}"`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
     await addUserSteps.fillField(
-      userDTO.name,
-      addUserPage.userNameField,
+      addUserPage.userNameField,userDTO.name
     );
     await addUserSteps.fillField(
-      userDTO.yearOfBirth,
-      addUserPage.yearOfBirthField,
+      addUserPage.yearOfBirthField, userDTO.yearOfBirth
     );
 
     await addUserPage.createBtn.click();
