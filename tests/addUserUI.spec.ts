@@ -9,13 +9,13 @@ let addUserPage: AddUserPage;
 
 test.beforeEach(async ({ page }) => {
   await test.step("Intitialize the Page Object using Page Factory", async () => {
-    const pageFactory = new PageFactory(page);
+    const pageFactory: PageFactory = new PageFactory(page);
 
     addUserPage = pageFactory.getAddUserPage();
   });
 
   await test.step("Navigate to the 'Add User' page", async () => {
-    await addUserPage.goToPage(URLS.ADDUSER);
+    await addUserPage.goToPage(URLS.ADD_USER);
   });
 });
 
@@ -50,7 +50,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async () => {
 
 test("Verify 'User Name' field placeholder on the 'Add User' page", async () => {
   await test.step("Check the placeholder for the 'User Name' field", async () => {
-    const placeholder =
+    const placeholder: string | null =
       await addUserPage.userNameField.getAttribute("placeholder");
     expect(placeholder).toEqual("User Name");
   });
@@ -66,7 +66,7 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
   });
 
   await test.step("Check the placeholder for the 'Year of Birth' field", async () => {
-    const placeholder =
+    const placeholder: string | null =
       await addUserPage.yearOfBirthField.getAttribute("placeholder");
     expect(placeholder).toEqual("Year of Birth");
   });

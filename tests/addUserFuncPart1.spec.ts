@@ -6,7 +6,11 @@ import { HomePage } from "../pages/homePage";
 import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 
-const validUserData = [
+const validUserData: {
+  userNameValue: string;
+  yearOfBirthValue: string;
+  genderValue: GenderOptions;
+}[] = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
@@ -40,7 +44,7 @@ let addUserPage: AddUserPage,
 
 test.beforeEach(async ({ page }) => {
   await test.step("Intitialize the Page Objects using Page Factory", async () => {
-    const pageFactory = new PageFactory(page);
+    const pageFactory: PageFactory = new PageFactory(page);
 
     addUserPage = pageFactory.getAddUserPage();
     homePage = pageFactory.getHomePage();
@@ -48,7 +52,7 @@ test.beforeEach(async ({ page }) => {
   });
 
   await test.step("Navigate to the 'Add User' page", async () => {
-    addUserPage.goToPage(URLS.ADDUSER);
+    addUserPage.goToPage(URLS.ADD_USER);
   });
 });
 
@@ -65,14 +69,16 @@ validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
     await test.step("Verify the created user's data", async () => {
       await homePage.getUserByUserName(userNameValue);
 
-      expect(await homePage.getYearOfBirthOfUser()).toBe(yearOfBirthValue);
-      expect(await homePage.getSelectedGenderOfUser()).toBe(
+      expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(
+        yearOfBirthValue,
+      );
+      expect(await homePage.getSelectedGenderOfUser(userNameValue)).toBe(
         GenderOptions[genderValue],
       );
     });
 
     await test.step("Delete created user", async () => {
-      await homePage.clickDeleteUserBtn();
+      await homePage.clickDeleteUserBtn(userNameValue);
       await deleteUserPage.yesBtn.click();
     });
   });

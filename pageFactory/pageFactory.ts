@@ -10,7 +10,7 @@ export class PageFactory {
   constructor(page: Page) {
     this.page = page;
   }
-
+  // TODO: create some generic method, which will work for all pages.
   getAddUserPage(): AddUserPage {
     return new AddUserPage(this.page);
   }

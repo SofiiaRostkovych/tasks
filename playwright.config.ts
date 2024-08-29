@@ -19,9 +19,9 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-
-  retries: 2,
-
+  /* Give failing tests 1 retry attempts */
+  retries: 1,
+  /* Limit the number of workers on CI, use default locally */
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? "dot" : "list",
@@ -29,11 +29,12 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: BASE,
-
-    /* Collect trace. See https://playwright.dev/docs/trace-viewer */
-    trace: "on",
+    /*  Record a trace only when retrying a test for the first time. See https://playwright.dev/docs/trace-viewer */
+    trace: "on-first-retry",
+    /* Capture screenshot after each test failure. */
     screenshot: "only-on-failure",
-    headless: false,
+    /* Run browser in headless mode. */
+    headless: true,
   },
 
   /* Configure projects for major browsers */
@@ -42,6 +43,7 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    /*
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
@@ -51,12 +53,12 @@ export default defineConfig({
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
-
+    */
     /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
+    {
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
+    },
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
