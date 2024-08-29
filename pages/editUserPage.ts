@@ -2,23 +2,23 @@ import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./basePage";
 
 export class EditUserPage extends BasePage {
-  readonly updateBtn = this.page.locator(
+  readonly updateBtn: Locator = this.page.locator(
     'xpath=//button[@data-testid="button-Update"]',
   );
 
-  readonly cancelBtn = this.page.locator(
+  readonly cancelBtn: Locator = this.page.locator(
     'xpath=//a[@data-testid="button-Cancel"]',
   );
 
-  readonly userNameField = this.page.locator(
+  readonly userNameField: Locator = this.page.locator(
     'xpath=//input[@id="inputUserName"]',
   );
 
-  readonly yearOfBirthField = this.page.locator(
+  readonly yearOfBirthField: Locator = this.page.locator(
     'xpath=//input[@id="inputYearOfBirth"]',
   );
 
-  readonly genderField = this.page.locator(
+  readonly genderField: Locator = this.page.locator(
     'xpath=//select[@id="selectGender"]',
   );
 

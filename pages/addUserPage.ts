@@ -3,25 +3,25 @@ import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplay
 import { BasePage } from "./basePage";
 
 export class AddUserPage extends BasePage {
-  readonly createBtn = this.page.locator(
+  readonly createBtn: Locator = this.page.locator(
     'xpath=//button[@data-testid="button-Create"]',
   );
-  readonly cancelBtn = this.page.locator(
+  readonly cancelBtn: Locator = this.page.locator(
     'xpath=//a[@data-testid="button-Cancel"]',
   );
-  readonly userNameField = this.page.locator(
+  readonly userNameField: Locator = this.page.locator(
     'xpath=//input[@id="inputUserName"]',
   );
-  readonly yearOfBirthField = this.page.locator(
+  readonly yearOfBirthField: Locator = this.page.locator(
     'xpath=//input[@id="inputYearOfBirth"]',
   );
-  readonly genderField = this.page.locator(
+  readonly genderField: Locator = this.page.locator(
     'xpath=//select[@id="selectGender"]',
   );
-  public yearOfBirthFieldError: Locator;
-  public userNameFieldError: Locator;
-  readonly maxUserNameLength = 14;
-  readonly minUserNameLength = 3;
+  readonly userNameFieldError: Locator = this.page.getByTestId("inputError-UserName");
+  readonly yearOfBirthFieldError: Locator = this.page.getByTestId("inputError-YearOfBirth");
+  readonly maxUserNameLength: number = 14;
+  readonly minUserNameLength: number = 3;
 
   async fillUserNameField(text: string): Promise<void> {
     await this.userNameField.fill(text);
@@ -48,16 +48,10 @@ export class AddUserPage extends BasePage {
   }
 
   async getUserNameFieldError(): Promise<string> {
-    let userNameFieldError: string = await this.page
-      .getByTestId("inputError-UserName")
-      .innerText();
-    return userNameFieldError;
+    return await this.userNameFieldError.innerText();;
   }
 
   async getYearOfBirthFieldError(): Promise<string> {
-    let yearOfBirthFieldError: string = await this.page
-      .getByTestId("inputError-YearOfBirth")
-      .innerText();
-    return yearOfBirthFieldError;
+    return await this.yearOfBirthFieldError.innerText();
   }
 }

@@ -3,11 +3,11 @@ import { URLS } from "../config/urlProvider";
 import { BasePage } from "./basePage";
 
 export class HomePage extends BasePage {
-  readonly addUserLink = this.page.locator(
+  readonly addUserLink: Locator = this.page.locator(
     `xpath=//a[@href="${URLS.ADD_USER}"]`,
   );
 
-  readonly usersTable = this.page.locator(
+  readonly usersTable: Locator = this.page.locator(
     'xpath=//table[@data-testid="table-Users"]',
   );
 
