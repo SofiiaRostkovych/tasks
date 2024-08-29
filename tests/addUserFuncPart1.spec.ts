@@ -1,16 +1,8 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { HomePage } from "../pages/homePage";
-import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 
-const validUserData: {
-  userNameValue: string;
-  yearOfBirthValue: string;
-  genderValue: GenderOptions;
-}[] = [
+const validUserData = [
   {
     userNameValue: "nб3-w",
     yearOfBirthValue: "1900",
@@ -38,48 +30,57 @@ const validUserData: {
   */
 ];
 
-let addUserPage: AddUserPage,
-  homePage: HomePage,
-  deleteUserPage: DeleteUserPage;
+let createdUser: Locator;
 
 test.beforeEach(async ({ page }) => {
-  await test.step("Intitialize the Page Objects using Page Factory", async () => {
-    const pageFactory: PageFactory = new PageFactory(page);
-
-    addUserPage = pageFactory.getAddUserPage();
-    homePage = pageFactory.getHomePage();
-    deleteUserPage = pageFactory.getDeleteUserPage();
-  });
-
-  await test.step("Navigate to the 'Add User' page", async () => {
-    addUserPage.goToPage(URLS.ADD_USER);
-  });
+  await page.goto(URLS.ADD_USER);
 });
 
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
-  test(`Check successful creation of new user "${userNameValue}"`, async () => {
-    await test.step("Create new user with valid data", async () => {
-      await addUserPage.selectGenderOption(genderValue);
-      await addUserPage.fillUserNameField(userNameValue);
-      await addUserPage.fillYearOfBirthField(yearOfBirthValue);
+  test(`Check successful creation of new user "${userNameValue}"`, async ({
+    page,
+  }) => {
+    const genderField = page.locator('xpath=//select[@id="selectGender"]');
+    const userNameField = page.locator('xpath=//input[@id="inputUserName"]');
+    const yearOfBirthField = page.locator(
+      'xpath=//input[@id="inputYearOfBirth"]',
+    );
+    const createBtn = page.locator(
+      'xpath=//button[@data-testid="button-Create"]',
+    );
 
-      await addUserPage.createBtn.click();
-    });
+    await genderField.selectOption(genderValue.toString());
+    await userNameField.fill(userNameValue);
+    await yearOfBirthField.fill(yearOfBirthValue);
+    await createBtn.click();
 
-    await test.step("Verify the created user's data", async () => {
-      await homePage.getUserByUserName(userNameValue);
+    const users = await page
+      .locator(`xpath=//td[@data-testid="td-UserName"]`)
+      .all();
+    for (const user of users) {
+      if ((await user.innerText()) === userNameValue) {
+        createdUser = user.locator("xpath=//parent::tr");
+      }
+    }
 
-      expect(await homePage.getYearOfBirthOfUser(userNameValue)).toBe(
-        yearOfBirthValue,
-      );
-      expect(await homePage.getSelectedGenderOfUser(userNameValue)).toBe(
-        GenderOptions[genderValue],
-      );
-    });
+    await expect(createdUser.getByTestId("td-YearOfBirth")).toHaveText(
+      yearOfBirthValue,
+    );
 
-    await test.step("Delete created user", async () => {
-      await homePage.clickDeleteUserBtn(userNameValue);
-      await deleteUserPage.yesBtn.click();
-    });
+    await expect(createdUser.getByTestId("td-UserName")).toHaveText(
+      userNameValue,
+    );
+
+    await expect(createdUser.getByTestId("td-Gender")).toHaveText(
+      GenderOptions[genderValue],
+    );
   });
+});
+
+test.afterEach(async ({ page }) => {
+  if (createdUser) {
+    await createdUser.getByTestId("button-Delete").click();
+
+    await page.locator('xpath=//button[@data-testid="button-Yes"]').click();
+  }
 });
