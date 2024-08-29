@@ -4,15 +4,16 @@ import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
 import { URLS } from "../config/urlProvider";
+import { AddUserSteps } from "../steps/addUserSteps";
 
 let addUserPage: AddUserPage;
-
+let addUserSteps: AddUserSteps;
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
-
-  await addUserPage.goToPage(URLS.ADD_USER);
+  addUserSteps = new AddUserSteps(page);
+  await addUserSteps.goToPage(URLS.ADD_USER);
 });
 
 test("Verify 'Create' button design on the 'Add User' page", async () => {
@@ -56,18 +57,18 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
 test("Check 'Gender' field content on the 'Add User' page", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
-  await addUserPage.selectGenderOption(GenderOptions.Male);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
+  await addUserSteps.selectGenderOption(GenderOptions.Male);
+  expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Male],
   );
 
-  await addUserPage.selectGenderOption(GenderOptions.Female);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
+  await addUserSteps.selectGenderOption(GenderOptions.Female);
+  expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Female],
   );
 
-  await addUserPage.selectGenderOption(GenderOptions.Undefined);
-  expect(await addUserPage.getGenderSelectedOption()).toBe(
+  await addUserSteps.selectGenderOption(GenderOptions.Undefined);
+  expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Undefined],
   );
 });

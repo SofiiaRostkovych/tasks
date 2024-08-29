@@ -3,6 +3,7 @@ import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
+import { AddUserSteps } from "../steps/addUserSteps";
 
 const invalidYearOfBirth: string[] = [
   "1899",
@@ -12,21 +13,23 @@ const invalidYearOfBirth: string[] = [
 ];
 
 let addUserPage: AddUserPage;
+let addUserSteps: AddUserSteps;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
 
-  await addUserPage.goToPage(URLS.ADD_USER);
+  addUserSteps = new AddUserSteps(page);
+  addUserSteps.goToPage(URLS.ADD_USER);
 });
 
 test(`Check creation of user with empty fields`, async () => {
   await addUserPage.createBtn.click();
 
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
-  expect(await addUserPage.getUserNameFieldError()).toBe("Name is requried");
-  expect(await addUserPage.getYearOfBirthFieldError()).toBe(
+  expect(await addUserSteps.getUserNameFieldError()).toBe("Name is requried");
+  expect(await addUserSteps.getYearOfBirthFieldError()).toBe(
     "Year of Birth is requried",
   );
 });
@@ -36,12 +39,12 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
     addUserPage.minUserNameLength - 1,
   );
 
-  await addUserPage.fillUserNameField(testStr);
-  await addUserPage.fillYearOfBirthField("1900");
+  await addUserSteps.fillField(testStr, addUserPage.userNameField);
+  await addUserSteps.fillField("1900", addUserPage.yearOfBirthField);
 
-  await addUserPage.pressEnterUserNameField();
+  await addUserPage.createBtn.click();
 
-  expect(await addUserPage.getUserNameFieldError()).toBe("Name is too short");
+  expect(await addUserSteps.getUserNameFieldError()).toBe("Name is too short");
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
 });
 
@@ -51,12 +54,15 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
       addUserPage.minUserNameLength,
     );
 
-    await addUserPage.fillUserNameField(testStr);
-    await addUserPage.fillYearOfBirthField(yearOfBirthValue);
+    await addUserSteps.fillField(testStr, addUserPage.userNameField);
+    await addUserSteps.fillField(
+      yearOfBirthValue,
+      addUserPage.yearOfBirthField,
+    );
 
-    await addUserPage.pressEnterYearOfBirthField();
+    await addUserPage.createBtn.click();
 
-    expect(await addUserPage.getYearOfBirthFieldError()).toBe(
+    expect(await addUserSteps.getYearOfBirthFieldError()).toBe(
       "Not valid Year of Birth is set",
     );
     await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
@@ -68,7 +74,7 @@ test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ()
   const testStr: string = generateRandomUserName(
     addUserPage.maxUserNameLength + 5,
   );
-  await addUserPage.fillUserNameField(testStr);
+  await addUserSteps.fillField(testStr, addUserPage.userNameField);
   await expect(addUserPage.userNameField).toHaveValue(
     testStr.substring(0, addUserPage.maxUserNameLength),
   );

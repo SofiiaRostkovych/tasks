@@ -34,7 +34,7 @@ export default defineConfig({
     /* Capture screenshot after each test failure. */
     screenshot: "only-on-failure",
     /* Run browser in headless mode. */
-    headless: true,
+    headless: false,
   },
 
   /* Configure projects for major browsers */
