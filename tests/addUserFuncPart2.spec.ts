@@ -39,8 +39,8 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
     addUserPage.minUserNameLength - 1,
   );
 
-  await addUserSteps.fillField(testStr, addUserPage.userNameField);
-  await addUserSteps.fillField("1900", addUserPage.yearOfBirthField);
+  await addUserSteps.fillField(addUserPage.userNameField, testStr);
+  await addUserSteps.fillField(addUserPage.yearOfBirthField, "1900");
 
   await addUserPage.createBtn.click();
 
@@ -54,10 +54,9 @@ invalidYearOfBirth.forEach((yearOfBirthValue) => {
       addUserPage.minUserNameLength,
     );
 
-    await addUserSteps.fillField(testStr, addUserPage.userNameField);
+    await addUserSteps.fillField(addUserPage.userNameField, testStr);
     await addUserSteps.fillField(
-      yearOfBirthValue,
-      addUserPage.yearOfBirthField,
+      addUserPage.yearOfBirthField, yearOfBirthValue
     );
 
     await addUserPage.createBtn.click();
@@ -74,7 +73,7 @@ test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ()
   const testStr: string = generateRandomUserName(
     addUserPage.maxUserNameLength + 5,
   );
-  await addUserSteps.fillField(testStr, addUserPage.userNameField);
+  await addUserSteps.fillField(addUserPage.userNameField, testStr);
   await expect(addUserPage.userNameField).toHaveValue(
     testStr.substring(0, addUserPage.maxUserNameLength),
   );

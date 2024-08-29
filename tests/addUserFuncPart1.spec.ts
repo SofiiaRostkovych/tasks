@@ -57,10 +57,9 @@ test.beforeEach(async ({ page }) => {
 validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
   test(`Check successful creation of new user "${userNameValue}"`, async () => {
     await addUserSteps.selectGenderOption(genderValue);
-    await addUserSteps.fillField(userNameValue, addUserPage.userNameField);
+    await addUserSteps.fillField(addUserPage.userNameField, userNameValue);
     await addUserSteps.fillField(
-      yearOfBirthValue,
-      addUserPage.yearOfBirthField,
+      addUserPage.yearOfBirthField, yearOfBirthValue
     );
 
     await addUserPage.createBtn.click();

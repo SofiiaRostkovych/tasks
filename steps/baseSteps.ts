@@ -14,7 +14,7 @@ export class BaseSteps extends BasePage {
     await this.page.goto(source);
   }
 
-  async fillField(text: string, field: Locator): Promise<void> {
+  async fillField(field: Locator, text: string): Promise<void> {
     await field.fill(text);
   }
 }

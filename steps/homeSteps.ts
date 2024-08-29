@@ -9,6 +9,7 @@ export class HomeSteps extends BaseSteps {
     super(page);
     this.homePage = new HomePage(page);
   }
+  
   async getUserByUserName(userNameValue: string): Promise<Locator> {
     const users: Locator[] = await this.page.getByTestId("td-UserName").all();
 
@@ -18,7 +19,7 @@ export class HomeSteps extends BaseSteps {
       }
     }
 
-    throw new Error(`Created user "${userNameValue}" was not found`);
+    throw new Error(`User with "${userNameValue}" name is not found`);
   }
 
   async getYearOfBirthOfUser(userNameValue: string): Promise<string> {

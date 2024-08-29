@@ -1,20 +1,14 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "./basePage";
-import {
-  CANCEL_BTN_TEST_ID,
-  UPDATE_BTN_TEST_ID,
-} from "../indentifiers/Buttons";
-import {
-  NAME_INPUT_TEST_ID,
-  YEAR_INPUT_TEST_ID,
-} from "../indentifiers/InputFields";
-import { GENDER_SELECT_TEST_ID } from "../indentifiers/SelectFields";
+import Button from "../identifiers/Button";
+import InputField from "../identifiers/InputField";
+import SelectField from "../identifiers/SelectField";
 
 export class EditUserPage extends BasePage {
-  readonly updateBtn: Locator = this.page.getByTestId(UPDATE_BTN_TEST_ID);
-  readonly cancelBtn: Locator = this.page.getByTestId(CANCEL_BTN_TEST_ID);
-  readonly userNameField: Locator = this.page.getByTestId(NAME_INPUT_TEST_ID);
+  readonly updateBtn: Locator = this.page.getByTestId(Button.Update);
+  readonly cancelBtn: Locator = this.page.getByTestId(Button.Cancel);
+  readonly userNameField: Locator = this.page.getByTestId(InputField.UserName);
+  readonly genderField: Locator = this.page.getByTestId(SelectField.Gender);
   readonly yearOfBirthField: Locator =
-    this.page.getByTestId(YEAR_INPUT_TEST_ID);
-  readonly genderField: Locator = this.page.getByTestId(GENDER_SELECT_TEST_ID);
+    this.page.getByTestId(InputField.YearOfBirth);
 }
