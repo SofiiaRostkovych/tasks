@@ -7,27 +7,12 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
+import { UserDTO } from "../dto/userDTO";
 
-const validUserData: {
-  userNameValue: string;
-  yearOfBirthValue: string;
-  genderValue: GenderOptions;
-}[] = [
-  {
-    userNameValue: "nб3-w",
-    yearOfBirthValue: "1900",
-    genderValue: GenderOptions.Undefined,
-  },
-  {
-    userNameValue: "йцу",
-    yearOfBirthValue: "2005",
-    genderValue: GenderOptions.Male,
-  },
-  {
-    userNameValue: "new user",
-    yearOfBirthValue: "2004",
-    genderValue: GenderOptions.Female,
-  },
+const validUserData: UserDTO[] = [
+  new UserDTO( "nб3-w","1900", GenderOptions.Undefined),
+  new UserDTO( "йцу", "2005", GenderOptions.Male),
+  new UserDTO( "new user", "2004", GenderOptions.Female),
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
@@ -54,25 +39,25 @@ test.beforeEach(async ({ page }) => {
   addUserSteps.goToPage(URLS.ADD_USER);
 });
 
-validUserData.forEach(({ userNameValue, yearOfBirthValue, genderValue }) => {
-  test(`Check successful creation of new user "${userNameValue}"`, async () => {
-    await addUserSteps.selectGenderOption(genderValue);
-    await addUserSteps.fillField(userNameValue, addUserPage.userNameField);
+validUserData.forEach((userDTO) => {
+  test(`Check successful creation of new user "${userDTO.userNameValue}"`, async () => {
+    await addUserSteps.selectGenderOption(userDTO.genderValue);
+    await addUserSteps.fillField(userDTO.userNameValue, addUserPage.userNameField);
     await addUserSteps.fillField(
-      yearOfBirthValue,
+      userDTO.yearOfBirthValue,
       addUserPage.yearOfBirthField,
     );
 
     await addUserPage.createBtn.click();
 
-    expect(await homeSteps.getYearOfBirthOfUser(userNameValue)).toBe(
-      yearOfBirthValue,
+    expect(await homeSteps.getYearOfBirthOfUser(userDTO.userNameValue)).toBe(
+      userDTO.yearOfBirthValue,
     );
-    expect(await homeSteps.getSelectedGenderOfUser(userNameValue)).toBe(
-      GenderOptions[genderValue],
+    expect(await homeSteps.getSelectedGenderOfUser(userDTO.userNameValue)).toBe(
+      GenderOptions[userDTO.genderValue],
     );
 
-    await homeSteps.clickDeleteUserBtn(userNameValue);
+    await homeSteps.clickDeleteUserBtn(userDTO.userNameValue);
     await deleteUserPage.yesBtn.click();
   });
 });
