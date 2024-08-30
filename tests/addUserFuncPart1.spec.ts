@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, APIResponse } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
@@ -10,7 +10,7 @@ import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserApiClient } from "../api/userApiClient";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
-
+import { containsUser } from "../helpers/containsUser";
 
 const validUserData: UserDto[] = [
   new UserDto("nб3-w", "1900", GenderOptions.Undefined),
@@ -41,11 +41,10 @@ test.beforeEach(async ({ page }) => {
 validUserData.forEach((userDTO) => {
   test(`Check successful creation of new user "${userDTO.name}"`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
+    await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
     await addUserSteps.fillField(
-      addUserPage.userNameField,userDTO.name
-    );
-    await addUserSteps.fillField(
-      addUserPage.yearOfBirthField, userDTO.yearOfBirth
+      addUserPage.yearOfBirthField,
+      userDTO.yearOfBirth,
     );
 
     await addUserPage.createBtn.click();
@@ -56,19 +55,17 @@ validUserData.forEach((userDTO) => {
     expect(await homeSteps.getSelectedGenderOfUser(userDTO.name)).toBe(
       GenderOptions[userDTO.gender],
     );
-
   });
 
   test.afterEach(async ({ request }) => {
     let userApiClient: UserApiClient = new UserApiClient(request);
-    const response = await userApiClient.listUsers();
+    const response: APIResponse = await userApiClient.listUsers();
     let users: UserDtoResponse[] = await response.json();
-    
-    users.forEach(async (user: any) => {
-      if(user.name == userDTO.name)
-      {
+
+    users.forEach(async (user: UserDtoResponse) => {
+      if (containsUser(user, users)) {
         await userApiClient.deleteUser(user.id);
       }
     });
-  });  
+  });
 });

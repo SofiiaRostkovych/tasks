@@ -57,11 +57,10 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
   test(`Check creation of user with invalid 'Year of Birth' ${userDTO.yearOfBirth}`, async () => {
+    await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
     await addUserSteps.fillField(
-      addUserPage.userNameField, userDTO.name
-    );
-    await addUserSteps.fillField(
-      addUserPage.yearOfBirthField, userDTO.yearOfBirth,
+      addUserPage.yearOfBirthField,
+      userDTO.yearOfBirth,
     );
 
     await addUserPage.createBtn.click();
