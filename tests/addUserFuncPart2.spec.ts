@@ -1,10 +1,13 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, APIResponse } from "@playwright/test";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { URLS } from "../config/urlProvider";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { UserDto } from "../dto/userDto";
+import { UserApiClient } from "../api/userApiClient";
+import { UserDtoResponse } from "../dto/userDtoResponse ";
+import { containsUser } from "../helpers/containsUser";
 
 const usersWithInvalidYearOfBirth: UserDto[] = [
   new UserDto(generateRandomUserName(4), "1899"),
@@ -21,14 +24,17 @@ const usersWithInvalidYearOfBirth: UserDto[] = [
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
+let userApiClient: UserApiClient;
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, request }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
 
   addUserSteps = new AddUserSteps(page);
   addUserSteps.goToPage(URLS.ADD_USER);
+
+  userApiClient = new UserApiClient(request);
 });
 
 test(`Check creation of user with empty fields`, async () => {
@@ -39,20 +45,29 @@ test(`Check creation of user with empty fields`, async () => {
   expect(await addUserSteps.getYearOfBirthFieldError()).toBe(
     "Year of Birth is requried",
   );
+
+  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
+    let users: UserDtoResponse[] = await responseForListAllUsers.json();
+  
+    expect(containsUser(new UserDto("",""), users)).toBe(false);
 });
 
 test(`Check creation of user with invalid 'User Name' input`, async () => {
-  const testStr: string = generateRandomUserName(
+  let testUser: UserDto = new UserDto(generateRandomUserName(
     addUserPage.minUserNameLength - 1,
-  );
-
-  await addUserSteps.fillField(addUserPage.userNameField, testStr);
-  await addUserSteps.fillField(addUserPage.yearOfBirthField, "1900");
+  ), "1900")
+  await addUserSteps.fillField(addUserPage.userNameField, testUser.name);
+  await addUserSteps.fillField(addUserPage.yearOfBirthField, testUser.yearOfBirth);
 
   await addUserPage.createBtn.click();
 
   expect(await addUserSteps.getUserNameFieldError()).toBe("Name is too short");
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
+ 
+  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
+  let users: UserDtoResponse[] = await responseForListAllUsers.json();
+
+  expect(containsUser(testUser, users)).toBe(false);
 });
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
@@ -69,6 +84,11 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
       "Not valid Year of Birth is set",
     );
     await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
+
+    let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
+    let users: UserDtoResponse[] = await responseForListAllUsers.json();
+  
+    expect(containsUser(userDTO, users)).toBe(false);
   });
 });
 
