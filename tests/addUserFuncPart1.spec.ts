@@ -26,6 +26,7 @@ const validUserData: UserDto[] = [
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
 let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
+let createdUserId: string;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
@@ -39,7 +40,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.name}"`, async () => {
+  test(`Check successful creation of new user "${userDTO.name}"`, async ({
+    request,
+  }) => {
     await addUserSteps.selectGenderOption(userDTO.gender);
     await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
     await addUserSteps.fillField(
@@ -55,17 +58,16 @@ validUserData.forEach((userDTO) => {
     expect(await homeSteps.getSelectedGenderOfUser(userDTO.name)).toBe(
       GenderOptions[userDTO.gender],
     );
-  });
 
-  test.afterEach(async ({ request }) => {
-    let userApiClient: UserApiClient = new UserApiClient(request);
-    const response: APIResponse = await userApiClient.listUsers();
-    let users: UserDtoResponse[] = await response.json();
+    await homeSteps.clickDeleteUserBtn(userDTO.name);
 
-    users.forEach(async (user: UserDtoResponse) => {
-      if (containsUser(user, users)) {
-        await userApiClient.deleteUser(user.id);
-      }
-    });
+    let url: string = homeSteps.page.url();
+    createdUserId = url.substring(url.lastIndexOf("/") + 1);
   });
+});
+
+test.afterEach(async ({ request }) => {
+  let userApiClient: UserApiClient = new UserApiClient(request);
+
+  await userApiClient.deleteUser(createdUserId);
 });
