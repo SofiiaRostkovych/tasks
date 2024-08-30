@@ -24,7 +24,7 @@ export default defineConfig({
   /* Limit the number of workers on CI, use default locally */
   workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? "html" : "list",
+  reporter:  "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

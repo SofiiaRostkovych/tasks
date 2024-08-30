@@ -5,4 +5,5 @@ export const URLS = {
   ADD_ADDRESS: "/Forms/AddAddress",
   EDIT_USER: "/Forms/EditUser",
   DELETE_USER: "/Forms/DeleteUser",
+  USER_API: "/api/User"
 };

@@ -8,6 +8,8 @@ import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
+import { UserApiClient } from "../api/userApiClient";
+import { UserDtoResponse } from "../dto/userDtoResponse ";
 
 
 const validUserData: UserDto[] = [
@@ -55,7 +57,18 @@ validUserData.forEach((userDTO) => {
       GenderOptions[userDTO.gender],
     );
 
-    await homeSteps.clickDeleteUserBtn(userDTO.name);
-    await deleteUserPage.yesBtn.click();
   });
+
+  test.afterEach(async ({ request }) => {
+    let userApiClient: UserApiClient = new UserApiClient(request);
+    const response = await userApiClient.listUsers();
+    let users: UserDtoResponse[] = await response.json();
+    
+    users.forEach(async (user: any) => {
+      if(user.name == userDTO.name)
+      {
+        await userApiClient.deleteUser(user.id);
+      }
+    });
+  });  
 });
