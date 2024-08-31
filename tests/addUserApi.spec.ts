@@ -17,7 +17,7 @@ test.beforeEach(async ({ request }) => {
   userApiClient = new UserApiClient(request);
 });
 
-test("Check API Get all users", async () => {
+test("Verify API GET '/api/User'", async () => {
   const responseForListAllUsers: APIResponse = await userApiClient.listUsers();
 
   expect(responseForListAllUsers.ok()).toBeTruthy();
@@ -28,7 +28,7 @@ test("Check API Get all users", async () => {
   expect(users.length > 0).toBeTruthy();
 });
 
-test("Check API Post - create new user", async () => {
+test("Verify API POST '/api/User'", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 
@@ -45,7 +45,7 @@ test("Check API Post - create new user", async () => {
   await userApiClient.deleteUser(createdUserId);
 });
 
-test("Check API Get user by id", async () => {
+test("Verify API GET '/api/User/{id}'", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 
@@ -68,7 +68,7 @@ test("Check API Get user by id", async () => {
   await userApiClient.deleteUser(createdUserId);
 });
 
-test("Check API PUT user by id", async () => {
+test("Verify API PUT '/api/User/{id}'", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 
@@ -93,7 +93,7 @@ test("Check API PUT user by id", async () => {
   await userApiClient.deleteUser(createdUserId);
 });
 
-test("Check API Delete user by id", async () => {
+test("Verify API DELETE '/api/User/{id}'", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 

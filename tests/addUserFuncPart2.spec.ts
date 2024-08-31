@@ -47,23 +47,27 @@ test(`Check creation of user with empty fields`, async () => {
   );
 
   let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
-    let users: UserDtoResponse[] = await responseForListAllUsers.json();
-  
-    expect(containsUser(new UserDto("",""), users)).toBe(false);
+  let users: UserDtoResponse[] = await responseForListAllUsers.json();
+
+  expect(containsUser(new UserDto("", ""), users)).toBe(false);
 });
 
 test(`Check creation of user with invalid 'User Name' input`, async () => {
-  let testUser: UserDto = new UserDto(generateRandomUserName(
-    addUserPage.minUserNameLength - 1,
-  ), "1900")
+  let testUser: UserDto = new UserDto(
+    generateRandomUserName(addUserPage.minUserNameLength - 1),
+    "1900",
+  );
   await addUserSteps.fillField(addUserPage.userNameField, testUser.name);
-  await addUserSteps.fillField(addUserPage.yearOfBirthField, testUser.yearOfBirth);
+  await addUserSteps.fillField(
+    addUserPage.yearOfBirthField,
+    testUser.yearOfBirth,
+  );
 
   await addUserPage.createBtn.click();
 
   expect(await addUserSteps.getUserNameFieldError()).toBe("Name is too short");
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
- 
+
   let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
   let users: UserDtoResponse[] = await responseForListAllUsers.json();
 
@@ -87,7 +91,7 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
 
     let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
     let users: UserDtoResponse[] = await responseForListAllUsers.json();
-  
+
     expect(containsUser(userDTO, users)).toBe(false);
   });
 });
