@@ -12,7 +12,7 @@ import { UserApiClient } from "../api/userApiClient";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { containsUser } from "../helpers/containsUser";
 
-const validUserData: UserDto[] = [
+let validUserData: UserDto[] = [
   new UserDto("nб3-w", "1900", GenderOptions.Undefined),
   new UserDto("йцу", "2005", GenderOptions.Male),
   new UserDto("new user", "2004", GenderOptions.Female),

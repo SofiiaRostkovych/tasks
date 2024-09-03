@@ -16,11 +16,8 @@ let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
 
 test.beforeEach(async ({ page, request }) => {
-  const response: APIResponse = await request.post(URLS.USER_API, {
-    data: userDto,
-  });
-  expect(response.ok()).toBeTruthy();
-  expect(response.status()).toBe(200);
+  userApiClient = new UserApiClient(request);
+  const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
 
   const pageFactory: PageFactory = new PageFactory(page);
@@ -38,7 +35,7 @@ test(`Check successful deletion of a user "${userDto.name}"`, async ({
   await deleteUserPage.yesBtn.click();
 
   userApiClient = new UserApiClient(request);
-  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
+  let responseForListAllUsers: APIResponse = await userApiClient.getUserList();
   let users: UserDtoResponse[] = await responseForListAllUsers.json();
 
   expect(containsUser(userDto, users)).toBe(false);

@@ -38,6 +38,8 @@ test.beforeEach(async ({ page, request }) => {
 });
 
 test(`Check creation of user with empty fields`, async () => {
+  await addUserSteps.fillField(addUserPage.userNameField, "");
+  await addUserSteps.fillField(addUserPage.yearOfBirthField, "");
   await addUserPage.createBtn.click();
 
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
@@ -46,8 +48,9 @@ test(`Check creation of user with empty fields`, async () => {
     "Year of Birth is requried",
   );
 
-  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
-  let users: UserDtoResponse[] = await responseForListAllUsers.json();
+  const responseForListAllUsers: APIResponse =
+    await userApiClient.getUserList();
+  const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
   expect(containsUser(new UserDto("", ""), users)).toBe(false);
 });
@@ -68,8 +71,9 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
   expect(await addUserSteps.getUserNameFieldError()).toBe("Name is too short");
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
 
-  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
-  let users: UserDtoResponse[] = await responseForListAllUsers.json();
+  const responseForListAllUsers: APIResponse =
+    await userApiClient.getUserList();
+  const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
   expect(containsUser(testUser, users)).toBe(false);
 });
@@ -89,8 +93,9 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
     );
     await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
 
-    let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
-    let users: UserDtoResponse[] = await responseForListAllUsers.json();
+    const responseForListAllUsers: APIResponse =
+      await userApiClient.getUserList();
+    const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
     expect(containsUser(userDTO, users)).toBe(false);
   });
