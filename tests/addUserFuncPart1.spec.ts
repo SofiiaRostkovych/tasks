@@ -40,9 +40,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.name}"`, async ({
-    request,
-  }) => {
+  test(`Check successful creation of new user "${userDTO.name}"`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
     await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
     await addUserSteps.fillField(
@@ -62,12 +60,15 @@ validUserData.forEach((userDTO) => {
     await homeSteps.clickDeleteUserBtn(userDTO.name);
 
     const url: string = homeSteps.page.url();
-    createdUserId = url.substring(url.lastIndexOf("/") + 1);
+    const regex = new RegExp("[^/]+$");
+    const endOfUrl = regex.exec(url);
+    if (endOfUrl != null) {
+      createdUserId = endOfUrl[0];
+    }
   });
 });
 
 test.afterEach(async ({ request }) => {
   const userApiClient: UserApiClient = new UserApiClient(request);
-
   await userApiClient.deleteUser(createdUserId);
 });

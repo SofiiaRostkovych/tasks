@@ -8,27 +8,24 @@ import { UserDto } from "../dto/userDto";
 import { UserApiClient } from "../api/userApiClient";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { containsUser } from "../helpers/containsUser";
+import { BaseSteps } from "../steps/baseSteps";
 
 const usersWithInvalidYearOfBirth: UserDto[] = [
-  new UserDto(generateRandomUserName(4), "1899"),
-  new UserDto(generateRandomUserName(3), "1898"),
-  new UserDto(
-    generateRandomUserName(14),
-    (new Date().getFullYear() - 17).toString(),
-  ),
-  new UserDto(
-    generateRandomUserName(13),
-    (new Date().getFullYear() - 16).toString(),
-  ),
+  new UserDto("user1", "1899"),
+  new UserDto("user2", "1898"),
+  new UserDto("user3", (new Date().getFullYear() - 17).toString()),
+  new UserDto("user4", (new Date().getFullYear() - 16).toString()),
 ];
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
+let baseSteps: BaseSteps;
 
 test.beforeEach(async ({ page, request }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
+  baseSteps = new BaseSteps(page);
   addUserPage = pageFactory.getAddUserPage();
 
   addUserSteps = new AddUserSteps(page);
@@ -38,8 +35,8 @@ test.beforeEach(async ({ page, request }) => {
 });
 
 test(`Check creation of user with empty fields`, async () => {
-  await addUserSteps.fillField(addUserPage.userNameField, "");
-  await addUserSteps.fillField(addUserPage.yearOfBirthField, "");
+  await baseSteps.fillField(addUserPage.userNameField, "");
+  await baseSteps.fillField(addUserPage.yearOfBirthField, "");
   await addUserPage.createBtn.click();
 
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
@@ -60,11 +57,8 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
     generateRandomUserName(addUserPage.minUserNameLength - 1),
     "1900",
   );
-  await addUserSteps.fillField(addUserPage.userNameField, testUser.name);
-  await addUserSteps.fillField(
-    addUserPage.yearOfBirthField,
-    testUser.yearOfBirth,
-  );
+  await baseSteps.fillField(addUserPage.userNameField, testUser.name);
+  await baseSteps.fillField(addUserPage.yearOfBirthField, testUser.yearOfBirth);
 
   await addUserPage.createBtn.click();
 
@@ -79,7 +73,7 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
 });
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
-  test(`Check creation of user with invalid 'Year of Birth' ${userDTO.yearOfBirth}`, async () => {
+  test(`Check creation of user with invalid 'Year of Birth': ${userDTO.yearOfBirth}`, async () => {
     await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
     await addUserSteps.fillField(
       addUserPage.yearOfBirthField,

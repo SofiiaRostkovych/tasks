@@ -2,11 +2,10 @@ import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 
 export function containsUser(
-  obj: UserDto | UserDtoResponse,
-  list: UserDtoResponse[] | UserDto[],
+  obj: UserDtoResponse | UserDto,
+  list: UserDtoResponse[],
 ): boolean {
-  let i: number;
-  for (i = 0; i < list.length; i++) {
+  for (let i: number = 0; i < list.length; i++) {
     if (
       list[i].name === obj.name &&
       list[i].yearOfBirth.toString() === obj.yearOfBirth &&

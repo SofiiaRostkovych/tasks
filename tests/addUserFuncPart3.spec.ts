@@ -37,7 +37,6 @@ test(`Check successful deletion of a user`, async ({ request }) => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
   await deleteUserPage.yesBtn.click();
 
-  userApiClient = new UserApiClient(request);
   const responseForListAllUsers: APIResponse =
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
