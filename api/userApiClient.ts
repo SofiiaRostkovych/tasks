@@ -41,7 +41,7 @@ export class UserApiClient {
     return response;
   }
 
-  async getUserList() {
+  async getUserList(): Promise<APIResponse> {
     const response: APIResponse = await this.request.get(this.USER_API);
     return response;
   }

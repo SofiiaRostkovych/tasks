@@ -12,7 +12,7 @@ import { UserApiClient } from "../api/userApiClient";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { containsUser } from "../helpers/containsUser";
 
-let validUserData: UserDto[] = [
+const validUserData: UserDto[] = [
   new UserDto("nб3-w", "1900", GenderOptions.Undefined),
   new UserDto("йцу", "2005", GenderOptions.Male),
   new UserDto("new user", "2004", GenderOptions.Female),
@@ -61,13 +61,13 @@ validUserData.forEach((userDTO) => {
 
     await homeSteps.clickDeleteUserBtn(userDTO.name);
 
-    let url: string = homeSteps.page.url();
+    const url: string = homeSteps.page.url();
     createdUserId = url.substring(url.lastIndexOf("/") + 1);
   });
 });
 
 test.afterEach(async ({ request }) => {
-  let userApiClient: UserApiClient = new UserApiClient(request);
+  const userApiClient: UserApiClient = new UserApiClient(request);
 
   await userApiClient.deleteUser(createdUserId);
 });

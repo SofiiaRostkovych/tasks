@@ -56,7 +56,7 @@ test(`Check creation of user with empty fields`, async () => {
 });
 
 test(`Check creation of user with invalid 'User Name' input`, async () => {
-  let testUser: UserDto = new UserDto(
+  const testUser: UserDto = new UserDto(
     generateRandomUserName(addUserPage.minUserNameLength - 1),
     "1900",
   );
