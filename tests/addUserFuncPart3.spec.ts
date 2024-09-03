@@ -8,14 +8,16 @@ import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { containsUser } from "../helpers/containsUser";
 import { URLS } from "../config/urlProvider";
 import { UserApiClient } from "../api/userApiClient";
+import { generateRandomUserName } from "../helpers/generateRandomUserName";
 
-let userDto = new UserDto("user to delete", "1956", GenderOptions.Undefined);
+let userDto:UserDto;
 let createdUser: UserDtoResponse;
 let deleteUserPage: DeleteUserPage;
 let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
 
 test.beforeEach(async ({ page, request }) => {
+  userDto = new UserDto(generateRandomUserName(10), "1956", GenderOptions.Undefined);
   userApiClient = new UserApiClient(request);
   const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
@@ -28,7 +30,7 @@ test.beforeEach(async ({ page, request }) => {
   await homeSteps.goToPage("");
 });
 
-test(`Check successful deletion of a user "${userDto.name}"`, async ({
+test(`Check successful deletion of a user`, async ({
   request,
 }) => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
