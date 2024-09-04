@@ -1,6 +1,6 @@
 import { APIResponse, expect } from "@playwright/test";
-import { UserDtoResponse } from "../../dto/userDtoResponse ";
-import { UserDto } from "../../dto/userDto";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserDto } from "../../DTO/UserDto";
 
 export class ApiSteps {
   public async verifySuccessResponse(response: APIResponse): Promise<void> {

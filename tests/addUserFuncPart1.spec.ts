@@ -6,7 +6,7 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
-import { UserDto } from "../dto/userDto";
+import { UserDto } from "../DTO/UserDto";
 import { UserApiClient } from "../api/userApiClient";
 import { GenericSteps } from "../steps/genericSteps";
 import { RegexHelper } from "../helpers/regexHelper";

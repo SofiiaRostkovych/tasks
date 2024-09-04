@@ -1,8 +1,6 @@
 import { Locator, Page } from "@playwright/test";
-import { PageFactory } from "../pageFactory/pageFactory";
 import { BaseSteps } from "./baseSteps";
 import { AddUserPage } from "../pages/addUserPage";
-import { GenderOptions } from "../enums/GenderOptions";
 import { SelectedValueHelper } from "../helpers/selectHelper";
 
 export class AddUserSteps extends BaseSteps {
