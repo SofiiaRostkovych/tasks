@@ -9,7 +9,7 @@ export class HomeSteps extends BaseSteps {
     super(page);
     this.homePage = new HomePage(page);
   }
-  
+
   async getUserByUserName(userNameValue: string): Promise<Locator> {
     const users: Locator[] = await this.page.getByTestId("td-UserName").all();
 

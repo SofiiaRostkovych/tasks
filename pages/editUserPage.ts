@@ -9,6 +9,7 @@ export class EditUserPage extends BasePage {
   readonly cancelBtn: Locator = this.page.getByTestId(Button.Cancel);
   readonly userNameField: Locator = this.page.getByTestId(InputField.UserName);
   readonly genderField: Locator = this.page.getByTestId(SelectField.Gender);
-  readonly yearOfBirthField: Locator =
-    this.page.getByTestId(InputField.YearOfBirth);
+  readonly yearOfBirthField: Locator = this.page.getByTestId(
+    InputField.YearOfBirth,
+  );
 }
