@@ -1,7 +1,7 @@
 import { test, expect, APIResponse } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
-import { UserDto } from "../dto/userDto";
-import { UserDtoResponse } from "../dto/userDtoResponse ";
+import { UserDto } from "../DTO/UserDto";
+import { UserDtoResponse } from "../DTO/UserDtoResponse";
 import { UserApiClient } from "../api/userApiClient";
 import { ApiSteps } from "../api/apiSteps/apiSteps";
 import { UserSteps } from "../steps/userSteps";

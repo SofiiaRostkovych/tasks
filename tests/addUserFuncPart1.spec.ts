@@ -6,7 +6,7 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
-import { UserDto } from "../dto/userDto";
+import { UserDto } from "../DTO/UserDto";
 import { UserApiClient } from "../api/userApiClient";
 import { GenericSteps } from "../steps/genericSteps";
 import { RegexHelper } from "../helpers/regexHelper";
@@ -15,12 +15,16 @@ const validUserData: UserDto[] = [
   { name: "nб3-w", yearOfBirth: "1900", gender: GenderOptions.Undefined },
   { name: "йцу", yearOfBirth: "2005", gender: GenderOptions.Male },
   { name: "new user", yearOfBirth: "2004", gender: GenderOptions.Female },
-  // TODO: uncomment after bugfix:
+  // TODO: uncomment last user in array after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
-  /* 
-   {userName: "adult test",yearOfBirth: (new Date().getFullYear()-18).toString(),  gender: GenderOptions.Male},
-  */
+
+  // Uncommented to check retry with GithubAction
+  {
+    name: "adult test",
+    yearOfBirth: (new Date().getFullYear() - 18).toString(),
+    gender: GenderOptions.Male,
+  },
 ];
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;

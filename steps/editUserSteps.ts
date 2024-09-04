@@ -1,8 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { PageFactory } from "../pageFactory/pageFactory";
 import { BaseSteps } from "./baseSteps";
-import { AddUserPage } from "../pages/addUserPage";
-import { GenderOptions } from "../enums/GenderOptions";
 import { EditUserPage } from "../pages/editUserPage";
 
 export class EditUserSteps extends BaseSteps {
