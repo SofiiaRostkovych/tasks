@@ -5,10 +5,10 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
-import { isUserInList } from "../helpers/isUserInList";
 import { UserApiClient } from "../api/userApiClient";
-import { generateRandomUserName } from "../helpers/generateRandomUserName";
 import { GenericSteps } from "../steps/genericSteps";
+import { UserSteps } from "../steps/userSteps";
+import { UserNameHelper } from "../helpers/userNameHelper";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;
@@ -19,7 +19,7 @@ let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
   userDto = {
-    name: generateRandomUserName(10),
+    name: UserNameHelper.generateRandomUserName(10),
     yearOfBirth: "1956",
     gender: GenderOptions.Undefined,
   };
@@ -32,6 +32,7 @@ test.beforeEach(async ({ page, request }) => {
 
   homeSteps = new HomeSteps(page);
   genericSteps = new GenericSteps(page);
+
   await genericSteps.goToPage("");
 });
 
@@ -43,5 +44,5 @@ test(`Check successful deletion of a user`, async ({ request }) => {
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(isUserInList(userDto, users)).toBe(false);
+  expect(UserSteps.isUserInList(userDto, users)).toBe(false);
 });

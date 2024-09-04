@@ -3,9 +3,9 @@ import { GenderOptions } from "../enums/GenderOptions";
 import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { UserApiClient } from "../api/userApiClient";
-import { isUserInList } from "../helpers/isUserInList";
 import { ApiSteps } from "../api/apiSteps/apiSteps";
-import { generateRandomUserName } from "../helpers/generateRandomUserName";
+import { UserSteps } from "../steps/userSteps";
+import { UserNameHelper } from "../helpers/userNameHelper";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;
@@ -17,13 +17,13 @@ test.beforeEach(async ({ request }) => {
   userApiClient = new UserApiClient(request);
   apiSteps = new ApiSteps();
   userDto = {
-    name: generateRandomUserName(5),
+    name: UserNameHelper.generateRandomUserName(5),
     yearOfBirth: "1900",
     gender: GenderOptions.Undefined,
   };
 
   userDtoForUpdate = {
-    name: generateRandomUserName(4),
+    name: UserNameHelper.generateRandomUserName(4),
     yearOfBirth: "2005",
     gender: GenderOptions.Female,
   };
@@ -98,7 +98,7 @@ test("Verify user deletion using API", async () => {
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(isUserInList(createdUser, users)).toBe(false);
+  expect(UserSteps.isUserInList(createdUser, users)).toBe(false);
 });
 
 test.afterEach(async () => {

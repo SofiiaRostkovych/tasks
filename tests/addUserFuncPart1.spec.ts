@@ -9,7 +9,7 @@ import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserApiClient } from "../api/userApiClient";
 import { GenericSteps } from "../steps/genericSteps";
-import { getIdFromUrl } from "../helpers/getIdFromUrl";
+import { RegexHelper } from "../helpers/regexHelper";
 
 const validUserData: UserDto[] = [
   { name: "nб3-w", yearOfBirth: "1900", gender: GenderOptions.Undefined },
@@ -60,7 +60,7 @@ validUserData.forEach((userDTO) => {
 
     await homeSteps.clickDeleteUserBtn(userDTO.name);
 
-    createdUserId = getIdFromUrl(homeSteps.page.url());
+    createdUserId = RegexHelper.getIdFromUrl(homeSteps.page.url());
   });
 });
 
