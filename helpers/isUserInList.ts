@@ -1,7 +1,7 @@
 import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
 
-export function containsUser(
+export function isUserInList(
   obj: UserDtoResponse | UserDto,
   list: UserDtoResponse[],
 ): boolean {

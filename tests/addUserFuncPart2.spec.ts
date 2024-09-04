@@ -7,36 +7,53 @@ import { AddUserSteps } from "../steps/addUserSteps";
 import { UserDto } from "../dto/userDto";
 import { UserApiClient } from "../api/userApiClient";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
-import { containsUser } from "../helpers/containsUser";
-import { BaseSteps } from "../steps/baseSteps";
+import { isUserInList } from "../helpers/isUserInList";
+import { GenericSteps } from "../steps/genericSteps";
+import { GenderOptions } from "../enums/GenderOptions";
 
 const usersWithInvalidYearOfBirth: UserDto[] = [
-  new UserDto("user1", "1899"),
-  new UserDto("user2", "1898"),
-  new UserDto("user3", (new Date().getFullYear() - 17).toString()),
-  new UserDto("user4", (new Date().getFullYear() - 16).toString()),
+  {
+    name: generateRandomUserName(6),
+    yearOfBirth: "1899",
+    gender: GenderOptions.Male,
+  },
+  {
+    name: generateRandomUserName(6),
+    yearOfBirth: "1898",
+    gender: GenderOptions.Male,
+  },
+  {
+    name: generateRandomUserName(6),
+    yearOfBirth: (new Date().getFullYear() - 17).toString(),
+    gender: GenderOptions.Male,
+  },
+  {
+    name: generateRandomUserName(6),
+    yearOfBirth: (new Date().getFullYear() - 16).toString(),
+    gender: GenderOptions.Male,
+  },
 ];
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
-let baseSteps: BaseSteps;
+let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
-  baseSteps = new BaseSteps(page);
+  genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getAddUserPage();
 
   addUserSteps = new AddUserSteps(page);
-  addUserSteps.goToPage(URLS.ADD_USER);
+  genericSteps.goToPage(URLS.ADD_USER);
 
   userApiClient = new UserApiClient(request);
 });
 
 test(`Check creation of user with empty fields`, async () => {
-  await baseSteps.fillField(addUserPage.userNameField, "");
-  await baseSteps.fillField(addUserPage.yearOfBirthField, "");
+  await genericSteps.fillField(addUserPage.userNameField, "");
+  await genericSteps.fillField(addUserPage.yearOfBirthField, "");
   await addUserPage.createBtn.click();
 
   await expect(addUserPage.page).toHaveURL(URLS.ADD_USER);
@@ -49,16 +66,20 @@ test(`Check creation of user with empty fields`, async () => {
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(containsUser(new UserDto("", ""), users)).toBe(false);
+  expect(isUserInList(new UserDto(), users)).toBe(false);
 });
 
 test(`Check creation of user with invalid 'User Name' input`, async () => {
-  const testUser: UserDto = new UserDto(
-    generateRandomUserName(addUserPage.minUserNameLength - 1),
-    "1900",
+  const testUser: UserDto = {
+    name: generateRandomUserName(addUserPage.minUserNameLength - 1),
+    yearOfBirth: "1900",
+    gender: GenderOptions.Female,
+  };
+  await genericSteps.fillField(addUserPage.userNameField, testUser.name);
+  await genericSteps.fillField(
+    addUserPage.yearOfBirthField,
+    testUser.yearOfBirth,
   );
-  await baseSteps.fillField(addUserPage.userNameField, testUser.name);
-  await baseSteps.fillField(addUserPage.yearOfBirthField, testUser.yearOfBirth);
 
   await addUserPage.createBtn.click();
 
@@ -69,13 +90,13 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(containsUser(testUser, users)).toBe(false);
+  expect(isUserInList(testUser, users)).toBe(false);
 });
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
   test(`Check creation of user with invalid 'Year of Birth': ${userDTO.yearOfBirth}`, async () => {
-    await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
-    await addUserSteps.fillField(
+    await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
+    await genericSteps.fillField(
       addUserPage.yearOfBirthField,
       userDTO.yearOfBirth,
     );
@@ -91,7 +112,7 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
       await userApiClient.getUserList();
     const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-    expect(containsUser(userDTO, users)).toBe(false);
+    expect(isUserInList(userDTO, users)).toBe(false);
   });
 });
 
@@ -100,7 +121,7 @@ test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async ()
   const testStr: string = generateRandomUserName(
     addUserPage.maxUserNameLength + 5,
   );
-  await addUserSteps.fillField(addUserPage.userNameField, testStr);
+  await genericSteps.fillField(addUserPage.userNameField, testStr);
   await expect(addUserPage.userNameField).toHaveValue(
     testStr.substring(0, addUserPage.maxUserNameLength),
   );

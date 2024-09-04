@@ -5,23 +5,24 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
-import { containsUser } from "../helpers/containsUser";
-import { URLS } from "../config/urlProvider";
+import { isUserInList } from "../helpers/isUserInList";
 import { UserApiClient } from "../api/userApiClient";
 import { generateRandomUserName } from "../helpers/generateRandomUserName";
+import { GenericSteps } from "../steps/genericSteps";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;
 let deleteUserPage: DeleteUserPage;
 let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
+let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
-  userDto = new UserDto(
-    generateRandomUserName(10),
-    "1956",
-    GenderOptions.Undefined,
-  );
+  userDto = {
+    name: generateRandomUserName(10),
+    yearOfBirth: "1956",
+    gender: GenderOptions.Undefined,
+  };
   userApiClient = new UserApiClient(request);
   const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
@@ -30,7 +31,8 @@ test.beforeEach(async ({ page, request }) => {
   deleteUserPage = pageFactory.getDeleteUserPage();
 
   homeSteps = new HomeSteps(page);
-  await homeSteps.goToPage("");
+  genericSteps = new GenericSteps(page);
+  await genericSteps.goToPage("");
 });
 
 test(`Check successful deletion of a user`, async ({ request }) => {
@@ -41,5 +43,5 @@ test(`Check successful deletion of a user`, async ({ request }) => {
     await userApiClient.getUserList();
   const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(containsUser(userDto, users)).toBe(false);
+  expect(isUserInList(userDto, users)).toBe(false);
 });

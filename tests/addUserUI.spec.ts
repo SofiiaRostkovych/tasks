@@ -5,15 +5,20 @@ import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
+import { GenericSteps } from "../steps/genericSteps";
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
+let genericSteps: GenericSteps;
+
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getAddUserPage();
   addUserSteps = new AddUserSteps(page);
-  await addUserSteps.goToPage(URLS.ADD_USER);
+  genericSteps = new GenericSteps(page);
+
+  await genericSteps.goToPage(URLS.ADD_USER);
 });
 
 test("Verify 'Create' button design on the 'Add User' page", async () => {
