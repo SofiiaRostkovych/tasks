@@ -5,7 +5,7 @@ import { UserDtoResponse } from "../dto/userDtoResponse ";
 import { UserApiClient } from "../api/userApiClient";
 import { ApiSteps } from "../api/apiSteps/apiSteps";
 import { UserSteps } from "../steps/userSteps";
-import { UserNameHelper } from "../helpers/userNameHelper";
+import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;
@@ -17,13 +17,13 @@ test.beforeEach(async ({ request }) => {
   userApiClient = new UserApiClient(request);
   apiSteps = new ApiSteps();
   userDto = {
-    name: UserNameHelper.generateRandomUserName(5),
+    name: RandomGeneratorHelper.generateRandomUserName(5),
     yearOfBirth: "1900",
     gender: GenderOptions.Undefined,
   };
 
   userDtoForUpdate = {
-    name: UserNameHelper.generateRandomUserName(4),
+    name: RandomGeneratorHelper.generateRandomUserName(4),
     yearOfBirth: "2005",
     gender: GenderOptions.Female,
   };
