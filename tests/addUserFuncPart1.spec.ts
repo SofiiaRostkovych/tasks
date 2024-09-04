@@ -20,7 +20,6 @@ const validUserData: UserDto[] = [
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
 
   // Uncommented to check retry with GithubAction
-
   {
     name: "adult test",
     yearOfBirth: (new Date().getFullYear() - 18).toString(),
