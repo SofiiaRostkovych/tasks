@@ -77,7 +77,7 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
     yearOfBirth: "1900",
     gender: GenderOptions.Female,
   };
-  
+
   await genericSteps.fillField(addUserPage.userNameField, testUser.name);
   await genericSteps.fillField(
     addUserPage.yearOfBirthField,

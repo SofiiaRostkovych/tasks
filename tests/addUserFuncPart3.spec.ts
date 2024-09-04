@@ -9,6 +9,7 @@ import { UserApiClient } from "../api/userApiClient";
 import { GenericSteps } from "../steps/genericSteps";
 import { UserSteps } from "../steps/userSteps";
 import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import { URLS } from "../config/urlProvider";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;
@@ -34,7 +35,7 @@ test.beforeEach(async ({ page, request }) => {
   homeSteps = new HomeSteps(page);
   genericSteps = new GenericSteps(page);
 
-  await genericSteps.goToPage("");
+  await genericSteps.goToPage(URLS.HOME_PAGE);
 });
 
 test(`Check successful deletion of a user`, async ({ request }) => {
