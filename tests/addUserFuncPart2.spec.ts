@@ -9,26 +9,26 @@ import { UserDtoResponse } from "../DTO/UserDtoResponse";
 import { UserSteps } from "../steps/userSteps";
 import { GenericSteps } from "../steps/genericSteps";
 import { GenderOptions } from "../enums/GenderOptions";
-import { UserNameHelper } from "../helpers/userNameHelper";
+import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
 
 const usersWithInvalidYearOfBirth: UserDto[] = [
   {
-    name: UserNameHelper.generateRandomUserName(6),
+    name: RandomGeneratorHelper.generateRandomUserName(6),
     yearOfBirth: "1899",
     gender: GenderOptions.Male,
   },
   {
-    name: UserNameHelper.generateRandomUserName(6),
+    name: RandomGeneratorHelper.generateRandomUserName(6),
     yearOfBirth: "1898",
     gender: GenderOptions.Male,
   },
   {
-    name: UserNameHelper.generateRandomUserName(6),
+    name: RandomGeneratorHelper.generateRandomUserName(6),
     yearOfBirth: (new Date().getFullYear() - 17).toString(),
     gender: GenderOptions.Male,
   },
   {
-    name: UserNameHelper.generateRandomUserName(6),
+    name: RandomGeneratorHelper.generateRandomUserName(6),
     yearOfBirth: (new Date().getFullYear() - 16).toString(),
     gender: GenderOptions.Male,
   },
@@ -71,12 +71,13 @@ test(`Check creation of user with empty fields`, async () => {
 
 test(`Check creation of user with invalid 'User Name' input`, async () => {
   const testUser: UserDto = {
-    name: UserNameHelper.generateRandomUserName(
+    name: RandomGeneratorHelper.generateRandomUserName(
       addUserPage.minUserNameLength - 1,
     ),
     yearOfBirth: "1900",
     gender: GenderOptions.Female,
   };
+
   await genericSteps.fillField(addUserPage.userNameField, testUser.name);
   await genericSteps.fillField(
     addUserPage.yearOfBirthField,
@@ -120,7 +121,7 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
 
 test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async () => {
   // checking maximum symbols limit - 14 characters for User Name input
-  const testStr: string = UserNameHelper.generateRandomUserName(
+  const testStr: string = RandomGeneratorHelper.generateRandomUserName(
     addUserPage.maxUserNameLength + 5,
   );
   await genericSteps.fillField(addUserPage.userNameField, testStr);

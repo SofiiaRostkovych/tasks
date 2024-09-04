@@ -3,6 +3,7 @@ export class RegexHelper {
     let id: string = "";
     const regex: RegExp = new RegExp("[^/]+$");
     const endOfUrl: RegExpExecArray | null = regex.exec(url);
+
     if (endOfUrl != null) {
       id = endOfUrl[0];
     }
