@@ -2,8 +2,8 @@ import { Locator, Page } from "@playwright/test";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { BaseSteps } from "./baseSteps";
 import { AddUserPage } from "../pages/addUserPage";
-import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
 import { GenderOptions } from "../enums/GenderOptions";
+import { SelectedValueHelper } from "../helpers/selectHelper";
 
 export class AddUserSteps extends BaseSteps {
   private addUserPage: AddUserPage;
@@ -18,7 +18,9 @@ export class AddUserSteps extends BaseSteps {
   }
 
   async getGenderSelectedOption(): Promise<string> {
-    return await extractSelectedDisplayedValue(this.addUserPage.genderField);
+    return await SelectedValueHelper.extractSelectedDisplayedValue(
+      this.addUserPage.genderField,
+    );
   }
 
   async getUserNameFieldError(): Promise<string> {

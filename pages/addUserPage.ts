@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { extractSelectedDisplayedValue } from "../helpers/extractSelectedDisplayedValue";
+import { extractSelectedDisplayedValue } from "../helpers/selectHelper";
 import { BasePage } from "./basePage";
 import Button from "../identifiers/Button";
 import InputField from "../identifiers/InputField";

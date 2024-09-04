@@ -5,41 +5,44 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserDtoResponse } from "../dto/userDtoResponse ";
-import { containsUser } from "../helpers/containsUser";
-import { URLS } from "../config/urlProvider";
 import { UserApiClient } from "../api/userApiClient";
+import { GenericSteps } from "../steps/genericSteps";
+import { UserSteps } from "../steps/userSteps";
+import { UserNameHelper } from "../helpers/userNameHelper";
 
-let userDto = new UserDto("user to delete", "1956", GenderOptions.Undefined);
+let userDto: UserDto;
 let createdUser: UserDtoResponse;
 let deleteUserPage: DeleteUserPage;
 let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
+let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
-  const response: APIResponse = await request.post(URLS.USER_API, {
-    data: userDto,
-  });
-  expect(response.ok()).toBeTruthy();
-  expect(response.status()).toBe(200);
+  userDto = {
+    name: UserNameHelper.generateRandomUserName(10),
+    yearOfBirth: "1956",
+    gender: GenderOptions.Undefined,
+  };
+  userApiClient = new UserApiClient(request);
+  const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
 
   const pageFactory: PageFactory = new PageFactory(page);
-
   deleteUserPage = pageFactory.getDeleteUserPage();
-  homeSteps = new HomeSteps(page);
 
-  await homeSteps.goToPage("");
+  homeSteps = new HomeSteps(page);
+  genericSteps = new GenericSteps(page);
+
+  await genericSteps.goToPage("");
 });
 
-test(`Check successful deletion of a user "${userDto.name}"`, async ({
-  request,
-}) => {
+test(`Check successful deletion of a user`, async ({ request }) => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
   await deleteUserPage.yesBtn.click();
 
-  userApiClient = new UserApiClient(request);
-  let responseForListAllUsers: APIResponse = await userApiClient.listUsers();
-  let users: UserDtoResponse[] = await responseForListAllUsers.json();
+  const responseForListAllUsers: APIResponse =
+    await userApiClient.getUserList();
+  const users: UserDtoResponse[] = await responseForListAllUsers.json();
 
-  expect(containsUser(userDto, users)).toBe(false);
+  expect(UserSteps.isUserInList(userDto, users)).toBe(false);
 });

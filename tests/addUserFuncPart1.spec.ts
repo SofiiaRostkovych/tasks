@@ -2,50 +2,49 @@ import { test, expect, APIResponse } from "@playwright/test";
 import { GenderOptions } from "../enums/GenderOptions";
 import { PageFactory } from "../pageFactory/pageFactory";
 import { AddUserPage } from "../pages/addUserPage";
-import { HomePage } from "../pages/homePage";
 import { DeleteUserPage } from "../pages/deleteUserPage";
 import { URLS } from "../config/urlProvider";
 import { AddUserSteps } from "../steps/addUserSteps";
 import { HomeSteps } from "../steps/homeSteps";
 import { UserDto } from "../dto/userDto";
 import { UserApiClient } from "../api/userApiClient";
-import { UserDtoResponse } from "../dto/userDtoResponse ";
-import { containsUser } from "../helpers/containsUser";
+import { GenericSteps } from "../steps/genericSteps";
+import { RegexHelper } from "../helpers/regexHelper";
 
 const validUserData: UserDto[] = [
-  new UserDto("nб3-w", "1900", GenderOptions.Undefined),
-  new UserDto("йцу", "2005", GenderOptions.Male),
-  new UserDto("new user", "2004", GenderOptions.Female),
+  { name: "nб3-w", yearOfBirth: "1900", gender: GenderOptions.Undefined },
+  { name: "йцу", yearOfBirth: "2005", gender: GenderOptions.Male },
+  { name: "new user", yearOfBirth: "2004", gender: GenderOptions.Female },
   // TODO: uncomment after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
   /* 
-   new UserDTO("adult test", (new Date().getFullYear()-18).toString(), GenderOptions[0]),
+   {userName: "adult test",yearOfBirth: (new Date().getFullYear()-18).toString(),  gender: GenderOptions.Male},
   */
 ];
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
 let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
 let createdUserId: string;
+let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
+  genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getAddUserPage();
   deleteUserPage = pageFactory.getDeleteUserPage();
   addUserSteps = new AddUserSteps(page);
   homeSteps = new HomeSteps(page);
 
-  addUserSteps.goToPage(URLS.ADD_USER);
+  genericSteps.goToPage(URLS.ADD_USER);
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.name}"`, async ({
-    request,
-  }) => {
+  test(`Check successful creation of new user "${userDTO.name}"`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
-    await addUserSteps.fillField(addUserPage.userNameField, userDTO.name);
-    await addUserSteps.fillField(
+    await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
+    await genericSteps.fillField(
       addUserPage.yearOfBirthField,
       userDTO.yearOfBirth,
     );
@@ -61,13 +60,11 @@ validUserData.forEach((userDTO) => {
 
     await homeSteps.clickDeleteUserBtn(userDTO.name);
 
-    let url: string = homeSteps.page.url();
-    createdUserId = url.substring(url.lastIndexOf("/") + 1);
+    createdUserId = RegexHelper.getIdFromUrl(homeSteps.page.url());
   });
 });
 
 test.afterEach(async ({ request }) => {
-  let userApiClient: UserApiClient = new UserApiClient(request);
-
+  const userApiClient: UserApiClient = new UserApiClient(request);
   await userApiClient.deleteUser(createdUserId);
 });

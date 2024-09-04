@@ -9,12 +9,4 @@ export class BaseSteps extends BasePage {
     super(page);
     this.pageFactory = new PageFactory(page);
   }
-
-  async goToPage(source: string): Promise<void> {
-    await this.page.goto(source);
-  }
-
-  async fillField(field: Locator, text: string): Promise<void> {
-    await field.fill(text);
-  }
 }

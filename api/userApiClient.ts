@@ -3,6 +3,7 @@ import { UserDto } from "../dto/userDto";
 import { URLS } from "../config/urlProvider";
 
 export class UserApiClient {
+  readonly USER_API: string = "/api/User/";
   private request: APIRequestContext;
 
   constructor(request: APIRequestContext) {
@@ -10,7 +11,7 @@ export class UserApiClient {
   }
 
   async createUser(userDto: UserDto): Promise<APIResponse> {
-    const response: APIResponse = await this.request.post(URLS.USER_API, {
+    const response: APIResponse = await this.request.post(this.USER_API, {
       data: userDto,
     });
     return response;
@@ -18,14 +19,14 @@ export class UserApiClient {
 
   async getUser(userId: string): Promise<APIResponse> {
     const response: APIResponse = await this.request.get(
-      URLS.USER_API + userId,
+      this.USER_API + userId,
     );
     return response;
   }
 
   async updateUser(userId: string, userDto: UserDto): Promise<APIResponse> {
     const response: APIResponse = await this.request.put(
-      URLS.USER_API + userId,
+      this.USER_API + userId,
       {
         data: userDto,
       },
@@ -35,13 +36,13 @@ export class UserApiClient {
 
   async deleteUser(userId: string): Promise<APIResponse> {
     const response: APIResponse = await this.request.delete(
-      URLS.USER_API + userId,
+      this.USER_API + userId,
     );
     return response;
   }
 
-  async listUsers() {
-    const response: APIResponse = await this.request.get(URLS.USER_API);
+  async getUserList(): Promise<APIResponse> {
+    const response: APIResponse = await this.request.get(this.USER_API);
     return response;
   }
 }
