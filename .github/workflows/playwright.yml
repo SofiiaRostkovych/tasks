@@ -40,8 +40,8 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
+        if: success() || failure()
         run: npm run test:${{ matrix.tag }}
-        continue-on-error: true
 
       - name: Upload Playwright Report
         if: ${{ always() }}
