@@ -41,7 +41,7 @@ export default defineConfig({
   projects: [
     {
       name: "Desktop",
-      grep: /@desktop/,
+      grep: /@desktop|@api/,
       use: { ...devices["Desktop Chrome"] },
     },
     /* Test against mobile viewports. */

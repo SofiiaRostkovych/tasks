@@ -1,11 +1,11 @@
 import { test, expect, APIResponse } from "@playwright/test";
-import { GenderOptions } from "../../enums/GenderOptions";
+import { UserApiClient } from "../../api/userApiClient";
 import { UserDto } from "../../DTO/UserDto";
 import { UserDtoResponse } from "../../DTO/UserDtoResponse";
-import { UserApiClient } from "../../api/userApiClient";
-import { ApiSteps } from "../../api/apiSteps/apiSteps";
-import { UserSteps } from "../../steps/userSteps";
+import { GenderOptions } from "../../enums/GenderOptions";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
+import { UserSteps } from "../../steps/userSteps";
+import { ApiSteps } from "../../api/apiSteps/apiSteps"
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;
