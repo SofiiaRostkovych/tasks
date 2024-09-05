@@ -4,6 +4,10 @@
   "description": "A JavaScript project",
   "main": "./dist/index.js",
   "scripts": {
+    "test": "npx playwright test",
+    "test:mobile": "npm run test -- --project=Mobile",
+    "test:desktop": "npm run test -- --project=Desktop",
+    "test:api": "npx playwright test --grep '@api'",
     "lint": "npx eslint",
     "lint:fix": "npm run lint -- --fix",
     "format": "npx prettier --write ."

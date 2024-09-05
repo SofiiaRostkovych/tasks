@@ -27,8 +27,8 @@ test.beforeEach(async ({ page, request }) => {
   const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
 
-  const pageFactory: PageFactory = new PageFactory(page);
-  deleteUserPage = pageFactory.getDeleteUserPage();
+  const pageFactory: PageFactory = new PageFactory();
+  deleteUserPage = pageFactory.getPage(DeleteUserPage, page);
 
   homeSteps = new HomeSteps(page);
   genericSteps = new GenericSteps(page);
@@ -36,7 +36,7 @@ test.beforeEach(async ({ page, request }) => {
   await genericSteps.goToPage("");
 });
 
-test(`Check successful deletion of a user`, async ({ request }) => {
+test(`Check successful deletion of a user @user @desktop @mobile`, async ({ request }) => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
   await deleteUserPage.yesBtn.click();
 

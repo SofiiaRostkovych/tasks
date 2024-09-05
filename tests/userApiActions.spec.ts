@@ -29,7 +29,7 @@ test.beforeEach(async ({ request }) => {
   };
 });
 
-test("Verify getting list of users using API", async () => {
+test("Verify getting list of users using API @api @user", async () => {
   const responseForListAllUsers: APIResponse =
     await userApiClient.getUserList();
 
@@ -38,7 +38,7 @@ test("Verify getting list of users using API", async () => {
   expect(users.length).toBeGreaterThan(0);
 });
 
-test("Check user creation using API", async () => {
+test("Check user creation using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 
@@ -49,7 +49,7 @@ test("Check user creation using API", async () => {
   apiSteps.verifyReceivedUser(createdUser, userDto);
 });
 
-test("Verify getting user's info by id using API", async () => {
+test("Verify getting user's info by id using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();
@@ -65,7 +65,7 @@ test("Verify getting user's info by id using API", async () => {
   expect(user.created).toBe(createdUser.created);
 });
 
-test("Check updating the user using API", async () => {
+test("Check updating the user using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();
@@ -83,7 +83,7 @@ test("Check updating the user using API", async () => {
   expect(user.created).not.toBe(createdUser.created);
 });
 
-test("Verify user deletion using API", async () => {
+test("Verify user deletion using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();
@@ -101,7 +101,7 @@ test("Verify user deletion using API", async () => {
   expect(UserSteps.isUserInList(createdUser, users)).toBe(false);
 });
 
-test.afterEach(async () => {
+test.afterEach("Delete created user", async () => {
   if (createdUserId != "") {
     await userApiClient.deleteUser(createdUserId);
   }

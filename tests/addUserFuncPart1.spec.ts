@@ -29,11 +29,11 @@ let createdUserId: string;
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory: PageFactory = new PageFactory(page);
+  const pageFactory: PageFactory = new PageFactory();
 
   genericSteps = new GenericSteps(page);
-  addUserPage = pageFactory.getAddUserPage();
-  deleteUserPage = pageFactory.getDeleteUserPage();
+  addUserPage = pageFactory.getPage(AddUserPage, page)
+  deleteUserPage = pageFactory.getPage(DeleteUserPage, page);
   addUserSteps = new AddUserSteps(page);
   homeSteps = new HomeSteps(page);
 
@@ -41,7 +41,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.name}"`, async () => {
+  test(`Check successful creation of new user "${userDTO.name}" @user @desktop @mobile`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
     await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
     await genericSteps.fillField(

@@ -12,16 +12,16 @@ let addUserSteps: AddUserSteps;
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory: PageFactory = new PageFactory(page);
+  const pageFactory: PageFactory = new PageFactory();
 
-  addUserPage = pageFactory.getAddUserPage();
+  addUserPage = pageFactory.getPage(AddUserPage, page);
   addUserSteps = new AddUserSteps(page);
   genericSteps = new GenericSteps(page);
 
   await genericSteps.goToPage(URLS.ADD_USER);
 });
 
-test("Verify 'Create' button design on the 'Add User' page", async () => {
+test("Verify 'Create' button design on the 'Add User' page @user @desktop @mobile", async () => {
   const createBtn: Locator = addUserPage.createBtn;
 
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
@@ -29,7 +29,7 @@ test("Verify 'Create' button design on the 'Add User' page", async () => {
   await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
 
-test("Verify 'Cancel' button design on the 'Add User' page", async () => {
+test("Verify 'Cancel' button design on the 'Add User' page @user @desktop @mobile", async () => {
   const cancelBtn: Locator = addUserPage.cancelBtn;
 
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
@@ -37,7 +37,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async () => {
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
 
-test("Verify 'User Name' field placeholder on the 'Add User' page", async () => {
+test("Verify 'User Name' field placeholder on the 'Add User' page @user @desktop @mobile", async () => {
   const placeholder: string | null =
     await addUserPage.userNameField.getAttribute("placeholder");
 
@@ -46,7 +46,7 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async () => 
   await expect(addUserPage.userNameField).toHaveValue("");
 });
 
-test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async () => {
+test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page @user @desktop @mobile", async () => {
   await expect(addUserPage.yearOfBirthField).toBeVisible();
   await expect(addUserPage.yearOfBirthField).toHaveValue("");
   const placeholder: string | null =
@@ -59,7 +59,7 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
   await expect(addUserPage.yearOfBirthField).toHaveValue("");
 });
 
-test("Check 'Gender' field content on the 'Add User' page", async () => {
+test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
   await addUserSteps.selectGenderOption(GenderOptions.Male);
