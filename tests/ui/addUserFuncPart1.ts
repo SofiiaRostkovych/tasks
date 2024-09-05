@@ -12,21 +12,7 @@ import { GenericSteps } from "../../steps/genericSteps";
 import { RegexHelper } from "../../helpers/regexHelper";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
-const validUserData: UserDto[] = [
-  { name: RandomGeneratorHelper.generateRandomUserName(3), yearOfBirth: "1900", gender: GenderOptions.Undefined },
-  { name: RandomGeneratorHelper.generateRandomUserName(4), yearOfBirth: "2005", gender: GenderOptions.Male },
-  { name: RandomGeneratorHelper.generateRandomUserName(14), yearOfBirth: "2004", gender: GenderOptions.Female },
-  // TODO: uncomment last user in array after bugfix:
-  // 'The User with Year of Birth 2006 is considered underage'
-  // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
-  /*
-  {
-    name: RandomGeneratorHelper.generateRandomUserName(13),
-    yearOfBirth: (new Date().getFullYear() - 18).toString(),
-    gender: GenderOptions.Male,
-  },
-  */
-];
+let validUserData: UserDto[] = [];
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
 let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
@@ -34,8 +20,35 @@ let createdUserId: string = "";
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory: PageFactory = new PageFactory(page);
+  validUserData = [
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(3),
+      yearOfBirth: "1900",
+      gender: GenderOptions.Undefined,
+    },
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(4),
+      yearOfBirth: "2005",
+      gender: GenderOptions.Male,
+    },
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(14),
+      yearOfBirth: "2004",
+      gender: GenderOptions.Female,
+    },
+    // TODO: uncomment last user in array after bugfix:
+    // 'The User with Year of Birth 2006 is considered underage'
+    // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
+    /*
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(13),
+      yearOfBirth: (new Date().getFullYear() - 18).toString(),
+      gender: GenderOptions.Male,
+    },
+    */
+  ];
 
+  const pageFactory: PageFactory = new PageFactory(page);
   genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getPage(AddUserPage);
   deleteUserPage = pageFactory.getPage(DeleteUserPage);
@@ -68,16 +81,15 @@ validUserData.forEach((userDTO) => {
     createdUserId = RegexHelper.getIdFromUrl(homeSteps.page.url());
   });
 });
- 
+
 // test designed to fail to verify retries in Github Actions
 test("Failing test @desktop", async () => {
   expect(1).toBe(2);
 });
 
-
 test.afterEach(async ({ request }) => {
-  if(createdUserId!=""){
+  if (createdUserId != "") {
     const userApiClient: UserApiClient = new UserApiClient(request);
-  await userApiClient.deleteUser(createdUserId);
+    await userApiClient.deleteUser(createdUserId);
   }
 });
