@@ -25,8 +25,14 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Run Playwright Desktop tests
+        run: npm run test:desktop
+
+      - name: Run Playwright Mobile tests
+        run: npm run test:mobile
+        
+      - name: Run Playwright API tests
+        run: nnpx playwright test --grep "@api"  
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

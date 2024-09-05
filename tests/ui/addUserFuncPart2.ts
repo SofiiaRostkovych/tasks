@@ -1,15 +1,15 @@
 import { test, expect, APIResponse } from "@playwright/test";
-import { URLS } from "../config/urlProvider";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { AddUserSteps } from "../steps/addUserSteps";
-import { UserDto } from "../DTO/UserDto";
-import { UserApiClient } from "../api/userApiClient";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
-import { UserSteps } from "../steps/userSteps";
-import { GenericSteps } from "../steps/genericSteps";
-import { GenderOptions } from "../enums/GenderOptions";
-import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import { URLS } from "../../config/urlProvider";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { AddUserPage } from "../../pages/addUserPage";
+import { AddUserSteps } from "../../steps/addUserSteps";
+import { UserDto } from "../../DTO/UserDto";
+import { UserApiClient } from "../../api/userApiClient";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserSteps } from "../../steps/userSteps";
+import { GenericSteps } from "../../steps/genericSteps";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
 const usersWithInvalidYearOfBirth: UserDto[] = [
   {

@@ -1,15 +1,15 @@
 import { test, expect, APIResponse } from "@playwright/test";
-import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { DeleteUserPage } from "../pages/deleteUserPage";
-import { URLS } from "../config/urlProvider";
-import { AddUserSteps } from "../steps/addUserSteps";
-import { HomeSteps } from "../steps/homeSteps";
-import { UserDto } from "../DTO/UserDto";
-import { UserApiClient } from "../api/userApiClient";
-import { GenericSteps } from "../steps/genericSteps";
-import { RegexHelper } from "../helpers/regexHelper";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { AddUserPage } from "../../pages/addUserPage";
+import { DeleteUserPage } from "../../pages/deleteUserPage";
+import { URLS } from "../../config/urlProvider";
+import { AddUserSteps } from "../../steps/addUserSteps";
+import { HomeSteps } from "../../steps/homeSteps";
+import { UserDto } from "../../DTO/UserDto";
+import { UserApiClient } from "../../api/userApiClient";
+import { GenericSteps } from "../../steps/genericSteps";
+import { RegexHelper } from "../../helpers/regexHelper";
 
 const validUserData: UserDto[] = [
   { name: "nб3-w", yearOfBirth: "1900", gender: GenderOptions.Undefined },

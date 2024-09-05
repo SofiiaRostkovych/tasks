@@ -1,15 +1,15 @@
 import { test, expect, APIResponse } from "@playwright/test";
-import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { DeleteUserPage } from "../pages/deleteUserPage";
-import { HomeSteps } from "../steps/homeSteps";
-import { UserDto } from "../DTO/UserDto";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
-import { UserApiClient } from "../api/userApiClient";
-import { GenericSteps } from "../steps/genericSteps";
-import { UserSteps } from "../steps/userSteps";
-import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
-import { URLS } from "../config/urlProvider";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { DeleteUserPage } from "../../pages/deleteUserPage";
+import { HomeSteps } from "../../steps/homeSteps";
+import { UserDto } from "../../DTO/UserDto";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserApiClient } from "../../api/userApiClient";
+import { GenericSteps } from "../../steps/genericSteps";
+import { UserSteps } from "../../steps/userSteps";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
+import { URLS } from "../../config/urlProvider";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;

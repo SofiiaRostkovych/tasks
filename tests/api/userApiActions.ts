@@ -1,11 +1,11 @@
 import { test, expect, APIResponse } from "@playwright/test";
-import { GenderOptions } from "../enums/GenderOptions";
-import { UserDto } from "../DTO/UserDto";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
-import { UserApiClient } from "../api/userApiClient";
-import { ApiSteps } from "../api/apiSteps/apiSteps";
-import { UserSteps } from "../steps/userSteps";
-import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { UserDto } from "../../DTO/UserDto";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserApiClient } from "../../api/userApiClient";
+import { ApiSteps } from "../../api/apiSteps/apiSteps";
+import { UserSteps } from "../../steps/userSteps";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;
@@ -101,7 +101,7 @@ test("Verify user deletion using API @api @user", async () => {
   expect(UserSteps.isUserInList(createdUser, users)).toBe(false);
 });
 
-test.afterEach("Delete created user", async () => {
+test.afterEach(async () => {
   if (createdUserId != "") {
     await userApiClient.deleteUser(createdUserId);
   }

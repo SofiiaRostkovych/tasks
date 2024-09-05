@@ -1,11 +1,11 @@
 import { test, expect, Locator } from "@playwright/test";
-import { Colors } from "../enums/Colors";
-import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { URLS } from "../config/urlProvider";
-import { AddUserSteps } from "../steps/addUserSteps";
-import { GenericSteps } from "../steps/genericSteps";
+import { Colors } from "../../enums/Colors";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { AddUserPage } from "../../pages/addUserPage";
+import { URLS } from "../../config/urlProvider";
+import { AddUserSteps } from "../../steps/addUserSteps";
+import { GenericSteps } from "../../steps/genericSteps";
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
