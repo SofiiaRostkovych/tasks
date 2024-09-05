@@ -1,8 +1,7 @@
-import { Locator, Page } from "@playwright/test";
-import { BasePage } from "../pages/basePage";
-import { PageFactory } from "../pageFactory/pageFactory";
+import { Locator } from "@playwright/test";
+import { BaseSteps } from "./baseSteps";
 
-export class GenericSteps extends BasePage {
+export class GenericSteps extends BaseSteps {
   async goToPage(source: string): Promise<void> {
     await this.page.goto(source);
   }

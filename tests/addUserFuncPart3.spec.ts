@@ -8,7 +8,8 @@ import { UserDtoResponse } from "../DTO/UserDtoResponse";
 import { UserApiClient } from "../api/userApiClient";
 import { GenericSteps } from "../steps/genericSteps";
 import { UserSteps } from "../steps/userSteps";
-import { UserNameHelper } from "../helpers/userNameHelper";
+import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import { URLS } from "../config/urlProvider";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;
@@ -19,10 +20,11 @@ let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
   userDto = {
-    name: UserNameHelper.generateRandomUserName(10),
+    name: RandomGeneratorHelper.generateRandomUserName(10),
     yearOfBirth: "1956",
     gender: GenderOptions.Undefined,
   };
+
   userApiClient = new UserApiClient(request);
   const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
@@ -33,7 +35,7 @@ test.beforeEach(async ({ page, request }) => {
   homeSteps = new HomeSteps(page);
   genericSteps = new GenericSteps(page);
 
-  await genericSteps.goToPage("");
+  await genericSteps.goToPage(URLS.HOME_PAGE);
 });
 
 test(`Check successful deletion of a user @user @desktop @mobile`, async ({ request }) => {
