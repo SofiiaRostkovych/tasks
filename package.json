@@ -8,6 +8,7 @@
     "test:mobile": "npx playwright test --project=Mobile",
     "test:desktop": "npx playwright test --project=Desktop",
     "test:api": "npx playwright test --grep @api",
+    "test:user": "npx playwright test --grep @user",
     "lint": "npx eslint",
     "lint:fix": "npm run lint -- --fix",
     "format": "npx prettier --write ."
