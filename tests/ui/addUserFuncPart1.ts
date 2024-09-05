@@ -10,26 +10,27 @@ import { UserDto } from "../../DTO/UserDto";
 import { UserApiClient } from "../../api/userApiClient";
 import { GenericSteps } from "../../steps/genericSteps";
 import { RegexHelper } from "../../helpers/regexHelper";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
 const validUserData: UserDto[] = [
-  { name: "nб3-w", yearOfBirth: "1900", gender: GenderOptions.Undefined },
-  { name: "йцу", yearOfBirth: "2005", gender: GenderOptions.Male },
-  { name: "new user", yearOfBirth: "2004", gender: GenderOptions.Female },
+  { name: RandomGeneratorHelper.generateRandomUserName(3), yearOfBirth: "1900", gender: GenderOptions.Undefined },
+  { name: RandomGeneratorHelper.generateRandomUserName(4), yearOfBirth: "2005", gender: GenderOptions.Male },
+  { name: RandomGeneratorHelper.generateRandomUserName(14), yearOfBirth: "2004", gender: GenderOptions.Female },
   // TODO: uncomment last user in array after bugfix:
   // 'The User with Year of Birth 2006 is considered underage'
   // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
-
-  // Uncommented to check retry with GithubAction
+  /*
   {
-    name: "adult test",
+    name: RandomGeneratorHelper.generateRandomUserName(13),
     yearOfBirth: (new Date().getFullYear() - 18).toString(),
     gender: GenderOptions.Male,
   },
+  */
 ];
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
 let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
-let createdUserId: string;
+let createdUserId: string = "";
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
@@ -67,8 +68,16 @@ validUserData.forEach((userDTO) => {
     createdUserId = RegexHelper.getIdFromUrl(homeSteps.page.url());
   });
 });
+ 
+// test designed to fail to verify retries in Github Actions
+test("Failing test @desktop", async () => {
+  expect(1).toBe(2);
+});
+
 
 test.afterEach(async ({ request }) => {
-  const userApiClient: UserApiClient = new UserApiClient(request);
+  if(createdUserId!=""){
+    const userApiClient: UserApiClient = new UserApiClient(request);
   await userApiClient.deleteUser(createdUserId);
+  }
 });

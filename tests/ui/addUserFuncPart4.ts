@@ -79,7 +79,7 @@ test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile
 });
 
 // this test was used to practice writing tests with XPath functions and axis
-/*test("Verify Header content on the 'Add User' page", async ({ page }) => {
+test.skip("Verify Header content on the 'Add User' page", async ({ page }) => {
   // checking the content of the first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
   await expect(listitem).toHaveText("Home");
@@ -90,12 +90,12 @@ test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile
     "xpath=/parent::li/following-sibling::li[1]/descendant::a",
   );
   await expect(listitem).toHaveText("Add User");
-  await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
+  await expect(listitem).toHaveAttribute("href", URLS.ADD_USER);
 
   // checking the content of last listitem of the header
   listitem = listitem.locator(
     'xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]',
   );
   await expect(listitem).toHaveText("Add Address");
-  await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
-});*/
+  await expect(listitem).toHaveAttribute("href", URLS.ADD_ADDRESS);
+});
