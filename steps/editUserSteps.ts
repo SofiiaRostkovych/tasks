@@ -7,7 +7,7 @@ export class EditUserSteps extends BaseSteps {
 
   constructor(page: Page) {
     super(page);
-    this.editUserPage = this.pageFactory.getPage(EditUserPage, page);
+    this.editUserPage = this.pageFactory.getPage(EditUserPage);
   }
 
   async selectGenderOption(option: string): Promise<void> {

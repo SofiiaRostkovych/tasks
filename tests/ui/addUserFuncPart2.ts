@@ -40,10 +40,10 @@ let userApiClient: UserApiClient;
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page, request }) => {
-  const pageFactory: PageFactory = new PageFactory();
+  const pageFactory: PageFactory = new PageFactory(page);
 
   genericSteps = new GenericSteps(page);
-  addUserPage = pageFactory.getPage(AddUserPage, page);
+  addUserPage = pageFactory.getPage(AddUserPage);
 
   addUserSteps = new AddUserSteps(page);
   genericSteps.goToPage(URLS.ADD_USER);

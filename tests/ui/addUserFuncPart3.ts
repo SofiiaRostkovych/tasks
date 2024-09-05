@@ -29,8 +29,8 @@ test.beforeEach(async ({ page, request }) => {
   const response = await userApiClient.createUser(userDto);
   createdUser = await response.json();
 
-  const pageFactory: PageFactory = new PageFactory();
-  deleteUserPage = pageFactory.getPage(DeleteUserPage, page);
+  const pageFactory: PageFactory = new PageFactory(page);
+  deleteUserPage = pageFactory.getPage(DeleteUserPage);
 
   homeSteps = new HomeSteps(page);
   genericSteps = new GenericSteps(page);

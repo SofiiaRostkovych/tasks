@@ -12,9 +12,9 @@ let addUserSteps: AddUserSteps;
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory: PageFactory = new PageFactory();
+  const pageFactory: PageFactory = new PageFactory(page);
 
-  addUserPage = pageFactory.getPage(AddUserPage, page);
+  addUserPage = pageFactory.getPage(AddUserPage);
   addUserSteps = new AddUserSteps(page);
   genericSteps = new GenericSteps(page);
 

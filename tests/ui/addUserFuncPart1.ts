@@ -33,11 +33,11 @@ let createdUserId: string;
 let genericSteps: GenericSteps;
 
 test.beforeEach(async ({ page }) => {
-  const pageFactory: PageFactory = new PageFactory();
+  const pageFactory: PageFactory = new PageFactory(page);
 
   genericSteps = new GenericSteps(page);
-  addUserPage = pageFactory.getPage(AddUserPage, page)
-  deleteUserPage = pageFactory.getPage(DeleteUserPage, page);
+  addUserPage = pageFactory.getPage(AddUserPage)
+  deleteUserPage = pageFactory.getPage(DeleteUserPage);
   addUserSteps = new AddUserSteps(page);
   homeSteps = new HomeSteps(page);
 
