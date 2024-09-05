@@ -5,7 +5,7 @@ import { DeleteUserPage } from "../pages/deleteUserPage";
 import { HomePage } from "../pages/homePage";
 import { BasePage } from "../pages/basePage";
 
-export class PageFactory{
+export class PageFactory {
   public page: Page;
 
   constructor(page: Page) {

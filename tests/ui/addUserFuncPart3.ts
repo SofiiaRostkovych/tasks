@@ -38,7 +38,9 @@ test.beforeEach(async ({ page, request }) => {
   await genericSteps.goToPage(URLS.HOME_PAGE);
 });
 
-test(`Check successful deletion of a user @user @desktop @mobile`, async ({ request }) => {
+test(`Check successful deletion of a user @user @desktop @mobile`, async ({
+  request,
+}) => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
   await deleteUserPage.yesBtn.click();
 

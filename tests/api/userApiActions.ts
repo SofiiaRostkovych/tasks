@@ -5,7 +5,7 @@ import { UserDtoResponse } from "../../DTO/UserDtoResponse";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 import { UserSteps } from "../../steps/userSteps";
-import { ApiSteps } from "../../api/apiSteps/apiSteps"
+import { ApiSteps } from "../../api/apiSteps/apiSteps";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;

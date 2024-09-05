@@ -13,7 +13,7 @@ import { BASE } from "./config/urlProvider";
  */
 export default defineConfig({
   timeout: 5 * 60 * 1000,
-  testMatch: '*.ts',
+  testMatch: "*.ts",
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
