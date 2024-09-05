@@ -40,18 +40,8 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: |
-          # Extract the tag name from github.ref
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-
-          # Run the test command if the tag matches
-          if [[ "$TAG_NAME" == "${{ matrix.tag }}" ]]; then
-            echo "Running tests for tag $TAG_NAME"
+        run: 
             npm run test:${{ matrix.tag }}
-          else
-            echo "Skipping tests for tag $TAG_NAME as it does not match ${{ matrix.tag }}"
-            exit 0
-          fi
 
       - name: Upload Playwright Report
         if: ${{ always() }}
