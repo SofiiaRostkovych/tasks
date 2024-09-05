@@ -6,7 +6,7 @@
   "scripts": {
     "test:": "npx playwright test",
     "test:mobile": "npx playwright test --project=Mobile",
-    "test:desktop": "npx playwright test --project=Desktop",
+    "test:desktop": "npx playwright test --project=Desktop --grep '@desktop'",
     "test:api": "npx playwright test --grep @api",
     "test:user": "npx playwright test --grep @user",
     "lint": "npx eslint",
