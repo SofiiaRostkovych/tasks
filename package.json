@@ -4,7 +4,7 @@
   "description": "A JavaScript project",
   "main": "./dist/index.js",
   "scripts": {
-    "test:": "npx playwright test",
+    "test": "npx playwright test",
     "test:mobile": "npx playwright test --project=Mobile",
     "test:desktop": "npx playwright test --project=Desktop --grep '@desktop'",
     "test:api": "npx playwright test --grep @api",

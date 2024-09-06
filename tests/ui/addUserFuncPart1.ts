@@ -1,4 +1,10 @@
-import { test, expect, APIResponse } from "@playwright/test";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+} from "@playwright/test";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { PageFactory } from "../../pageFactory/pageFactory";
 import { AddUserPage } from "../../pages/addUserPage";
@@ -12,42 +18,45 @@ import { GenericSteps } from "../../steps/genericSteps";
 import { RegexHelper } from "../../helpers/regexHelper";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
-let validUserData: UserDto[] = [];
+let validUserData: UserDto[] = [
+  {
+    name: "1",
+    yearOfBirth: "1900",
+    gender: GenderOptions.Undefined,
+  },
+  {
+    name: "2",
+    yearOfBirth: "2005",
+    gender: GenderOptions.Male,
+  },
+  {
+    name: "3",
+    yearOfBirth: "2004",
+    gender: GenderOptions.Female,
+  },
+  // TODO: uncomment last user in array after bugfix:
+  // 'The User with Year of Birth 2006 is considered underage'
+  // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
+  /*
+  {
+    name: "4",
+    yearOfBirth: (new Date().getFullYear() - 18).toString(),
+    gender: GenderOptions.Male,
+  },
+  */
+];
 
 let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
 let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
 let createdUserId: string = "";
 let genericSteps: GenericSteps;
+let request: APIRequestContext;
+
+test.beforeAll(async () => {
+  request = await playwrightRequest.newContext();
+});
 
 test.beforeEach(async ({ page }) => {
-  validUserData = [
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(3),
-      yearOfBirth: "1900",
-      gender: GenderOptions.Undefined,
-    },
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(4),
-      yearOfBirth: "2005",
-      gender: GenderOptions.Male,
-    },
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(14),
-      yearOfBirth: "2004",
-      gender: GenderOptions.Female,
-    },
-    // TODO: uncomment last user in array after bugfix:
-    // 'The User with Year of Birth 2006 is considered underage'
-    // Bug report - https://requirements-trainee.atlassian.net/browse/KAN-1
-    /*
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(13),
-      yearOfBirth: (new Date().getFullYear() - 18).toString(),
-      gender: GenderOptions.Male,
-    },
-    */
-  ];
-
   const pageFactory: PageFactory = new PageFactory(page);
   genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getPage(AddUserPage);
@@ -59,7 +68,11 @@ test.beforeEach(async ({ page }) => {
 });
 
 validUserData.forEach((userDTO) => {
-  test(`Check successful creation of new user "${userDTO.name}" @user @desktop @mobile`, async () => {
+  userDTO.name += RandomGeneratorHelper.generateRandomUserName(
+    RandomGeneratorHelper.generateRandomNumber(2, 13),
+  );
+
+  test(`Check successful creation of new user #${userDTO.name.charAt(0)} @user @desktop @mobile`, async () => {
     await addUserSteps.selectGenderOption(userDTO.gender);
     await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
     await genericSteps.fillField(

@@ -1,4 +1,10 @@
-import { test, expect, APIResponse } from "@playwright/test";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+} from "@playwright/test";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { PageFactory } from "../../pageFactory/pageFactory";
 import { DeleteUserPage } from "../../pages/deleteUserPage";
@@ -17,10 +23,17 @@ let deleteUserPage: DeleteUserPage;
 let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
 let genericSteps: GenericSteps;
+let request: APIRequestContext;
 
-test.beforeEach(async ({ page, request }) => {
+test.beforeAll(async () => {
+  request = await playwrightRequest.newContext();
+});
+
+test.beforeEach(async ({ page }) => {
   userDto = {
-    name: RandomGeneratorHelper.generateRandomUserName(10),
+    name: RandomGeneratorHelper.generateRandomUserName(
+      RandomGeneratorHelper.generateRandomNumber(3, 14),
+    ),
     yearOfBirth: "1956",
     gender: GenderOptions.Undefined,
   };
@@ -38,9 +51,7 @@ test.beforeEach(async ({ page, request }) => {
   await genericSteps.goToPage(URLS.HOME_PAGE);
 });
 
-test(`Check successful deletion of a user @user @desktop @mobile`, async ({
-  request,
-}) => {
+test(`Check successful deletion of a user @user @desktop @mobile`, async () => {
   await homeSteps.clickDeleteUserBtn(userDto.name);
   await deleteUserPage.yesBtn.click();
 

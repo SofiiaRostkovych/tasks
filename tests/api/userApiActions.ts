@@ -1,4 +1,10 @@
-import { test, expect, APIResponse } from "@playwright/test";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+} from "@playwright/test";
 import { UserApiClient } from "../../api/userApiClient";
 import { UserDto } from "../../DTO/UserDto";
 import { UserDtoResponse } from "../../DTO/UserDtoResponse";
@@ -12,8 +18,13 @@ let userApiClient: UserApiClient;
 let apiSteps: ApiSteps;
 let userDto: UserDto;
 let userDtoForUpdate: UserDto;
+let request: APIRequestContext;
 
-test.beforeEach(async ({ request }) => {
+test.beforeAll(async () => {
+  request = await playwrightRequest.newContext(); // Create a new request context
+});
+
+test.beforeEach(async () => {
   userApiClient = new UserApiClient(request);
   apiSteps = new ApiSteps();
   userDto = {

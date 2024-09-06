@@ -1,4 +1,10 @@
-import { test, expect, APIResponse } from "@playwright/test";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+} from "@playwright/test";
 import { URLS } from "../../config/urlProvider";
 import { PageFactory } from "../../pageFactory/pageFactory";
 import { AddUserPage } from "../../pages/addUserPage";
@@ -11,35 +17,40 @@ import { GenericSteps } from "../../steps/genericSteps";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
-const usersWithInvalidYearOfBirth: UserDto[] = [
-  {
-    name: RandomGeneratorHelper.generateRandomUserName(6),
-    yearOfBirth: "1899",
-    gender: GenderOptions.Male,
-  },
-  {
-    name: RandomGeneratorHelper.generateRandomUserName(6),
-    yearOfBirth: "1898",
-    gender: GenderOptions.Male,
-  },
-  {
-    name: RandomGeneratorHelper.generateRandomUserName(6),
-    yearOfBirth: (new Date().getFullYear() - 17).toString(),
-    gender: GenderOptions.Male,
-  },
-  {
-    name: RandomGeneratorHelper.generateRandomUserName(6),
-    yearOfBirth: (new Date().getFullYear() - 16).toString(),
-    gender: GenderOptions.Male,
-  },
-];
-
+let usersWithInvalidYearOfBirth: UserDto[] = [];
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
 let genericSteps: GenericSteps;
+let request: APIRequestContext;
 
-test.beforeEach(async ({ page, request }) => {
+test.beforeAll(async () => {
+  request = await playwrightRequest.newContext();
+  usersWithInvalidYearOfBirth = [
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(6),
+      yearOfBirth: "1899",
+      gender: GenderOptions.Male,
+    },
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(6),
+      yearOfBirth: "1898",
+      gender: GenderOptions.Male,
+    },
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(6),
+      yearOfBirth: (new Date().getFullYear() - 17).toString(),
+      gender: GenderOptions.Male,
+    },
+    {
+      name: RandomGeneratorHelper.generateRandomUserName(6),
+      yearOfBirth: (new Date().getFullYear() - 16).toString(),
+      gender: GenderOptions.Male,
+    },
+  ];
+});
+
+test.beforeEach(async ({ page }) => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   genericSteps = new GenericSteps(page);
