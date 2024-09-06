@@ -3,6 +3,7 @@ import {
   expect,
   request as playwrightRequest,
   APIRequestContext,
+  Page,
 } from "@playwright/test";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { PageFactory } from "../../pageFactory/pageFactory";
@@ -50,12 +51,15 @@ let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
 let createdUserId: string = "";
 let genericSteps: GenericSteps;
 let request: APIRequestContext;
+let page: Page;
 
-test.beforeAll(async () => {
+test.beforeAll(async ({browser}) => {
   request = await playwrightRequest.newContext();
+  const context = await browser.newContext();
+  page = await context.newPage();
 });
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
   genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getPage(AddUserPage);

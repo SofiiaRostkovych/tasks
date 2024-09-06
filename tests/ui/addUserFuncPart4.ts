@@ -1,4 +1,4 @@
-import { test, expect, Locator } from "@playwright/test";
+import { test, expect, Locator, Page } from "@playwright/test";
 import { Colors } from "../../enums/Colors";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { PageFactory } from "../../pageFactory/pageFactory";
@@ -10,8 +10,14 @@ import { GenericSteps } from "../../steps/genericSteps";
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let genericSteps: GenericSteps;
+let page: Page;
 
-test.beforeEach(async ({ page }) => {
+test.beforeAll(async ({browser}) => {
+  const context = await browser.newContext();
+  page = await context.newPage();
+});
+
+test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   addUserPage = pageFactory.getPage(AddUserPage);
@@ -79,7 +85,7 @@ test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile
 });
 
 // this test was used to practice writing tests with XPath functions and axis
-test.skip("Verify Header content on the 'Add User' page", async ({ page }) => {
+test.skip("Verify Header content on the 'Add User' page", async () => {
   // checking the content of the first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
   await expect(listitem).toHaveText("Home");

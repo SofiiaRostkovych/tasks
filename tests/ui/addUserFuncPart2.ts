@@ -4,6 +4,7 @@ import {
   request as playwrightRequest,
   APIResponse,
   APIRequestContext,
+  Page,
 } from "@playwright/test";
 import { URLS } from "../../config/urlProvider";
 import { PageFactory } from "../../pageFactory/pageFactory";
@@ -45,12 +46,15 @@ let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
 let genericSteps: GenericSteps;
 let request: APIRequestContext;
+let page: Page;
 
-test.beforeAll(async () => {
+test.beforeAll(async ({browser}) => {
   request = await playwrightRequest.newContext();
+  const context = await browser.newContext();
+  page = await context.newPage();
 });
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   genericSteps = new GenericSteps(page);
