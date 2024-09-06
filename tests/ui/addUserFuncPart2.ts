@@ -17,7 +17,29 @@ import { GenericSteps } from "../../steps/genericSteps";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
-let usersWithInvalidYearOfBirth: UserDto[] = [];
+let usersWithInvalidYearOfBirth: UserDto[] = [
+  {
+    name: RandomGeneratorHelper.generateRandomUserName(6),
+    yearOfBirth: "1899",
+    gender: GenderOptions.Male,
+  },
+  {
+    name: RandomGeneratorHelper.generateRandomUserName(6),
+    yearOfBirth: "1898",
+    gender: GenderOptions.Male,
+  },
+  {
+    name: RandomGeneratorHelper.generateRandomUserName(6),
+    yearOfBirth: (new Date().getFullYear() - 17).toString(),
+    gender: GenderOptions.Male,
+  },
+  {
+    name: RandomGeneratorHelper.generateRandomUserName(6),
+    yearOfBirth: (new Date().getFullYear() - 16).toString(),
+    gender: GenderOptions.Male,
+  },
+];
+
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
@@ -26,28 +48,6 @@ let request: APIRequestContext;
 
 test.beforeAll(async () => {
   request = await playwrightRequest.newContext();
-  usersWithInvalidYearOfBirth = [
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(6),
-      yearOfBirth: "1899",
-      gender: GenderOptions.Male,
-    },
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(6),
-      yearOfBirth: "1898",
-      gender: GenderOptions.Male,
-    },
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(6),
-      yearOfBirth: (new Date().getFullYear() - 17).toString(),
-      gender: GenderOptions.Male,
-    },
-    {
-      name: RandomGeneratorHelper.generateRandomUserName(6),
-      yearOfBirth: (new Date().getFullYear() - 16).toString(),
-      gender: GenderOptions.Male,
-    },
-  ];
 });
 
 test.beforeEach(async ({ page }) => {
