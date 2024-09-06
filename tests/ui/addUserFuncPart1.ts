@@ -2,7 +2,6 @@ import {
   test,
   expect,
   request as playwrightRequest,
-  APIResponse,
   APIRequestContext,
 } from "@playwright/test";
 import { GenderOptions } from "../../enums/GenderOptions";
@@ -100,7 +99,7 @@ test("Failing test @desktop", async () => {
   expect(1).toBe(2);
 });
 
-test.afterEach(async ({ request }) => {
+test.afterEach(async () => {
   if (createdUserId != "") {
     const userApiClient: UserApiClient = new UserApiClient(request);
     await userApiClient.deleteUser(createdUserId);

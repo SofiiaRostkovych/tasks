@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { BaseSteps } from "./baseSteps";
 import { EditUserPage } from "../pages/editUserPage";
 
