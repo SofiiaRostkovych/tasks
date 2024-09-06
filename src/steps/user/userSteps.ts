@@ -1,5 +1,5 @@
-import { UserDto } from "../DTO/UserDto";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
+import { UserDto } from "../../dto/UserDto";
+import { UserDtoResponse } from "../../dto/UserDtoResponse";
 
 export class UserSteps {
   static isUserInList(

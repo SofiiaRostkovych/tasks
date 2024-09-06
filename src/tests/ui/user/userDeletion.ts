@@ -4,18 +4,19 @@ import {
   request as playwrightRequest,
   APIResponse,
   APIRequestContext,
+  Page,
 } from "@playwright/test";
-import { GenderOptions } from "../../enums/GenderOptions";
-import { PageFactory } from "../../pageFactory/pageFactory";
-import { DeleteUserPage } from "../../pages/deleteUserPage";
-import { HomeSteps } from "../../steps/homeSteps";
-import { UserDto } from "../../DTO/UserDto";
-import { UserDtoResponse } from "../../DTO/UserDtoResponse";
-import { UserApiClient } from "../../api/userApiClient";
-import { GenericSteps } from "../../steps/genericSteps";
-import { UserSteps } from "../../steps/userSteps";
-import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
-import { URLS } from "../../config/urlProvider";
+import { GenderOptions } from "../../../enums/GenderOptions";
+import { PageFactory } from "../../../pageFactory/pageFactory";
+import { DeleteUserPage } from "../../../pages/user/deleteUserPage";
+import { HomeSteps } from "../../../steps/user/homeSteps";
+import { UserDto } from "../../../dto/UserDto";
+import { UserDtoResponse } from "../../../dto/UserDtoResponse";
+import { UserApiClient } from "../../../api/userApiClient";
+import { GenericSteps } from "../../../steps/base/genericSteps";
+import { UserSteps } from "../../../steps/user/userSteps";
+import { RandomGeneratorHelper } from "../../../helpers/randomGeneratorHelper";
+import { URLS } from "../../../providers/urlProvider";
 
 let userDto: UserDto;
 let createdUser: UserDtoResponse;
@@ -26,7 +27,7 @@ let genericSteps: GenericSteps;
 let request: APIRequestContext;
 let page: Page;
 
-test.beforeAll(async ({browser}) => {
+test.beforeAll(async ({ browser }) => {
   request = await playwrightRequest.newContext();
   const context = await browser.newContext();
   page = await context.newPage();

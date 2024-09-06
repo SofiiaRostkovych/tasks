@@ -5,18 +5,18 @@ import {
   APIRequestContext,
   Page,
 } from "@playwright/test";
-import { GenderOptions } from "../../enums/GenderOptions";
-import { PageFactory } from "../../pageFactory/pageFactory";
-import { AddUserPage } from "../../pages/addUserPage";
-import { DeleteUserPage } from "../../pages/deleteUserPage";
-import { URLS } from "../../config/urlProvider";
-import { AddUserSteps } from "../../steps/addUserSteps";
-import { HomeSteps } from "../../steps/homeSteps";
-import { UserDto } from "../../DTO/UserDto";
-import { UserApiClient } from "../../api/userApiClient";
-import { GenericSteps } from "../../steps/genericSteps";
-import { RegexHelper } from "../../helpers/regexHelper";
-import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
+import { GenderOptions } from "../../../enums/GenderOptions";
+import { PageFactory } from "../../../pageFactory/pageFactory";
+import { AddUserPage } from "../../../pages/user/addUserPage";
+import { DeleteUserPage } from "../../../pages/user/deleteUserPage";
+import { URLS } from "../../../providers/urlProvider";
+import { AddUserSteps } from "../../../steps/user/addUserSteps";
+import { HomeSteps } from "../../../steps/user/homeSteps";
+import { UserDto } from "../../../dto/UserDto";
+import { UserApiClient } from "../../../api/userApiClient";
+import { GenericSteps } from "../../../steps/base/genericSteps";
+import { RegexHelper } from "../../../helpers/regexHelper";
+import { RandomGeneratorHelper } from "../../../helpers/randomGeneratorHelper";
 
 let validUserData: UserDto[] = [
   {
@@ -53,7 +53,7 @@ let genericSteps: GenericSteps;
 let request: APIRequestContext;
 let page: Page;
 
-test.beforeAll(async ({browser}) => {
+test.beforeAll(async ({ browser }) => {
   request = await playwrightRequest.newContext();
   const context = await browser.newContext();
   page = await context.newPage();
@@ -70,13 +70,13 @@ test.beforeEach(async () => {
   genericSteps.goToPage(URLS.ADD_USER);
 });
 
-validUserData.forEach((userDTO) => {
+validUserData.forEach((userDTO: UserDto) => {
   userDTO.name += RandomGeneratorHelper.generateRandomUserName(
     RandomGeneratorHelper.generateRandomNumber(2, 13),
   );
 
   test(`Check successful creation of new user #${userDTO.name.charAt(0)} @user @desktop @mobile`, async () => {
-    await addUserSteps.selectGenderOption(userDTO.gender);
+    await genericSteps.selectOption(addUserPage.genderField, userDTO.gender);
     await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
     await genericSteps.fillField(
       addUserPage.yearOfBirthField,

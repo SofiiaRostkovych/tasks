@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import { BaseSteps } from "./baseSteps";
-import { EditUserPage } from "../pages/editUserPage";
+import { BaseSteps } from "../baseSteps";
+import { EditUserPage } from "../../pages/user/editUserPage";
 
 export class EditUserSteps extends BaseSteps {
   private editUserPage: EditUserPage;
@@ -8,9 +8,5 @@ export class EditUserSteps extends BaseSteps {
   constructor(page: Page) {
     super(page);
     this.editUserPage = this.pageFactory.getPage(EditUserPage);
-  }
-
-  async selectGenderOption(option: string): Promise<void> {
-    await this.editUserPage.genderField.selectOption(option);
   }
 }

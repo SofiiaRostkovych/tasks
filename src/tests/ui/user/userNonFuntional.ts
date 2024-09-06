@@ -1,18 +1,18 @@
 import { test, expect, Locator, Page } from "@playwright/test";
-import { Colors } from "../../enums/Colors";
-import { GenderOptions } from "../../enums/GenderOptions";
-import { PageFactory } from "../../pageFactory/pageFactory";
-import { AddUserPage } from "../../pages/addUserPage";
-import { URLS } from "../../config/urlProvider";
-import { AddUserSteps } from "../../steps/addUserSteps";
-import { GenericSteps } from "../../steps/genericSteps";
+import { Colors } from "../../../enums/Colors";
+import { GenderOptions } from "../../../enums/GenderOptions";
+import { PageFactory } from "../../../pageFactory/pageFactory";
+import { AddUserPage } from "../../../pages/user/addUserPage";
+import { URLS } from "../../../providers/urlProvider";
+import { AddUserSteps } from "../../../steps/user/addUserSteps";
+import { GenericSteps } from "../../../steps/base/genericSteps";
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let genericSteps: GenericSteps;
 let page: Page;
 
-test.beforeAll(async ({browser}) => {
+test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext();
   page = await context.newPage();
 });
@@ -68,17 +68,23 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
 test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
-  await addUserSteps.selectGenderOption(GenderOptions.Male);
+  await genericSteps.selectOption(addUserPage.genderField, GenderOptions.Male);
   expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Male],
   );
 
-  await addUserSteps.selectGenderOption(GenderOptions.Female);
+  await genericSteps.selectOption(
+    addUserPage.genderField,
+    GenderOptions.Female,
+  );
   expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Female],
   );
 
-  await addUserSteps.selectGenderOption(GenderOptions.Undefined);
+  await genericSteps.selectOption(
+    addUserPage.genderField,
+    GenderOptions.Undefined,
+  );
   expect(await addUserSteps.getGenderSelectedOption()).toBe(
     GenderOptions[GenderOptions.Undefined],
   );

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { BasePage } from "../pages/basePage";
+import { BasePage } from "../pages/base/basePage";
 
 export class PageFactory {
   public page: Page;
