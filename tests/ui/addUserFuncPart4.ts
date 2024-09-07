@@ -1,27 +1,33 @@
-import { test, expect, Locator } from "@playwright/test";
-import { Colors } from "../enums/Colors";
-import { GenderOptions } from "../enums/GenderOptions";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { URLS } from "../config/urlProvider";
-import { AddUserSteps } from "../steps/addUserSteps";
-import { GenericSteps } from "../steps/genericSteps";
+import { test, expect, Locator, Page } from "@playwright/test";
+import { Colors } from "../../enums/Colors";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { AddUserPage } from "../../pages/addUserPage";
+import { URLS } from "../../config/urlProvider";
+import { AddUserSteps } from "../../steps/addUserSteps";
+import { GenericSteps } from "../../steps/genericSteps";
 
 let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let genericSteps: GenericSteps;
+let page: Page;
 
-test.beforeEach(async ({ page }) => {
+test.beforeAll(async ({browser}) => {
+  const context = await browser.newContext();
+  page = await context.newPage();
+});
+
+test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
 
-  addUserPage = pageFactory.getAddUserPage();
+  addUserPage = pageFactory.getPage(AddUserPage);
   addUserSteps = new AddUserSteps(page);
   genericSteps = new GenericSteps(page);
 
   await genericSteps.goToPage(URLS.ADD_USER);
 });
 
-test("Verify 'Create' button design on the 'Add User' page", async () => {
+test("Verify 'Create' button design on the 'Add User' page @user @desktop @mobile", async () => {
   const createBtn: Locator = addUserPage.createBtn;
 
   await expect(createBtn).toHaveCSS("background-color", Colors.lightBlue);
@@ -29,7 +35,7 @@ test("Verify 'Create' button design on the 'Add User' page", async () => {
   await expect(createBtn).toHaveCSS("background-color", Colors.darkBlue);
 });
 
-test("Verify 'Cancel' button design on the 'Add User' page", async () => {
+test("Verify 'Cancel' button design on the 'Add User' page @user @desktop @mobile", async () => {
   const cancelBtn: Locator = addUserPage.cancelBtn;
 
   await expect(cancelBtn).toHaveCSS("background-color", Colors.lightGrey);
@@ -37,7 +43,7 @@ test("Verify 'Cancel' button design on the 'Add User' page", async () => {
   await expect(cancelBtn).toHaveCSS("background-color", Colors.darkGrey);
 });
 
-test("Verify 'User Name' field placeholder on the 'Add User' page", async () => {
+test("Verify 'User Name' field placeholder on the 'Add User' page @user @desktop @mobile", async () => {
   const placeholder: string | null =
     await addUserPage.userNameField.getAttribute("placeholder");
 
@@ -46,7 +52,7 @@ test("Verify 'User Name' field placeholder on the 'Add User' page", async () => 
   await expect(addUserPage.userNameField).toHaveValue("");
 });
 
-test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page", async () => {
+test("Verify 'Year of Birth' field placeholder and only number input on the 'Add User' page @user @desktop @mobile", async () => {
   await expect(addUserPage.yearOfBirthField).toBeVisible();
   await expect(addUserPage.yearOfBirthField).toHaveValue("");
   const placeholder: string | null =
@@ -59,7 +65,7 @@ test("Verify 'Year of Birth' field placeholder and only number input on the 'Add
   await expect(addUserPage.yearOfBirthField).toHaveValue("");
 });
 
-test("Check 'Gender' field content on the 'Add User' page", async () => {
+test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile", async () => {
   await expect(addUserPage.genderField).toBeVisible();
 
   await addUserSteps.selectGenderOption(GenderOptions.Male);
@@ -79,7 +85,7 @@ test("Check 'Gender' field content on the 'Add User' page", async () => {
 });
 
 // this test was used to practice writing tests with XPath functions and axis
-/*test("Verify Header content on the 'Add User' page", async ({ page }) => {
+test.skip("Verify Header content on the 'Add User' page", async () => {
   // checking the content of the first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
   await expect(listitem).toHaveText("Home");
@@ -90,12 +96,12 @@ test("Check 'Gender' field content on the 'Add User' page", async () => {
     "xpath=/parent::li/following-sibling::li[1]/descendant::a",
   );
   await expect(listitem).toHaveText("Add User");
-  await expect(listitem).toHaveAttribute("href", URLS.ADDUSER);
+  await expect(listitem).toHaveAttribute("href", URLS.ADD_USER);
 
   // checking the content of last listitem of the header
   listitem = listitem.locator(
     'xpath=ancestor::ul/descendant::a[contains(text(),"Add Address")]',
   );
   await expect(listitem).toHaveText("Add Address");
-  await expect(listitem).toHaveAttribute("href", URLS.ADDADDRESS);
-});*/
+  await expect(listitem).toHaveAttribute("href", URLS.ADD_ADDRESS);
+});

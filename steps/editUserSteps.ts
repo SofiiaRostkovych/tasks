@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { BaseSteps } from "./baseSteps";
 import { EditUserPage } from "../pages/editUserPage";
 
@@ -7,7 +7,7 @@ export class EditUserSteps extends BaseSteps {
 
   constructor(page: Page) {
     super(page);
-    this.editUserPage = this.pageFactory.getEditUserPage();
+    this.editUserPage = this.pageFactory.getPage(EditUserPage);
   }
 
   async selectGenderOption(option: string): Promise<void> {

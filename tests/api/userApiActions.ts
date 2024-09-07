@@ -1,19 +1,30 @@
-import { test, expect, APIResponse } from "@playwright/test";
-import { GenderOptions } from "../enums/GenderOptions";
-import { UserDto } from "../DTO/UserDto";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
-import { UserApiClient } from "../api/userApiClient";
-import { ApiSteps } from "../api/apiSteps/apiSteps";
-import { UserSteps } from "../steps/userSteps";
-import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+} from "@playwright/test";
+import { UserApiClient } from "../../api/userApiClient";
+import { UserDto } from "../../DTO/UserDto";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
+import { UserSteps } from "../../steps/userSteps";
+import { ApiSteps } from "../../api/apiSteps/apiSteps";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;
 let apiSteps: ApiSteps;
 let userDto: UserDto;
 let userDtoForUpdate: UserDto;
+let request: APIRequestContext;
 
-test.beforeEach(async ({ request }) => {
+test.beforeAll(async () => {
+  request = await playwrightRequest.newContext(); // Create a new request context
+});
+
+test.beforeEach(async () => {
   userApiClient = new UserApiClient(request);
   apiSteps = new ApiSteps();
   userDto = {
@@ -29,7 +40,7 @@ test.beforeEach(async ({ request }) => {
   };
 });
 
-test("Verify getting list of users using API", async () => {
+test("Verify getting list of users using API @api @user", async () => {
   const responseForListAllUsers: APIResponse =
     await userApiClient.getUserList();
 
@@ -38,7 +49,7 @@ test("Verify getting list of users using API", async () => {
   expect(users.length).toBeGreaterThan(0);
 });
 
-test("Check user creation using API", async () => {
+test("Check user creation using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
 
@@ -49,7 +60,7 @@ test("Check user creation using API", async () => {
   apiSteps.verifyReceivedUser(createdUser, userDto);
 });
 
-test("Verify getting user's info by id using API", async () => {
+test("Verify getting user's info by id using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();
@@ -65,7 +76,7 @@ test("Verify getting user's info by id using API", async () => {
   expect(user.created).toBe(createdUser.created);
 });
 
-test("Check updating the user using API", async () => {
+test("Check updating the user using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();
@@ -83,7 +94,7 @@ test("Check updating the user using API", async () => {
   expect(user.created).not.toBe(createdUser.created);
 });
 
-test("Verify user deletion using API", async () => {
+test("Verify user deletion using API @api @user", async () => {
   const responseForUserCreation: APIResponse =
     await userApiClient.createUser(userDto);
   const createdUser: UserDtoResponse = await responseForUserCreation.json();

@@ -1,6 +1,5 @@
 import { APIRequestContext, APIResponse, Page } from "playwright";
-import { UserDto } from "../dto/userDto";
-import { URLS } from "../config/urlProvider";
+import { UserDto } from "../DTO/UserDto";
 
 export class UserApiClient {
   readonly USER_API: string = "/api/User/";

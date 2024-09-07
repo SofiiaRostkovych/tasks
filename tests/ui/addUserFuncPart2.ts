@@ -1,17 +1,24 @@
-import { test, expect, APIResponse } from "@playwright/test";
-import { URLS } from "../config/urlProvider";
-import { PageFactory } from "../pageFactory/pageFactory";
-import { AddUserPage } from "../pages/addUserPage";
-import { AddUserSteps } from "../steps/addUserSteps";
-import { UserDto } from "../DTO/UserDto";
-import { UserApiClient } from "../api/userApiClient";
-import { UserDtoResponse } from "../DTO/UserDtoResponse";
-import { UserSteps } from "../steps/userSteps";
-import { GenericSteps } from "../steps/genericSteps";
-import { GenderOptions } from "../enums/GenderOptions";
-import { RandomGeneratorHelper } from "../helpers/randomGeneratorHelper";
+import {
+  test,
+  expect,
+  request as playwrightRequest,
+  APIResponse,
+  APIRequestContext,
+  Page,
+} from "@playwright/test";
+import { URLS } from "../../config/urlProvider";
+import { PageFactory } from "../../pageFactory/pageFactory";
+import { AddUserPage } from "../../pages/addUserPage";
+import { AddUserSteps } from "../../steps/addUserSteps";
+import { UserDto } from "../../DTO/UserDto";
+import { UserApiClient } from "../../api/userApiClient";
+import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserSteps } from "../../steps/userSteps";
+import { GenericSteps } from "../../steps/genericSteps";
+import { GenderOptions } from "../../enums/GenderOptions";
+import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
 
-const usersWithInvalidYearOfBirth: UserDto[] = [
+let usersWithInvalidYearOfBirth: UserDto[] = [
   {
     name: RandomGeneratorHelper.generateRandomUserName(6),
     yearOfBirth: "1899",
@@ -38,12 +45,20 @@ let addUserPage: AddUserPage;
 let addUserSteps: AddUserSteps;
 let userApiClient: UserApiClient;
 let genericSteps: GenericSteps;
+let request: APIRequestContext;
+let page: Page;
 
-test.beforeEach(async ({ page, request }) => {
+test.beforeAll(async ({browser}) => {
+  request = await playwrightRequest.newContext();
+  const context = await browser.newContext();
+  page = await context.newPage();
+});
+
+test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
 
   genericSteps = new GenericSteps(page);
-  addUserPage = pageFactory.getAddUserPage();
+  addUserPage = pageFactory.getPage(AddUserPage);
 
   addUserSteps = new AddUserSteps(page);
   genericSteps.goToPage(URLS.ADD_USER);
@@ -51,7 +66,7 @@ test.beforeEach(async ({ page, request }) => {
   userApiClient = new UserApiClient(request);
 });
 
-test(`Check creation of user with empty fields`, async () => {
+test(`Check creation of user with empty fields @user @desktop @mobile`, async () => {
   await genericSteps.fillField(addUserPage.userNameField, "");
   await genericSteps.fillField(addUserPage.yearOfBirthField, "");
   await addUserPage.createBtn.click();
@@ -69,7 +84,7 @@ test(`Check creation of user with empty fields`, async () => {
   expect(UserSteps.isUserInList(new UserDto(), users)).toBe(false);
 });
 
-test(`Check creation of user with invalid 'User Name' input`, async () => {
+test(`Check creation of user with invalid 'User Name' input @user @desktop @mobile`, async () => {
   const testUser: UserDto = {
     name: RandomGeneratorHelper.generateRandomUserName(
       addUserPage.minUserNameLength - 1,
@@ -97,7 +112,7 @@ test(`Check creation of user with invalid 'User Name' input`, async () => {
 });
 
 usersWithInvalidYearOfBirth.forEach((userDTO) => {
-  test(`Check creation of user with invalid 'Year of Birth': ${userDTO.yearOfBirth}`, async () => {
+  test(`Check creation of user with invalid 'Year of Birth': ${userDTO.yearOfBirth} @user @desktop @mobile`, async () => {
     await genericSteps.fillField(addUserPage.userNameField, userDTO.name);
     await genericSteps.fillField(
       addUserPage.yearOfBirthField,
@@ -119,7 +134,7 @@ usersWithInvalidYearOfBirth.forEach((userDTO) => {
   });
 });
 
-test("Verify 'User Name' maximum symbols limit on the 'Add User' page", async () => {
+test("Verify 'User Name' maximum symbols limit on the 'Add User' page @user @desktop @mobile", async () => {
   // checking maximum symbols limit - 14 characters for User Name input
   const testStr: string = RandomGeneratorHelper.generateRandomUserName(
     addUserPage.maxUserNameLength + 5,

@@ -13,7 +13,7 @@ import { BASE } from "./config/urlProvider";
  */
 export default defineConfig({
   timeout: 5 * 60 * 1000,
-
+  testMatch: "*.ts",
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -40,12 +40,14 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "Desktop",
+      grep: /@desktop|@api/,
       use: { ...devices["Desktop Chrome"] },
     },
     /* Test against mobile viewports. */
     {
-      name: "Mobile Chrome",
+      name: "Mobile",
+      grep: /@mobile/,
       use: { ...devices["Pixel 5"] },
     },
   ],
