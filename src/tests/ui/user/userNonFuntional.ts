@@ -91,7 +91,7 @@ test("Check 'Gender' field content on the 'Add User' page @user @desktop @mobile
 });
 
 // this test was used to practice writing tests with XPath functions and axis
-test.skip("Verify Header content on the 'Add User' page", async () => {
+test.skip("Verify Header content on the 'Add User' page @desktop", async () => {
   // checking the content of the first listitem of the header
   let listitem = page.locator("xpath=//ul/li[position()<2]/child::a");
   await expect(listitem).toHaveText("Home");

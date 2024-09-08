@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseSteps } from "../base/baseSteps";
-import { HomePage } from "../../pages/user/homePage";
+import { BaseSteps } from "./base/baseSteps";
+import { HomePage } from "../pages/homePage";
 
 export class HomeSteps extends BaseSteps {
   private homePage: HomePage;

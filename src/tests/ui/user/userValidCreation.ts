@@ -11,7 +11,7 @@ import { AddUserPage } from "../../../pages/user/addUserPage";
 import { DeleteUserPage } from "../../../pages/user/deleteUserPage";
 import { URLS } from "../../../providers/urlProvider";
 import { AddUserSteps } from "../../../steps/user/addUserSteps";
-import { HomeSteps } from "../../../steps/user/homeSteps";
+import { HomeSteps } from "../../../steps/homeSteps";
 import { UserDto } from "../../../dto/UserDto";
 import { UserApiClient } from "../../../api/userApiClient";
 import { GenericSteps } from "../../../steps/base/genericSteps";

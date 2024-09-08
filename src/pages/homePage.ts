@@ -1,6 +1,6 @@
 import { Locator } from "@playwright/test";
-import { URLS } from "../../providers/urlProvider";
-import { BasePage } from "../base/basePage";
+import { URLS } from "../providers/urlProvider";
+import { BasePage } from "./base/basePage";
 
 export class HomePage extends BasePage {
   readonly usersTable: Locator = this.page.getByTestId("table-Users");

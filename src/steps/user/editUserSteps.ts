@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { BaseSteps } from "../baseSteps";
+import { BaseSteps } from "../base/baseSteps";
 import { EditUserPage } from "../../pages/user/editUserPage";
 
 export class EditUserSteps extends BaseSteps {
