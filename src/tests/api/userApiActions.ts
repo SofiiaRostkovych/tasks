@@ -6,12 +6,12 @@ import {
   APIRequestContext,
 } from "@playwright/test";
 import { UserApiClient } from "../../api/userApiClient";
-import { UserDto } from "../../DTO/UserDto";
-import { UserDtoResponse } from "../../DTO/UserDtoResponse";
+import { UserDto } from "../../dto/UserDto";
+import { UserDtoResponse } from "../../dto/UserDtoResponse";
 import { GenderOptions } from "../../enums/GenderOptions";
 import { RandomGeneratorHelper } from "../../helpers/randomGeneratorHelper";
-import { UserSteps } from "../../steps/userSteps";
-import { ApiSteps } from "../../api/apiSteps/apiSteps";
+import { UserSteps } from "../../steps/user/userSteps";
+import { ApiSteps } from "../../steps/api/apiSteps";
 
 let createdUserId: string = "";
 let userApiClient: UserApiClient;

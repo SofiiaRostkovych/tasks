@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { BASE } from "./config/urlProvider";
+import { BASE } from "./src/providers/urlProvider";
 
 /**
  * Read environment variables from file.
@@ -14,7 +14,7 @@ import { BASE } from "./config/urlProvider";
 export default defineConfig({
   timeout: 5 * 60 * 1000,
   testMatch: "*.ts",
-  testDir: "./tests",
+  testDir: "./src/tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

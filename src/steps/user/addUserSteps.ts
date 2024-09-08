@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { BaseSteps } from "./baseSteps";
-import { AddUserPage } from "../pages/addUserPage";
-import { SelectedValueHelper } from "../helpers/selectHelper";
+import { BaseSteps } from "../base/baseSteps";
+import { AddUserPage } from "../../pages/user/addUserPage";
+import { SelectedValueHelper } from "../../helpers/selectHelper";
 
 export class AddUserSteps extends BaseSteps {
   private addUserPage: AddUserPage;
@@ -9,10 +9,6 @@ export class AddUserSteps extends BaseSteps {
   constructor(page: Page) {
     super(page);
     this.addUserPage = this.pageFactory.getPage(AddUserPage);
-  }
-
-  async selectGenderOption(option: number): Promise<void> {
-    await this.addUserPage.genderField.selectOption(option.toString());
   }
 
   async getGenderSelectedOption(): Promise<string> {

@@ -1,5 +1,5 @@
 import { APIRequestContext, APIResponse, Page } from "playwright";
-import { UserDto } from "../DTO/UserDto";
+import { UserDto } from "../dto/UserDto";
 
 export class UserApiClient {
   readonly USER_API: string = "/api/User/";
@@ -13,6 +13,11 @@ export class UserApiClient {
     const response: APIResponse = await this.request.post(this.USER_API, {
       data: userDto,
     });
+    return response;
+  }
+
+  async getUserList(): Promise<APIResponse> {
+    const response: APIResponse = await this.request.get(this.USER_API);
     return response;
   }
 
@@ -37,11 +42,6 @@ export class UserApiClient {
     const response: APIResponse = await this.request.delete(
       this.USER_API + userId,
     );
-    return response;
-  }
-
-  async getUserList(): Promise<APIResponse> {
-    const response: APIResponse = await this.request.get(this.USER_API);
     return response;
   }
 }
