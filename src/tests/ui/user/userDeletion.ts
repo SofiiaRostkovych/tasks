@@ -19,7 +19,6 @@ import { RandomGeneratorHelper } from "../../../helpers/randomGeneratorHelper";
 import { URLS } from "../../../providers/urlProvider";
 
 let userDto: UserDto;
-let createdUser: UserDtoResponse;
 let deleteUserPage: DeleteUserPage;
 let homeSteps: HomeSteps;
 let userApiClient: UserApiClient;
@@ -44,7 +43,6 @@ test.beforeEach(async () => {
 
   userApiClient = new UserApiClient(request);
   const response = await userApiClient.createUser(userDto);
-  createdUser = await response.json();
 
   const pageFactory: PageFactory = new PageFactory(page);
   deleteUserPage = pageFactory.getPage(DeleteUserPage);

@@ -46,8 +46,8 @@ let validUserData: UserDto[] = [
   */
 ];
 
-let addUserPage: AddUserPage, deleteUserPage: DeleteUserPage;
-let addUserSteps: AddUserSteps, homeSteps: HomeSteps;
+let addUserPage: AddUserPage;
+let homeSteps: HomeSteps;
 let createdUserId: string = "";
 let genericSteps: GenericSteps;
 let request: APIRequestContext;
@@ -63,8 +63,6 @@ test.beforeEach(async () => {
   const pageFactory: PageFactory = new PageFactory(page);
   genericSteps = new GenericSteps(page);
   addUserPage = pageFactory.getPage(AddUserPage);
-  deleteUserPage = pageFactory.getPage(DeleteUserPage);
-  addUserSteps = new AddUserSteps(page);
   homeSteps = new HomeSteps(page);
 
   genericSteps.goToPage(URLS.ADD_USER);
