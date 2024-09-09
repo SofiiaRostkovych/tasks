@@ -11,7 +11,7 @@ export class HomeSteps extends BaseSteps {
   }
 
   async getUserByUserName(userNameValue: string): Promise<Locator> {
-    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState("domcontentloaded");
     const users: Locator[] = await this.page.getByTestId("td-UserName").all();
 
     for (const user of users) {
